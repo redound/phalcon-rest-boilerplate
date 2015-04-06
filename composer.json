@@ -1,0 +1,13 @@
+{
+    "name": "olivierandriessen/phalcon-rest-skeleton",
+    "description": "Phalcon REST skeleton application",
+    "require": {
+        "olivierandriessen/phalcon-rest": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Olivier Andriessen",
+            "email": "olivierandriessen@gmail.com"
+        }
+    ]
+}

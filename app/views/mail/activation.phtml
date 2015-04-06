@@ -1,0 +1,13 @@
+<?=$this->partial('mail/header')?>
+<h2>Registration</h2>
+<p>
+	Hi <?=$user->name?>,<br><br>
+	We thank you for your registration!<br>
+	Please click the link below to finish your registration:<br><br>
+	---<br><br>
+	<a target="_blank" href="http://localhost/#/activate?mailtoken=<?=$user->mailToken?>">
+		http://localhost/#/activate?mailtoken=<?=$user->mailToken?>
+	</a>
+	<br>
+</p>
+<?=$this->partial('mail/footer')?>
