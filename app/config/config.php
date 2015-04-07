@@ -19,7 +19,6 @@ return new \Phalcon\Config([
 		'modelsDir'      		=> __DIR__ . '/../../app/models/',
 		'collectionsDir'     	=> __DIR__ . '/../../app/collections/',
 		'transformersDir'	 	=> __DIR__ . '/../../app/transformers/',
-		'servicesDir'	 		=> __DIR__ . '/../../app/services/',
 		'viewsDir'       		=> __DIR__ . '/../../app/views/',
 	],
 
