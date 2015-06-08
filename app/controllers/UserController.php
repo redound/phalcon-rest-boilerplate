@@ -1,13 +1,13 @@
 <?php
 
-use OA\PhalconRest\UserException,
-    OA\PhalconRest\CoreException,
-    OA\PhalconRest\Transformers\UserTransformer;
+use PhalconRest\Exceptions\UserException,
+    PhalconRest\Exceptions\CoreException,
+    PhalconRest\Transformers\UserTransformer;
 
 /**
  * @resource("User")
  */
-class UsersController extends OA\PhalconRest\Mvc\Controller
+class UserController extends PhalconRest\Mvc\Controller
 {
     /**
      * @title("Activate")

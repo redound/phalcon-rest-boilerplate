@@ -1,12 +1,12 @@
 <?php
 
-use OA\PhalconRest\UserException,
-    OA\PhalconRest\Services\ErrorService as ERR;
+use PhalconRest\Exceptions\UserException,
+    Library\PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
 /**
  * @resource("Product")
  */
-class ProductsController extends OA\PhalconRest\Mvc\Controller
+class ProductController extends PhalconRest\Mvc\Controller
 {
 
     /**
@@ -54,7 +54,7 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!$product){
 
-            throw new UserException(ERR::DATA_NOTFOUND, 'Project with id: #' . $product_id . ' could not be found.');
+            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Project with id: #' . $product_id . ' could not be found.');
         }
 
         return $this->createItem($product, new ProductTransformer, 'product');
@@ -94,7 +94,7 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!$product->save()){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not create product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not create product.');
         }
 
         return $this->createItemWithOK($product, new ProductTransformer, 'product');
@@ -127,7 +127,7 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!$product){
 
-            throw new UserException(ERR::DATA_NOTFOUND, 'Could not find product.');
+            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Could not find product.');
         }
 
 
@@ -138,7 +138,7 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!$product->save()){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not update product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not update product.');
         }
 
         return $this->createItemWithOK($product, new ProductTransformer, 'product');
@@ -157,7 +157,7 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!Products::remove($product_id)){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not remove product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not remove product.');
         }
 
         return $this->respondWithOK();
