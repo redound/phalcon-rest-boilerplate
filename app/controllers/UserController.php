@@ -115,7 +115,7 @@ class UserController extends \PhalconRest\Mvc\Controller
      * @response("Data object or Error object")
      * @responseExample({
      *      "data": {
-     *          "Session": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+     *          "AuthToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
      *          "Expires": 1428497770000
      *      }
      *  })
