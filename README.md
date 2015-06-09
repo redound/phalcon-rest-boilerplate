@@ -1,3 +1,3 @@
-#Phalcon REST Skeleton#
+#Phalcon REST Boilerplate#
 
-This repository provides a skeleton application for [Phalcon REST framework](https://github.com/olivierandriessen/phalcon-rest)
+This repository provides an base application with all of the classes of [Phalcon REST library] implemented.(https://github.com/olivierandriessen/phalcon-rest)
