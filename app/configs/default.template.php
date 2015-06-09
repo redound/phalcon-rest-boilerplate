@@ -26,8 +26,19 @@ return [
 	],
 
 	'acl'					 => [
-		'publicEndpoints'		=> ['/export/documentation.json', '/export/postman-collection.json', '/users', '/users/authenticate/{account}', '/users/activate'],
-		'privateEndpoints'		=> ['/users/me', '/products', '/products/{product_id}']
+		'publicEndpoints'		=> [
+			'/proxy.html', 
+			'/export/documentation.json', 
+			'/export/postman-collection.json', 
+			'/users', 
+			'/users/authenticate/{account}', 
+			'/users/activate'
+		],
+		'privateEndpoints'		=> [
+			'/users/me', 
+			'/products', 
+			'/products/{product_id}'
+		]
 	],
 
 	'errorMessages' 		 => [

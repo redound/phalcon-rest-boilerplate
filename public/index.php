@@ -43,6 +43,13 @@ try {
         exit;
     }
 
+    // Needed for IE
+    $app->get('/proxy.html', function() use ($app, $config) {
+
+        echo $app->di->get(PhalconServices::VIEW)->render('general/proxy', ['client' => $config->clientHostName]);
+        exit;
+    });
+
     // Handle not found
     $app->notFound(function() {
 
