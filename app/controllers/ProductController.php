@@ -1,17 +1,17 @@
 <?php
 
-use OA\PhalconRest\UserException,
-    OA\PhalconRest\Services\ErrorService as ERR;
+use PhalconRest\Exceptions\UserException,
+    PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
 /**
  * @resource("Product")
  */
-class ProductsController extends OA\PhalconRest\Mvc\Controller
+class ProductController extends PhalconRest\Mvc\Controller
 {
 
     /**
-     * @title('All')
-     * @description('Get all products')
+     * @title("All")
+     * @description("Get all products")
      * @response("Collection of Product objects or Error object")
      * @requestExample("GET /products")
      * @responseExample({
@@ -20,21 +20,22 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000,
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
     public function all()
     {
-        $products = Products::all();
+        $products = Product::find();
 
         return $this->createCollection($products, new ProductTransformer, 'products');
     }
 
+
     /**
-     * @title('Find')
-     * @description('Get all products')
+     * @title("Find")
+     * @description("Get all products")
      * @response("Product object or Error object")
      * @requestExample("GET /product/14")
      * @responseExample({
@@ -42,34 +43,34 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
     public function find($product_id)
     {
 
-        $product = Products::findFirstById($product_id);
+        $product = Product::findFirstById($product_id);
 
         if (!$product){
 
-            throw new UserException(ERR::DATA_NOTFOUND, 'Project with id: #' . $product_id . ' could not be found.');
+            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Project with id: #' . $product_id . ' could not be found.');
         }
 
         return $this->createItem($product, new ProductTransformer, 'product');
     }
 
     /**
-     * @title('Create')
-     * @description('Create a new product')
+     * @title("Create")
+     * @description("Create a new product")
      * @response("Product object or Error object")
      * @requestExample({
      *      "title": "Title",
      *      "brand": "Brand name",
      *      "color": "green",
-     *      "createdAt": 1427646703000,
-     *      "updatedAt": 1427646703000
+     *      "createdAt": "1427646703000",
+     *      "updatedAt": "1427646703000"
      * })
      * @responseExample({
      *     "result": "OK",
@@ -78,8 +79,8 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
@@ -87,26 +88,26 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
     {
         $data = $this->request->getJsonRawBody();
 
-        $product = new Products;
+        $product = new Product;
 
         // Prepare method is provided by \OA\Phalcon\Mvc\Model
         $product->prepare($data);
 
         if (!$product->save()){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not create product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not create product.');
         }
 
         return $this->createItemWithOK($product, new ProductTransformer, 'product');
     }
 
     /**
-     * @title('Update')
-     * @description('Update a product')
+     * @title("Update")
+     * @description("Update a product")
      * @response("Product object or Error object")
      * @requestExample({
      *     "product": {
-     *         "title": "Updated Title",
+     *         "title": "Updated Title"
      *     }
      * })
      * @responseExample({
@@ -116,18 +117,18 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
      *         "title": "Updated Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
     public function update($product_id)
     {
-        $product = Products::findFirstById($product_id);
+        $product = Product::findFirstById($product_id);
 
         if (!$product){
 
-            throw new UserException(ERR::DATA_NOTFOUND, 'Could not find product.');
+            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Could not find product.');
         }
 
 
@@ -138,15 +139,15 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
 
         if (!$product->save()){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not update product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not update product.');
         }
 
         return $this->createItemWithOK($product, new ProductTransformer, 'product');
     }
 
     /**
-     * @title('Remove')
-     * @description('Remove a product')
+     * @title("Remove")
+     * @description("Remove a product")
      * @response("Result object or Error object")
      * @responseExample({
      *     "result": "OK"
@@ -155,9 +156,9 @@ class ProductsController extends OA\PhalconRest\Mvc\Controller
     public function remove($product_id)
     {
 
-        if (!Products::remove($product_id)){
+        if (!Product::remove($product_id)){
 
-            throw new UserException(ERR::DATA_FAIL, 'Could not remove product.');
+            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not remove product.');
         }
 
         return $this->respondWithOK();

@@ -1,16 +1,16 @@
 <?php
 
-use OA\PhalconRest\UserException;
-use OA\PhalconRest\Services\ErrorService as ERR;
+use PhalconRest\Exceptions\UserException;
+use PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
-class Products extends OA\PhalconRest\Mvc\Model
+class Product extends BaseModel
 {
 	protected $_rules;
 
 	public function getSource()
 	{
 
-		return 'products';
+		return 'product';
 	}
 
 	public function columnMap()

@@ -1,2 +1,5 @@
-/vendor/
+/vendor
 .DS_Store
+/app/configs
+!.default.template.php
+!.server.template.php

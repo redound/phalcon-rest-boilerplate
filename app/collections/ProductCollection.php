@@ -1,11 +1,11 @@
 <?php
 
-class ProductsCollection extends \Phalcon\Mvc\Micro\Collection
+class ProductCollection extends \Phalcon\Mvc\Micro\Collection
 {
 	public function __construct()
 	{
 
-		$this->setHandler('ProductsController', true); // true means; LazyLoad
+		$this->setHandler('ProductController', true); // true means; LazyLoad
 		$this->setPrefix('/products');
 		$this->get('/', 'all');
 		$this->post('/', 'create');
