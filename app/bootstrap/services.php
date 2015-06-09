@@ -96,7 +96,7 @@ $di->setShared(PhalconServices::MODELS_MANAGER, function() use ($di){
 /**
  * @description PhalconRest - \League\Fractal\Manager
  */
-$di->set(PhalconRestServices::FRACTAL_MANAGER, function(){
+$di->setShared(PhalconRestServices::FRACTAL_MANAGER, function(){
 
     $fractal = new \League\Fractal\Manager;
     $fractal->setSerializer(new \Library\Fractal\CustomSerializer);

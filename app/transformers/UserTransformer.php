@@ -20,8 +20,8 @@ class UserTransformer extends Fractal\TransformerAbstract
 		];
 	}
 
-	public function includeAccounts($user){
-
-		return $this->item($user->getAccounts(), new \PhalconRest\Transformers\AccountsTransformer, 'parent');
+	public function includeAccounts($user)
+	{
+		return $this->item($user, new AccountTransformer, 'parent');
 	}
 }

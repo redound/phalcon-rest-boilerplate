@@ -4,13 +4,13 @@ use League\Fractal;
 
 class GoogleAccountTransformer extends Fractal\TransformerAbstract
 {
-	public function transform($account)
+	public function transform($google)
 	{
 		return [
-			'id' 				=> (int) $account->id,
-			'userId' 			=> (int) $account->userId,
-			'googleId' 			=> (int) $account->googleId,
-			'email' 			=> $account->email
+			'id' 				=> (int) $google->id,
+			'userId' 			=> (int) $google->userId,
+			'googleId' 			=> (int) $google->googleId,
+			'email' 			=> $google->email
 		];
 	}
 }

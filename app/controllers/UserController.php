@@ -41,10 +41,8 @@ class UserController extends \PhalconRest\Mvc\Controller
      * @requestExample({
      *      "name": "John Doe",
      *      "email": "john@doe.com",
-     *      "account": {
-     *          "username": "john",
-     *          "password": "supersecretpassword"
-     *      }
+     *      "username": "john",
+     *      "password": "supersecretpassword"
      * })
      * @responseExample({
      *     "user": {

@@ -27,7 +27,6 @@ try {
 
     $request        = $app->di->get(PhalconRestServices::REQUEST);
     $response       = $app->di->get(PhalconRestServices::RESPONSE);
-    $fractal        = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
 
     // Mount Collections
     $app->mount(new ExportCollection);
@@ -56,8 +55,9 @@ try {
         throw new UserException(ErrorCodes::GEN_NOTFOUND);
     });
 
-    $app->before(function() use ($fractal, $request) {
+    $app->before(function() use ($app, $request) {
 
+        $fractal = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
         $include = $request->getQuery('include');
 
         if (!is_null($include)) {
