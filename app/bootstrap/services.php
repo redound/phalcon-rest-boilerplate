@@ -1,7 +1,6 @@
 <?php
 
 use Library\App\Constants\Services as AppServices;
-use Library\Phalcon\Constants\Services as PhalconServices;
 use PhalconRest\Constants\Services as PhalconRestServices;
 
 $di = new \Phalcon\DI\FactoryDefault($config);
@@ -9,7 +8,7 @@ $di = new \Phalcon\DI\FactoryDefault($config);
 /**
  * @description Phalcon - \Phalcon\Config
  */
-$di->setShared(PhalconServices::CONFIG, function() use ($config){
+$di->setShared(AppServices::CONFIG, function() use ($config){
 
     return $config;
 });
@@ -17,7 +16,7 @@ $di->setShared(PhalconServices::CONFIG, function() use ($config){
 /**
  * @description Phalcon - \Phalcon\Db\Adapter\Pdo\Mysql
  */
-$di->set(PhalconServices::DB, function() use ($config, $di) {
+$di->set(AppServices::DB, function() use ($config, $di) {
 
     $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
         "host"          => $config->database->host,
@@ -27,7 +26,7 @@ $di->set(PhalconServices::DB, function() use ($config, $di) {
     ));
 
     //Assign the eventsManager to the db adapter instance
-    $connection->setEventsManager($di->get(PhalconServices::EVENTS_MANAGER));
+    $connection->setEventsManager($di->get(AppServices::EVENTS_MANAGER));
 
     return $connection;
 });
@@ -35,7 +34,7 @@ $di->set(PhalconServices::DB, function() use ($config, $di) {
 /**
  * @description Phalcon - \Phalcon\Mvc\Url
  */
-$di->set(PhalconServices::URL, function() use ($config) {
+$di->set(AppServices::URL, function() use ($config) {
 	$url = new \Phalcon\Mvc\Url();
 	$url->setBaseUri($config->application->baseUri);
 	return $url;
@@ -44,7 +43,7 @@ $di->set(PhalconServices::URL, function() use ($config) {
 /**
  * @description Phalcon - \Phalcon\Mvc\View\Simple
  */
-$di->set(PhalconServices::VIEW, function() use ($config) {
+$di->set(AppServices::VIEW, function() use ($config) {
 
 	$view = new Phalcon\Mvc\View\Simple();
 	$view->setViewsDir($config->application->viewsDir);
@@ -55,7 +54,7 @@ $di->set(PhalconServices::VIEW, function() use ($config) {
 /**
  * @description Phalcon - \Phalcon\Mvc\Router
  */
-$di->set(PhalconServices::ROUTER, function(){
+$di->set(AppServices::ROUTER, function(){
 
     return new \Phalcon\Mvc\Router;
 });
@@ -63,7 +62,7 @@ $di->set(PhalconServices::ROUTER, function(){
 /**
  * @description Phalcon - EventsManager
  */
-$di->setShared(PhalconServices::EVENTS_MANAGER, function() use ($di, $config) {
+$di->setShared(AppServices::EVENTS_MANAGER, function() use ($di, $config) {
 
     // Create instance
     $eventsManager = new \Phalcon\Events\Manager;
@@ -87,10 +86,10 @@ $di->setShared(PhalconServices::EVENTS_MANAGER, function() use ($di, $config) {
 /**
  * @description Phalcon - \Phalcon\Mvc\Model\Manager
  */
-$di->setShared(PhalconServices::MODELS_MANAGER, function() use ($di){
+$di->setShared(AppServices::MODELS_MANAGER, function() use ($di){
 
     $modelsManager = new \Phalcon\Mvc\Model\Manager;
-    return $modelsManager->setEventsManager($di->get(PhalconServices::EVENTS_MANAGER));
+    return $modelsManager->setEventsManager($di->get(AppServices::EVENTS_MANAGER));
 });
 
 /**

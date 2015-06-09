@@ -5,7 +5,6 @@ namespace Library\App\Services;
 use PhalconRest\Exceptions\UserException,
     PhalconRest\Exceptions\CoreException,
     Library\App\Constants\Services as AppServices,
-    Library\Phalcon\Constants\Services as PhalconServices,
     PhalconRest\Constants\Services as PhalconRestServices,
     PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
@@ -52,7 +51,7 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
 
     public function register($data)
     {
-        $db = $this->di->get(PhalconServices::DB);
+        $db = $this->di->get(AppServices::DB);
 
         if (!isset($data->name) && !isset($data->email) || !isset($data->username) || !isset($data->password)) {
 

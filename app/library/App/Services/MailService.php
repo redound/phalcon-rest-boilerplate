@@ -2,7 +2,7 @@
 
 namespace Library\App\Services;
 
-use Library\Phalcon\Constants\Services as PhalconServices;
+use Library\App\Constants\Services as AppServices;
 use PhalconRest\Constants\Services as PhalconRestServices;
 
 class MailService extends \Phalcon\Mvc\User\Plugin
@@ -10,8 +10,8 @@ class MailService extends \Phalcon\Mvc\User\Plugin
 
 	public function sendActivationMail($user, $account)
 	{
-		$config 	= $this->di->get(PhalconServices::CONFIG);
-		$view 		= $this->di->get(PhalconServices::VIEW);
+		$config 	= $this->di->get(AppServices::CONFIG);
+		$view 		= $this->di->get(AppServices::VIEW);
 		$mailer 	= $this->di->get(PhalconRestServices::MAILER);
 		$link		= $config->clientHostName . '/activate?mailtoken=' . $user->mailToken;
 		

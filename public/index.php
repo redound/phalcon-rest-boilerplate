@@ -1,6 +1,6 @@
 <?php
 
-use Library\Phalcon\Constants\Services as PhalconServices;
+use Library\App\Constants\Services as AppServices;
 use PhalconRest\Constants\Services as PhalconRestServices;
 use PhalconRest\Constants\ErrorCodes;
 use PhalconRest\Documentation;
@@ -23,7 +23,7 @@ try {
 
     $app = new \Phalcon\Mvc\Micro($di);
 
-    $app->setEventsManager($app->di->get(PhalconServices::EVENTS_MANAGER));
+    $app->setEventsManager($app->di->get(AppServices::EVENTS_MANAGER));
 
     $request        = $app->di->get(PhalconRestServices::REQUEST);
     $response       = $app->di->get(PhalconRestServices::RESPONSE);
@@ -45,7 +45,7 @@ try {
     // Needed for IE
     $app->get('/proxy.html', function() use ($app, $config) {
 
-        echo $app->di->get(PhalconServices::VIEW)->render('general/proxy', ['client' => $config->clientHostName]);
+        echo $app->di->get(AppServices::VIEW)->render('general/proxy', ['client' => $config->clientHostName]);
         exit;
     });
 

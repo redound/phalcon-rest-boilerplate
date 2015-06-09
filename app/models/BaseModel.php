@@ -1,6 +1,6 @@
 <?php
 
-use Library\Phalcon\Validation\Validator,
+use PhalconRest\Validation\Validator,
 	PhalconRest\Exceptions\CoreException,
 	PhalconRest\Exceptions\UserException,
 	PhalconRest\Constants\ErrorCodes as ErrorCodes;

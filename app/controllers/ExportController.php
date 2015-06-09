@@ -1,6 +1,6 @@
 <?php
 
-use \Library\Phalcon\Constants\Services as PhalconServices;
+use \Library\App\Constants\Services as AppServices;
 
 class ExportController extends \PhalconRest\Mvc\Controller {
 
@@ -25,7 +25,7 @@ class ExportController extends \PhalconRest\Mvc\Controller {
 
 	public function postman()
 	{
-		$config = $this->di->get(PhalconServices::CONFIG);
+		$config = $this->di->get(AppServices::CONFIG);
 		$collection = $this->generator->generatePostmanCollection($config->hostName);
 		
 		return $this->createItem($collection, new \PhalconRest\Documentation\PostmanCollectionTransformer, 'parent');
