@@ -3,6 +3,7 @@
 use Library\Phalcon\Constants\Services as PhalconServices;
 use PhalconRest\Constants\Services as PhalconRestServices;
 use PhalconRest\Constants\ErrorCodes;
+use PhalconRest\Documentation;
 
 use PhalconRest\Exceptions\UserException;
 
@@ -29,6 +30,7 @@ try {
     $fractal        = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
 
     // Mount Collections
+    $app->mount(new ExportCollection);
     $app->mount(new ProductCollection);
     $app->mount(new UserCollection);
 

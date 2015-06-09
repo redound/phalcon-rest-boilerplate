@@ -26,7 +26,7 @@ return [
 	],
 
 	'acl'					 => [
-		'publicEndpoints'		=> ['/users', '/users/authenticate/{account}', '/users/activate'],
+		'publicEndpoints'		=> ['/export/documentation.json', '/export/postman-collection.json', '/users', '/users/authenticate/{account}', '/users/activate'],
 		'privateEndpoints'		=> ['/users/me', '/products', '/products/{product_id}']
 	],
 

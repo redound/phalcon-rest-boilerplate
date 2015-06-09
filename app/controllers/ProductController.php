@@ -10,8 +10,8 @@ class ProductController extends PhalconRest\Mvc\Controller
 {
 
     /**
-     * @title('All')
-     * @description('Get all products')
+     * @title("All")
+     * @description("Get all products")
      * @response("Collection of Product objects or Error object")
      * @requestExample("GET /products")
      * @responseExample({
@@ -20,8 +20,8 @@ class ProductController extends PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000,
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
@@ -32,9 +32,10 @@ class ProductController extends PhalconRest\Mvc\Controller
         return $this->createCollection($products, new ProductTransformer, 'products');
     }
 
+
     /**
-     * @title('Find')
-     * @description('Get all products')
+     * @title("Find")
+     * @description("Get all products")
      * @response("Product object or Error object")
      * @requestExample("GET /product/14")
      * @responseExample({
@@ -42,8 +43,8 @@ class ProductController extends PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
@@ -61,15 +62,15 @@ class ProductController extends PhalconRest\Mvc\Controller
     }
 
     /**
-     * @title('Create')
-     * @description('Create a new product')
+     * @title("Create")
+     * @description("Create a new product")
      * @response("Product object or Error object")
      * @requestExample({
      *      "title": "Title",
      *      "brand": "Brand name",
      *      "color": "green",
-     *      "createdAt": 1427646703000,
-     *      "updatedAt": 1427646703000
+     *      "createdAt": "1427646703000",
+     *      "updatedAt": "1427646703000"
      * })
      * @responseExample({
      *     "result": "OK",
@@ -78,8 +79,8 @@ class ProductController extends PhalconRest\Mvc\Controller
      *         "title": "Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
@@ -101,12 +102,12 @@ class ProductController extends PhalconRest\Mvc\Controller
     }
 
     /**
-     * @title('Update')
-     * @description('Update a product')
+     * @title("Update")
+     * @description("Update a product")
      * @response("Product object or Error object")
      * @requestExample({
      *     "product": {
-     *         "title": "Updated Title",
+     *         "title": "Updated Title"
      *     }
      * })
      * @responseExample({
@@ -116,8 +117,8 @@ class ProductController extends PhalconRest\Mvc\Controller
      *         "title": "Updated Title",
      *         "brand": "Brand name",
      *         "color": "green",
-     *         "createdAt": 1427646703000,
-     *         "updatedAt": 1427646703000
+     *         "createdAt": "1427646703000",
+     *         "updatedAt": "1427646703000"
      *     }
      * })
      */
@@ -145,8 +146,8 @@ class ProductController extends PhalconRest\Mvc\Controller
     }
 
     /**
-     * @title('Remove')
-     * @description('Remove a product')
+     * @title("Remove")
+     * @description("Remove a product")
      * @response("Result object or Error object")
      * @responseExample({
      *     "result": "OK"
