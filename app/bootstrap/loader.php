@@ -18,12 +18,12 @@ $loader->registerDirs([
 	$appPath . 'views/',
 	$vendorPath . 'phpmailer/phpmailer',
 	$vendorPath . 'firebase/php-jwt/Firebase/PHP-JWT/Authentication',
-	$vendorPath . 'firebase/php-jwt/Firebase/PHP-JWT/Exceptions'
+	$vendorPath . 'firebase/php-jwt/Firebase/PHP-JWT/Exceptions',
+	$vendorPath . 'olivierandriessen/phalcon-rest/src'
 ]);
 
 $loader->registerNamespaces([
 	'Library' 			=> $appPath . 'library/',
-	'PhalconRest' 		=> __DIR__ . '/../../vendor/olivierandriessen/phalcon-rest',
 	'League\Fractal' 	=> $vendorPath . 'league/fractal/src'
 ]);
 
