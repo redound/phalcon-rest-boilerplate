@@ -1,12 +1,5 @@
-/vendor/
+/vendor
 .DS_Store
-
-# Ignore everything
-*
-# But not these files....
-!/app/configs/server.template.php
-!/app/configs/default.template.php
-
-# etc...
-# ...even if they are in subdirectories
-!*/
+/app/configs
+!.default.template.php
+!.server.template.php
