@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 10.0.19-MariaDB)
 # Database: phalconrest
-# Generation Time: 2015-06-08 08:38:52 +0000
+# Generation Time: 2015-06-09 09:27:30 +0000
 # ************************************************************
 
 
@@ -20,12 +20,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table products
+# Dump of table google_account
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `google_account`;
 
-CREATE TABLE `products` (
+CREATE TABLE `google_account` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `google_id` decimal(21,0) unsigned DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `google_account_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table product
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `product`;
+
+CREATE TABLE `product` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `brand` varchar(255) DEFAULT NULL,
@@ -37,17 +54,15 @@ CREATE TABLE `products` (
 
 
 
-# Dump of table users
+# Dump of table user
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `user`;
 
-CREATE TABLE `users` (
+CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(55) DEFAULT NULL,
   `email` varchar(55) DEFAULT NULL,
-  `date_registered` datetime DEFAULT NULL,
-  `account_type_ids` varchar(11) DEFAULT NULL,
   `active` tinyint(1) DEFAULT NULL,
   `mail_token` varchar(60) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -57,36 +72,19 @@ CREATE TABLE `users` (
 
 
 
-# Dump of table google_accounts
+# Dump of table username_account
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `google_accounts`;
+DROP TABLE IF EXISTS `username_account`;
 
-CREATE TABLE `google_accounts` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `google_id` decimal(21,0) unsigned DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `google_accounts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table username_accounts
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `username_accounts`;
-
-CREATE TABLE `username_accounts` (
+CREATE TABLE `username_account` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
   `username` varchar(55) DEFAULT NULL,
   `password` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `username_accounts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `username_account_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
