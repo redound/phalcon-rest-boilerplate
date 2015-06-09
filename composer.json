@@ -6,7 +6,7 @@
         "phpmailer/phpmailer": "5.2.9",
         "firebase/php-jwt": "2.0.0",
         "google/apiclient": "1.1.2",
-        "olivierandriessen/phalcon-rest": "dev-master"
+        "olivierandriessen/phalcon-rest": "dev-develop"
     },
     "authors": [
         {

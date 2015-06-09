@@ -1,9 +1,9 @@
 <?php
 
 use PhalconRest\Exceptions\UserException;
-use Library\PhalconRest\Constants\ErrorCodes as ErrorCodes;
+use PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
-class Product extends PhalconRest\Mvc\Model
+class Product extends BaseModel
 {
 	protected $_rules;
 

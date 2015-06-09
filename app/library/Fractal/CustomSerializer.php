@@ -1,6 +1,6 @@
 <?php
 
-namespace OA\Fractal;
+namespace Library\Fractal;
 
 class CustomSerializer extends \League\Fractal\Serializer\ArraySerializer
 {

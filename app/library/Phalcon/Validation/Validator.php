@@ -1,6 +1,6 @@
 <?php
 
-namespace OA\Phalcon\Validation;
+namespace Library\Phalcon\Validation;
 
 use Phalcon\Validation;
 

@@ -2,6 +2,8 @@
 
 return [
 
+	'hostName' => 'http://phalcon-rest-skeleton.andev.local',
+	'clientHostName' => 'http://phalcon-rest-app.andev.local',
 	'database' => [
 
 		// Change to your own configuration
@@ -21,9 +23,9 @@ return [
 		'port'				=> 587,
 		'smtpSecure'		=> 'tls',
 		'smtpAuth'			=> true,
-		'from'				=> ['your-email@example.com', 'Your Name'],
-		'replyTo'			=> ['your-email@example.com', 'Your Name'],
-		'username'			=> 'your-email@example.com',
-		'password'			=> 'secret-password',
-	],
+		'from'				=> ['your-email-address', 'your-name'],
+		'replyTo'			=> ['your-email-address', 'your-name'],
+		'username'			=> 'your-email-address-or-username',
+		'password'			=> 'your-password',
+	]
 ];

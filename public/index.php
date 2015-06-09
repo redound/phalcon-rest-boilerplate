@@ -1,8 +1,10 @@
 <?php
 
-use Library\App\Constants\Services as AppServices;
 use Library\Phalcon\Constants\Services as PhalconServices;
-use Library\PhalconRest\Constants\Services as PhalconRestServices;
+use PhalconRest\Constants\Services as PhalconRestServices;
+use PhalconRest\Constants\ErrorCodes;
+
+use PhalconRest\Exceptions\UserException;
 
 try {
 
@@ -10,23 +12,25 @@ try {
     $application_env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'development';
 
     // Read the configuration based on env
-    $config = require __DIR__ . "/../app/config/config.php";
+    $config = require __DIR__ . "/../app/bootstrap/config.php";
 
     // Include loader
-    require __DIR__ . "/../app/config/loader.php";
+    require __DIR__ . "/../app/bootstrap/loader.php";
 
     // Setup all required services (DI)
-    require __DIR__ . "/../app/config/services.php";
+    require __DIR__ . "/../app/bootstrap/services.php";
 
     $app = new \Phalcon\Mvc\Micro($di);
 
-    $request        = $app->get(PhalconRestServices::REQUEST);
-    $response       = $app->get(PhalconRestServices::RESPONSE);
-    $fractal        = $app->get(FractalService::MANAGER);
+    $app->setEventsManager($app->di->get(PhalconServices::EVENTS_MANAGER));
+
+    $request        = $app->di->get(PhalconRestServices::REQUEST);
+    $response       = $app->di->get(PhalconRestServices::RESPONSE);
+    $fractal        = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
 
     // Mount Collections
-    $this->mount(new ProductCollection);
-    $this->mount(new UserCollection);
+    $app->mount(new ProductCollection);
+    $app->mount(new UserCollection);
 
     // OPTIONS have no body, send the headers, exit
     if($request->getMethod() == 'OPTIONS'){
@@ -40,10 +44,10 @@ try {
     // Handle not found
     $app->notFound(function() {
 
-        throw new Exception(ErrorCodes::GEN_NOTFOUND);
+        throw new UserException(ErrorCodes::GEN_NOTFOUND);
     });
 
-    $app->before(function() use ($fractal) {
+    $app->before(function() use ($fractal, $request) {
 
         $include = $request->getQuery('include');
 
@@ -52,32 +56,28 @@ try {
         }
     });
 
-    $app->after(function() {
+    $app->after(function() use ($app, $response) {
 
-        $response->send($this->getReturnedValue()); // Get return value from controller
+        $response->send($app->getReturnedValue()); // Get return value from controller
     });
 
     $app->handle();
 
 } catch (PhalconRest\Exceptions\UserException $e){
 
-	$app->response->sendException($e);
+	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 } catch (PhalconRest\CoreException $e){
 
-	$app->response->sendException($e);
+	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 } catch (Phalcon\Exception $e){
 
-	$app->response->sendException($e);
+	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 } catch (PDOException $e){
 
-	$app->response->sendException($e);
-
-} catch (Exception $e){
-
-	$app->response->sendException($e);
+	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 }
 

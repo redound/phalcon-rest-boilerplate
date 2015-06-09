@@ -4,6 +4,7 @@ return [
 
 	'application' 			=> [
 		'baseUri'        		=> '/',
+		'viewsDir'				=> __DIR__ . '/../../app/views/'
 	],
 
 	'activationMail' 		=> [
@@ -21,10 +22,11 @@ return [
 	'authentication' 		=> [
 		'jwtSecret' 			=> 'example_key',
 		'genSalt' 				=> 'should-also-be-in-application-env',
+		'expireTime'			=> 86400 * 7 // One week till token expires
 	],
 
 	'acl'					 => [
-		'publicEndpoints'		=> ['/users', '/users/login', '/users/activate'],
+		'publicEndpoints'		=> ['/users', '/users/authenticate/{account}', '/users/activate'],
 		'privateEndpoints'		=> ['/users/me', '/products', '/products/{product_id}']
 	],
 

@@ -10,7 +10,7 @@ class UserCollection extends \Phalcon\Mvc\Micro\Collection
 		$this->post('/', 'create');
 		$this->get('/activate', 'activate');
 		$this->get('/me', 'me');
-		$this->post('/login', 'login');
+		$this->post('/authenticate/{account}', 'authenticate');
 		$this->get('/logout', 'logout');
 	}
 }

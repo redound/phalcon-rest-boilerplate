@@ -1,14 +1,20 @@
 <?php
 
-namespace PhalconRest\Models;
-
-class GoogleAccount extends \PhalconRest\Mvc\Model
+class GoogleAccount extends BaseModel
 {
     
     public function getSource()
     {
 
         return 'google_account';
+    }
+
+    public function initialize()
+    {
+
+        $this->hasOne('userId', 'User', 'id', [
+            'alias' => 'User'
+        ]);
     }
 
     public function columnMap()
@@ -32,5 +38,4 @@ class GoogleAccount extends \PhalconRest\Mvc\Model
             'googleId' => 'pattern:/\d{21}/', // should be exactly 21 digits
         ];
     }
-
 }

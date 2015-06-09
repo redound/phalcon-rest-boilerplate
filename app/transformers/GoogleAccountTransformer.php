@@ -1,7 +1,5 @@
 <?php
 
-namespace PhalconRest\Transformers;
-
 use League\Fractal;
 
 class GoogleAccountTransformer extends Fractal\TransformerAbstract

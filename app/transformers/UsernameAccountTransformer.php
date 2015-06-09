@@ -1,7 +1,5 @@
 <?php
 
-namespace PhalconRest\Transformers;
-
 use League\Fractal;
 
 class UsernameAccountTransformer extends Fractal\TransformerAbstract

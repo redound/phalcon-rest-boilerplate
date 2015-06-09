@@ -1,14 +1,20 @@
 <?php
 
-namespace PhalconRest\Models;
-
-class UsernameAccount extends \PhalconRest\Mvc\Model
+class UsernameAccount extends BaseModel
 {
 
     public function getSource()
     {
 
-        return 'username_accounts';
+        return 'username_account';
+    }
+
+    public function initialize()
+    {
+
+        $this->hasOne('userId', 'User', 'id', [
+            'alias' => 'User'
+        ]);
     }
 
     public function columnMap()
@@ -32,4 +38,8 @@ class UsernameAccount extends \PhalconRest\Mvc\Model
         ];
     }
 
+    public function validatePassword($password)
+    {
+        return $this->di->get('security')->checkHash($password, $this->password);
+    }
 }

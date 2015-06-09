@@ -3,11 +3,11 @@
 use Library\Phalcon\Validation\Validator,
 	PhalconRest\Exceptions\CoreException,
 	PhalconRest\Exceptions\UserException,
-	Library\PhalconRest\Constants\ErrorCodes;
+	PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
-class Model extends \Phalcon\Mvc\Model
+class BaseModel extends \Phalcon\Mvc\Model
 {
-	protected $_validator;
+	protected $validator;
 
 	public function beforeValidationOnCreate()
 	{
@@ -22,13 +22,13 @@ class Model extends \Phalcon\Mvc\Model
 
 	public function getValidator()
 	{
-		if (!$this->_validator){
+		if (!$this->validator){
 
 
-			$this->_validator = Validator::make($this, $this->validateRules());
+			$this->validator = Validator::make($this, $this->validateRules());
 		}
 
-		return $this->_validator;
+		return $this->validator;
 	}
 
 	public function validation()
@@ -37,17 +37,17 @@ class Model extends \Phalcon\Mvc\Model
 			return true;
 		}
 
-		$this->_validator = $this->getValidator();
+		$this->validator = $this->getValidator();
 
-		return $this->_validator->passes();
+		return $this->validator->passes();
 	}
 
 	public function onValidationFails()
 	{
 		$message = null;
-		if ($this->_validator)
+		if ($this->validator)
 		{
-			$message = $this->_validator->getFirstMessage();
+			$message = $this->validator->getFirstMessage();
 		}
 
 		if ($messages = $this->getMessages())

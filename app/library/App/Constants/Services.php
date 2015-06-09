@@ -2,10 +2,9 @@
 
 namespace Library\App\Constants;
 
-class Services {
+class Services
+{
 
-	const DB 						= 'app_db';
-	const URL 						= 'app_url';
-	const VIEW 						= 'app_view';
-	const CONFIG 					= 'app_config';
+	const USER_SERVICE = 'app_user_service';
+	const MAIL_SERVICE = 'app_mail_service';
 }

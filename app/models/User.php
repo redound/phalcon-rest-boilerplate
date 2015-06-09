@@ -1,12 +1,9 @@
 <?php
 
-namespace PhalconRest\Models;
-
 use PhalconRest\Exceptions\CoreException;
-use Library\PhalconRest\Constants\AccountTypes;
 use League\Fractal\Resource\Item;
 
-class User extends \PhalconRest\Mvc\Model
+class User extends BaseModel
 {
 
     public function getSource()
@@ -23,8 +20,6 @@ class User extends \PhalconRest\Mvc\Model
             'id'                        => 'id',
             'name'                      => 'name',
             'email'                     => 'email',
-            'date_registered'           => 'dateRegistered',
-            'account_type_ids'          => 'accountTypeIds',
             'active'                    => 'active',
             'mail_token'                => 'mailToken',
             'updated_at'                => 'updatedAt',
@@ -34,89 +29,79 @@ class User extends \PhalconRest\Mvc\Model
 
     public function initialize()
     {
-        $this->hasOne('id', 'GoogleAccounts', 'userId');
-        $this->hasOne('id', 'UsernameAccounts', 'userId');
-    }
+        $this->hasOne('id', 'GoogleAccount', 'userId', [
+            'alias' => 'GoogleAccount'
+        ]);
 
-    public function getAccountTypes()
-    {
-
-        if (!isset($this->accountTypeIds)) {
-
-            return [];
-        }
-
-        return explode(',', $this->accountTypeIds);
-    }
-
-    public function setAccountTypes($types)
-    {
-
-        $this->accountTypeIds = implode(',', $types);
-    }
-
-    public function hasAccountType($type)
-    {
-
-        $accountTypes = $this->getAccountTypes();
-        return (in_array($type, $accountTypes));
-    }
-
-    public function addAccountType($type)
-    {
-
-        if (!$this->hasAccountType($type)) {
-
-            $accountTypes = $this->getAccountTypes();
-            $accountTypes[] = $type;
-            $this->setAccountTypes($accountTypes);
-        }
-    }
-
-    public function getAccounts()
-    {
-
-        $accounts = [];
-
-        $di = \Phalcon\DI::getDefault();
-        $fractal = $di->get('fractal');
-
-        if ($this->googleAccounts){
-            $account = $fractal->createData(new Item($this->googleAccounts, new \PhalconRest\Transformers\GoogleAccountTransformer, 'google'))->toArray();
-            $accounts = array_merge($accounts, $account);
-        }
-
-        if ($this->usernameAccounts){
-            $account = $fractal->createData(new Item($this->usernameAccounts, new \PhalconRest\Transformers\UsernameAccountTransformer, 'username'))->toArray();
-            $accounts = array_merge($accounts, $account);
-        }
-        return $accounts;
-    }
-
-    public function removeAccountType()
-    {
-
-        if ($this->hasAccountType($type)) {
-
-            $accountTypes = $this->getAccountTypes();
-            unset($accountTypes[$type]);
-            $this->setAccountTypes($accountTypes);
-        }
+        $this->hasOne('id', 'UsernameAccount', 'userId', [
+            'alias' => 'UsernameAccount'
+        ]);
     }
 
     public function validateRules()
     {
 
         return [
-            'name' => 'pattern:/[A-Za-z ]{2,55}/', // should contain between 2 - 55 letters
+            'name' => 'pattern:/[A-Za-z ]{0,55}/', // should contain between 0 - 55 letters
             'email' => 'email', // should be an email address
         ];
     }
 
-    public function beforeValidationOnCreate()
+    public function getAccount($account)
     {
+        if ($account === \Library\App\Constants\AccountTypes::GOOGLE) {
 
-        parent::beforeValidationOnCreate();
-        $this->dateRegistered = date('Y-m-d H:i:s');
+            return $this->googleAccount;
+        }
+        elseif ($account === \Library\App\Constants\AccountTypes::USERNAME) {
+            
+            return $this->usernameAccount;
+        }
+
+        return false;
+    }
+
+    public static function findByPayload($payload)
+    {
+        return User::findFirstByEmail($payload['email']);
+    }
+
+    public function getByUsername($username)
+    {
+        return UsernameAccount::findFirstByUsername($username);
+    }
+
+    public function processGooglePayload($data)
+    {
+        $user = User::findByPayload($data);
+
+        if ($user && $user->googleAccount) {
+
+            return $user;
+        }
+
+        // Create Google Account
+        $googleAccount              = new \GoogleAccount();
+        $googleAccount->googleId    = $data['googleId'];
+        $googleAccount->email       = $data['email'];
+
+        // No user? Create one
+        if (!$user) {
+
+            $user = new User();
+            $user->email            = $data['email'];
+            $user->active           = 1;
+            $user->mailToken        = null;
+        }
+
+        // Assign Google Account to User
+        $user->googleAccount    = $googleAccount;
+
+        if (!$user->save()) {
+
+            throw new CoreException(ErrorCodes::USER_REGISTERFAIL, 'User could not be created');
+        }
+
+        return $user;
     }
 }

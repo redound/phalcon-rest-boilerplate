@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fd9f09fb8f31648ec6b3e488cc568a2a",
+    "hash": "09be55032d7966332a2a8a30b0e3196b",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -158,16 +158,16 @@
         },
         {
             "name": "olivierandriessen/phalcon-rest",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/olivierandriessen/phalcon-rest.git",
-                "reference": "6510e11199662db159236166635c80aaaeebe716"
+                "reference": "40c8056c14a7f55a556f1d0177c26ac8050eba28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/olivierandriessen/phalcon-rest/zipball/6510e11199662db159236166635c80aaaeebe716",
-                "reference": "6510e11199662db159236166635c80aaaeebe716",
+                "url": "https://api.github.com/repos/olivierandriessen/phalcon-rest/zipball/40c8056c14a7f55a556f1d0177c26ac8050eba28",
+                "reference": "40c8056c14a7f55a556f1d0177c26ac8050eba28",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +187,7 @@
                 }
             ],
             "description": "Phalcon REST API framework",
-            "time": "2015-04-06 20:02:55"
+            "time": "2015-06-06 11:01:43"
         },
         {
             "name": "phpmailer/phpmailer",

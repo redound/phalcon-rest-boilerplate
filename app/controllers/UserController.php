@@ -2,12 +2,14 @@
 
 use PhalconRest\Exceptions\UserException,
     PhalconRest\Exceptions\CoreException,
-    PhalconRest\Transformers\UserTransformer;
+    Library\PhalconRest\Transformers\UserTransformer,
+    Library\App\Constants\Services as AppServices,
+    PhalconRest\Constants\Services as PhalconRestServices;
 
 /**
  * @resource("User")
  */
-class UserController extends PhalconRest\Mvc\Controller
+class UserController extends \PhalconRest\Mvc\Controller
 {
     /**
      * @title("Activate")
@@ -18,11 +20,18 @@ class UserController extends PhalconRest\Mvc\Controller
      *      "result": "OK"
      *  })
      */
+    public function onConstruct()
+    {
+        parent::onConstruct();
+
+        $this->userService = $this->di->get(AppServices::USER_SERVICE);
+    }
+
     public function activate()
     {
         $user = $this->userService->activate();
 
-        return $this->createItem($user, new UserTransformer, 'user');
+        return $this->createItem($user, new \UserTransformer, 'user');
     }
 
     /**
@@ -54,7 +63,7 @@ class UserController extends PhalconRest\Mvc\Controller
 
         $user = $this->userService->register($data);
 
-        return $this->createItem($user, new UserTransformer, 'user');
+        return $this->createItem($user, new \UserTransformer, 'user');
     }
 
     /**
@@ -94,30 +103,26 @@ class UserController extends PhalconRest\Mvc\Controller
 
         $user = $this->userService->me();
 
-        return $this->createItem($user, new UserTransformer, 'user');
+        return $this->createItem($user, new \UserTransformer, 'user');
     }
 
     /**
      * @title("Authenticate")
      * @description("Authenticate user")
      * @headers({
-     *      "Authorization": "'Username sd9u19221934y=' (base64 encoded username and password) or 'Google dgd9u1243yndfs=' (base64 encoded code and access_token received from google client authentication)"
+     *      "Authorization": "'Basic sd9u19221934y='(base64 encoded username and password or code and access_token received from google client authentication)"
      * })
      * @response("Data object or Error object")
      * @responseExample({
      *      "data": {
-     *          "AuthToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+     *          "Session": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
      *          "Expires": 1428497770000
      *      }
      *  })
      */
-    public function login()
+    public function authenticate($account)
     {
-
-        $tokenData = $this->userService->login();
-
-        return $this->respondWithArray($tokenData, 'data');
-
+        return $this->respondWithArray($this->userService->login($account), 'data');
     }
 
 }

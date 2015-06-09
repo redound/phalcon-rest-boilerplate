@@ -1,9 +1,6 @@
 <?php
 
-namespace PhalconRest\Transformers;
-
-use League\Fractal,
-    PhalconRest\Constants\AccountTypes;
+use League\Fractal;
 
 class UserTransformer extends Fractal\TransformerAbstract
 {
@@ -18,9 +15,8 @@ class UserTransformer extends Fractal\TransformerAbstract
 			'id' 				=> (int) $user->id,
 			'name' 				=> $user->name,
 			'email' 			=> $user->email,
-			'dateRegistered' 	=> (int) strtotime($user->dateRegistered) * 1000,
+			'dateRegistered' 	=> (int) strtotime($user->createdAt) * 1000,
 			'active'			=> (int) $user->active,
-			'accountTypeIds' 	=> $user->accountTypeIds
 		];
 	}
 

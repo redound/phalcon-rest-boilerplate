@@ -1,7 +1,7 @@
 <?php
 
 use PhalconRest\Exceptions\UserException,
-    Library\PhalconRest\Constants\ErrorCodes as ErrorCodes;
+    PhalconRest\Constants\ErrorCodes as ErrorCodes;
 
 /**
  * @resource("Product")
@@ -27,7 +27,7 @@ class ProductController extends PhalconRest\Mvc\Controller
      */
     public function all()
     {
-        $products = Products::all();
+        $products = Product::find();
 
         return $this->createCollection($products, new ProductTransformer, 'products');
     }
@@ -50,7 +50,7 @@ class ProductController extends PhalconRest\Mvc\Controller
     public function find($product_id)
     {
 
-        $product = Products::findFirstById($product_id);
+        $product = Product::findFirstById($product_id);
 
         if (!$product){
 
@@ -87,7 +87,7 @@ class ProductController extends PhalconRest\Mvc\Controller
     {
         $data = $this->request->getJsonRawBody();
 
-        $product = new Products;
+        $product = new Product;
 
         // Prepare method is provided by \OA\Phalcon\Mvc\Model
         $product->prepare($data);
@@ -123,7 +123,7 @@ class ProductController extends PhalconRest\Mvc\Controller
      */
     public function update($product_id)
     {
-        $product = Products::findFirstById($product_id);
+        $product = Product::findFirstById($product_id);
 
         if (!$product){
 
@@ -155,7 +155,7 @@ class ProductController extends PhalconRest\Mvc\Controller
     public function remove($product_id)
     {
 
-        if (!Products::remove($product_id)){
+        if (!Product::remove($product_id)){
 
             throw new UserException(ErrorCodes::DATA_FAIL, 'Could not remove product.');
         }
