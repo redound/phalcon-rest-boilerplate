@@ -7,10 +7,10 @@ class CustomSerializer extends \League\Fractal\Serializer\ArraySerializer
     public function collection($resourceKey, array $data)
     {
 
-    	if ($resourceKey == 'parent'){
+        if ($resourceKey == 'parent') {
 
-    		return $data;
-    	}
+            return $data;
+        }
 
         return array($resourceKey ?: 'data' => $data);
     }
@@ -18,7 +18,7 @@ class CustomSerializer extends \League\Fractal\Serializer\ArraySerializer
     public function item($resourceKey, array $data)
     {
 
-        if ($resourceKey == 'parent'){
+        if ($resourceKey == 'parent') {
 
             return $data;
         }

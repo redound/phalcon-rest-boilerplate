@@ -1,46 +1,41 @@
 <?php
 
 use PhalconRest\Exceptions\CoreException;
-use League\Fractal\Resource\Item;
 
 class User extends BaseModel
 {
 
     public function getSource()
     {
-
         return 'user';
     }
 
     public function columnMap()
     {
-        //Keys are the real names in the table and
-        //the values their names in the application
         return [
-            'id'                        => 'id',
-            'name'                      => 'name',
-            'email'                     => 'email',
-            'active'                    => 'active',
-            'mail_token'                => 'mailToken',
-            'updated_at'                => 'updatedAt',
-            'created_at'                => 'createdAt',
+            'id' => 'id',
+            'name' => 'name',
+            'email' => 'email',
+            'active' => 'active',
+            'mail_token' => 'mailToken',
+            'updated_at' => 'updatedAt',
+            'created_at' => 'createdAt',
         ];
     }
 
     public function initialize()
     {
         $this->hasOne('id', 'GoogleAccount', 'userId', [
-            'alias' => 'GoogleAccount'
+            'alias' => 'GoogleAccount',
         ]);
 
         $this->hasOne('id', 'UsernameAccount', 'userId', [
-            'alias' => 'UsernameAccount'
+            'alias' => 'UsernameAccount',
         ]);
     }
 
     public function validateRules()
     {
-
         return [
             'name' => 'pattern:/[A-Za-z ]{0,55}/', // should contain between 0 - 55 letters
             'email' => 'email', // should be an email address
@@ -50,11 +45,8 @@ class User extends BaseModel
     public function getAccount($account)
     {
         if ($account === \Library\App\Constants\AccountTypes::GOOGLE) {
-
             return $this->googleAccount;
-        }
-        elseif ($account === \Library\App\Constants\AccountTypes::USERNAME) {
-            
+        } elseif ($account === \Library\App\Constants\AccountTypes::USERNAME) {
             return $this->usernameAccount;
         }
 
@@ -76,29 +68,26 @@ class User extends BaseModel
         $user = User::findByPayload($data);
 
         if ($user && $user->googleAccount) {
-
             return $user;
         }
 
         // Create Google Account
-        $googleAccount              = new \GoogleAccount();
-        $googleAccount->googleId    = $data['googleId'];
-        $googleAccount->email       = $data['email'];
+        $googleAccount = new \GoogleAccount;
+        $googleAccount->googleId = $data['googleId'];
+        $googleAccount->email = $data['email'];
 
         // No user? Create one
         if (!$user) {
-
-            $user = new User();
-            $user->email            = $data['email'];
-            $user->active           = 1;
-            $user->mailToken        = null;
+            $user = new User;
+            $user->email = $data['email'];
+            $user->active = 1;
+            $user->mailToken = null;
         }
 
         // Assign Google Account to User
-        $user->googleAccount    = $googleAccount;
+        $user->googleAccount = $googleAccount;
 
         if (!$user->save()) {
-
             throw new CoreException(ErrorCodes::USER_REGISTERFAIL, 'User could not be created');
         }
 

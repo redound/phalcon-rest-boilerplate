@@ -8,7 +8,7 @@ $di = new \Phalcon\DI\FactoryDefault($config);
 /**
  * @description Phalcon - \Phalcon\Config
  */
-$di->setShared(AppServices::CONFIG, function() use ($config){
+$di->setShared(AppServices::CONFIG, function () use ($config) {
 
     return $config;
 });
@@ -16,13 +16,13 @@ $di->setShared(AppServices::CONFIG, function() use ($config){
 /**
  * @description Phalcon - \Phalcon\Db\Adapter\Pdo\Mysql
  */
-$di->set(AppServices::DB, function() use ($config, $di) {
+$di->set(AppServices::DB, function () use ($config, $di) {
 
     $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        "host"          => $config->database->host,
-        "username"      => $config->database->username,
-        "password"      => $config->database->password,
-        "dbname"        => $config->database->name
+        "host" => $config->database->host,
+        "username" => $config->database->username,
+        "password" => $config->database->password,
+        "dbname" => $config->database->name,
     ));
 
     //Assign the eventsManager to the db adapter instance
@@ -34,27 +34,27 @@ $di->set(AppServices::DB, function() use ($config, $di) {
 /**
  * @description Phalcon - \Phalcon\Mvc\Url
  */
-$di->set(AppServices::URL, function() use ($config) {
-	$url = new \Phalcon\Mvc\Url();
-	$url->setBaseUri($config->application->baseUri);
-	return $url;
+$di->set(AppServices::URL, function () use ($config) {
+    $url = new \Phalcon\Mvc\Url();
+    $url->setBaseUri($config->application->baseUri);
+    return $url;
 });
 
 /**
  * @description Phalcon - \Phalcon\Mvc\View\Simple
  */
-$di->set(AppServices::VIEW, function() use ($config) {
+$di->set(AppServices::VIEW, function () use ($config) {
 
-	$view = new Phalcon\Mvc\View\Simple();
-	$view->setViewsDir($config->application->viewsDir);
+    $view = new Phalcon\Mvc\View\Simple();
+    $view->setViewsDir($config->application->viewsDir);
 
-	return $view;
+    return $view;
 });
 
 /**
  * @description Phalcon - \Phalcon\Mvc\Router
  */
-$di->set(AppServices::ROUTER, function(){
+$di->set(AppServices::ROUTER, function () {
 
     return new \Phalcon\Mvc\Router;
 });
@@ -62,7 +62,7 @@ $di->set(AppServices::ROUTER, function(){
 /**
  * @description Phalcon - EventsManager
  */
-$di->setShared(AppServices::EVENTS_MANAGER, function() use ($di, $config) {
+$di->setShared(AppServices::EVENTS_MANAGER, function () use ($di, $config) {
 
     // Create instance
     $eventsManager = new \Phalcon\Events\Manager;
@@ -75,8 +75,8 @@ $di->setShared(AppServices::EVENTS_MANAGER, function() use ($di, $config) {
     /**
      * @description PhalconRest - Authorize endpoints
      */
-    $privateEndpoints   = $config->acl->privateEndpoints;
-    $publicEndpoints    = $config->acl->publicEndpoints;
+    $privateEndpoints = $config->acl->privateEndpoints;
+    $publicEndpoints = $config->acl->publicEndpoints;
 
     $eventsManager->attach('micro', new \PhalconRest\Middleware\Acl($privateEndpoints, $publicEndpoints));
 
@@ -86,7 +86,7 @@ $di->setShared(AppServices::EVENTS_MANAGER, function() use ($di, $config) {
 /**
  * @description Phalcon - \Phalcon\Mvc\Model\Manager
  */
-$di->setShared(AppServices::MODELS_MANAGER, function() use ($di){
+$di->setShared(AppServices::MODELS_MANAGER, function () use ($di) {
 
     $modelsManager = new \Phalcon\Mvc\Model\Manager;
     return $modelsManager->setEventsManager($di->get(AppServices::EVENTS_MANAGER));
@@ -95,45 +95,45 @@ $di->setShared(AppServices::MODELS_MANAGER, function() use ($di){
 /**
  * @description PhalconRest - \League\Fractal\Manager
  */
-$di->setShared(PhalconRestServices::FRACTAL_MANAGER, function(){
+$di->setShared(PhalconRestServices::FRACTAL_MANAGER, function () {
 
     $fractal = new \League\Fractal\Manager;
     $fractal->setSerializer(new \Library\Fractal\CustomSerializer);
     return $fractal;
 });
 
-$di->setShared(PhalconRestServices::GOOGLE_CLIENT, function() use ($config) {
+$di->setShared(PhalconRestServices::GOOGLE_CLIENT, function () use ($config) {
 
     $googleClient = new \PhalconRest\Facades\GoogleClient(new \Google_Client);
 
     return $googleClient
-        ->setClientId($config->googleClient->clientId)
-        ->setClientSecret($config->googleClient->clientSecret)
-        ->setRedirectUri($config->googleClient->redirectUri)
-        ->setScopes($config->googleClient->scopes);
+    ->setClientId($config->googleClient->clientId)
+    ->setClientSecret($config->googleClient->clientSecret)
+    ->setRedirectUri($config->googleClient->redirectUri)
+    ->setScopes($config->googleClient->scopes);
 });
 
 /**
  * @description PhalconRest - \PhalconRest\Auth\Auth
  */
-$di->setShared(PhalconRestServices::AUTH_MANAGER, function() use ($di, $config) {
+$di->setShared(PhalconRestServices::AUTH_MANAGER, function () use ($di, $config) {
 
-    $googleClient       = $di->get(PhalconRestServices::GOOGLE_CLIENT);
-    $authGoogle         = new \PhalconRest\Auth\Account\Google(\Library\App\Constants\AccountTypes::GOOGLE, new \User, $googleClient);
-    $authUsername       = new \PhalconRest\Auth\Account\Username(\Library\App\Constants\AccountTypes::USERNAME, new \User);
-    $sessionManager     = new \PhalconRest\Auth\Session\JWT(new \JWT);
-    $authManager        = new \PhalconRest\Auth\Manager($sessionManager);
+    $googleClient = $di->get(PhalconRestServices::GOOGLE_CLIENT);
+    $authGoogle = new \PhalconRest\Auth\Account\Google(\Library\App\Constants\AccountTypes::GOOGLE, new \User, $googleClient);
+    $authUsername = new \PhalconRest\Auth\Account\Username(\Library\App\Constants\AccountTypes::USERNAME, new \User);
+    $sessionManager = new \PhalconRest\Auth\Session\JWT(new \JWT);
+    $authManager = new \PhalconRest\Auth\Manager($sessionManager);
 
     return $authManager
-        ->addAccount(\Library\App\Constants\AccountTypes::GOOGLE, $authGoogle)
-        ->addAccount(\Library\App\Constants\AccountTypes::USERNAME, $authUsername)
-        ->setExpireTime($config->authentication->expireTime);
+    ->addAccount(\Library\App\Constants\AccountTypes::GOOGLE, $authGoogle)
+    ->addAccount(\Library\App\Constants\AccountTypes::USERNAME, $authUsername)
+    ->setExpireTime($config->authentication->expireTime);
 });
 
 /**
  * @description PhalconRest - \PhalconRest\Mailer\Mailer
  */
-$di->setShared(PhalconRestServices::MAILER, function() use($di, $config) {
+$di->setShared(PhalconRestServices::MAILER, function () use ($di, $config) {
 
     //Create a new PHPMailer instance
     $mail = new \PHPMailer;
@@ -183,7 +183,7 @@ $di->setShared(PhalconRestServices::MAILER, function() use($di, $config) {
 /**
  * @description PhalconRest - \PhalconRest\Http\Request
  */
-$di->setShared(PhalconRestServices::REQUEST, function(){
+$di->setShared(PhalconRestServices::REQUEST, function () {
 
     return new \PhalconRest\Http\Request;
 });
@@ -191,7 +191,7 @@ $di->setShared(PhalconRestServices::REQUEST, function(){
 /**
  * @description PhalconRest - Response
  */
-$di->set(PhalconRestServices::RESPONSE, function() use ($config) {
+$di->set(PhalconRestServices::RESPONSE, function () use ($config) {
 
     $responseManager = new \PhalconRest\Http\Response\Manager($config->errorMessages->toArray());
     $response = new \PhalconRest\Http\Response;
@@ -201,7 +201,7 @@ $di->set(PhalconRestServices::RESPONSE, function() use ($config) {
 /**
  * @description App - \Library\App\Services\UserService
  */
-$di->setShared(AppServices::USER_SERVICE, function() {
+$di->setShared(AppServices::USER_SERVICE, function () {
 
     return new \Library\App\Services\UserService;
 });
@@ -209,7 +209,7 @@ $di->setShared(AppServices::USER_SERVICE, function() {
 /**
  * @description App - \Library\App\Services\MailService
  */
-$di->setShared(AppServices::MAIL_SERVICE, function() {
+$di->setShared(AppServices::MAIL_SERVICE, function () {
 
     return new \Library\App\Services\MailService;
 });

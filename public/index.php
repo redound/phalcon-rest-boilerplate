@@ -1,10 +1,8 @@
 <?php
 
 use Library\App\Constants\Services as AppServices;
-use PhalconRest\Constants\Services as PhalconRestServices;
 use PhalconRest\Constants\ErrorCodes;
-use PhalconRest\Documentation;
-
+use PhalconRest\Constants\Services as PhalconRestServices;
 use PhalconRest\Exceptions\UserException;
 
 try {
@@ -25,8 +23,8 @@ try {
 
     $app->setEventsManager($app->di->get(AppServices::EVENTS_MANAGER));
 
-    $request        = $app->di->get(PhalconRestServices::REQUEST);
-    $response       = $app->di->get(PhalconRestServices::RESPONSE);
+    $request = $app->di->get(PhalconRestServices::REQUEST);
+    $response = $app->di->get(PhalconRestServices::RESPONSE);
 
     // Mount Collections
     $app->mount(new ExportCollection);
@@ -34,28 +32,28 @@ try {
     $app->mount(new UserCollection);
 
     // OPTIONS have no body, send the headers, exit
-    if($request->getMethod() == 'OPTIONS'){
-        
+    if ($request->getMethod() == 'OPTIONS') {
+
         $response->send([
-            'result' => 'OK'
+            'result' => 'OK',
         ]);
         exit;
     }
 
     // Needed for IE
-    $app->get('/proxy.html', function() use ($app, $config) {
+    $app->get('/proxy.html', function () use ($app, $config) {
 
         echo $app->di->get(AppServices::VIEW)->render('general/proxy', ['client' => $config->clientHostName]);
         exit;
     });
 
     // Handle not found
-    $app->notFound(function() {
+    $app->notFound(function () {
 
         throw new UserException(ErrorCodes::GEN_NOTFOUND);
     });
 
-    $app->before(function() use ($app, $request) {
+    $app->before(function () use ($app, $request) {
 
         $fractal = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
         $include = $request->getQuery('include');
@@ -65,28 +63,32 @@ try {
         }
     });
 
-    $app->after(function() use ($app, $response) {
+    $app->after(function () use ($app, $response) {
 
         $response->send($app->getReturnedValue()); // Get return value from controller
     });
 
     $app->handle();
 
-} catch (PhalconRest\Exceptions\UserException $e){
+} catch (PhalconRest\Exceptions\UserException $e) {
 
-	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
-} catch (PhalconRest\CoreException $e){
+} catch (PhalconRest\CoreException $e) {
 
-	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
-} catch (Phalcon\Exception $e){
+} catch (Phalcon\Exception $e) {
 
-	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
-} catch (PDOException $e){
+} catch (PDOException $e) {
 
-	$app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+
+} catch (Exception $e) {
+
+    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 }
 

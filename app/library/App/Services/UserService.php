@@ -2,19 +2,19 @@
 
 namespace Library\App\Services;
 
-use PhalconRest\Exceptions\UserException,
-    PhalconRest\Exceptions\CoreException,
-    Library\App\Constants\Services as AppServices,
-    PhalconRest\Constants\Services as PhalconRestServices,
-    PhalconRest\Constants\ErrorCodes as ErrorCodes;
+use Library\App\Constants\Services as AppServices;
+use PhalconRest\Constants\ErrorCodes as ErrorCodes;
+use PhalconRest\Constants\Services as PhalconRestServices;
+use PhalconRest\Exceptions\UserException;
 
-class UserService extends \Phalcon\Mvc\User\Plugin {
+class UserService extends \Phalcon\Mvc\User\Plugin
+{
 
     public function __construct()
     {
-        $this->request          = $this->di->get(PhalconRestServices::REQUEST);
-        $this->authManager      = $this->di->get(PhalconRestServices::AUTH_MANAGER);
-        $this->mailService      = $this->di->get(AppServices::MAIL_SERVICE);
+        $this->request = $this->di->get(PhalconRestServices::REQUEST);
+        $this->authManager = $this->di->get(PhalconRestServices::AUTH_MANAGER);
+        $this->mailService = $this->di->get(AppServices::MAIL_SERVICE);
     }
 
     public function activate()
@@ -29,7 +29,7 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
 
         $user = \User::findFirst([
             'conditions' => 'mailToken = :mailtoken:',
-            'bind' => ['mailtoken' => $mailtoken]
+            'bind' => ['mailtoken' => $mailtoken],
         ]);
 
         if (!$user) {
@@ -69,15 +69,15 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
         // Check if perhaps username already exists
         $usernameAccount = \UsernameAccount::findFirstByUsername($data->username);
 
-        if ($usernameAccount){
+        if ($usernameAccount) {
 
             throw new \Exception('Username already exists');
         }
 
         // Let's create username account
-        $usernameAccount                        = new \UsernameAccount();
-        $usernameAccount->username              = $data->username;
-        $usernameAccount->password              = $this->security->hash($data->password);
+        $usernameAccount = new \UsernameAccount();
+        $usernameAccount->username = $data->username;
+        $usernameAccount->password = $this->security->hash($data->password);
 
         // If user already exists, this stays false in the
         // next check so there will not be sent an activation mail.
@@ -98,16 +98,16 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
                 $mailToken = $this->authManager->createMailToken();
 
                 $user = new \User();
-                $user->name             = $data->name;
-                $user->email            = $data->email;
+                $user->name = $data->name;
+                $user->email = $data->email;
 
                 // By default, user is not active.
                 // They need to click the mailToken they get sent by mail
-                $user->active           = 0;
-                $user->mailToken        = $mailToken;
+                $user->active = 0;
+                $user->mailToken = $mailToken;
             }
 
-            $user->usernameAccount  = $usernameAccount;
+            $user->usernameAccount = $usernameAccount;
 
             if (!$user->save()) {
 
@@ -119,7 +119,7 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
                 // Send a mail where they can activate their account
                 $sent = $this->mailService->sendActivationMail($user, $usernameAccount);
 
-                if (!$sent){
+                if (!$sent) {
 
                     throw new \Exception('User #' . $user->id . ' was created, but Activation mail could not be sent. So changes have been rolled back.');
                 }
@@ -128,7 +128,7 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
             // Everything has gone to plan, let's commit those changes!
             $db->commit();
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
 
             $db->rollback();
             throw new UserException(ErrorCodes::USER_CREATEFAIL, $e->getMessage());
@@ -143,7 +143,7 @@ class UserService extends \Phalcon\Mvc\User\Plugin {
 
         $user = \User::findFirst($user->id);
 
-        if (!$user){
+        if (!$user) {
 
             throw new UserException(ErrorCodes::USER_NOTFOUND);
         }

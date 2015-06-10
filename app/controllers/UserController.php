@@ -1,10 +1,7 @@
 <?php
 
-use PhalconRest\Exceptions\UserException,
-    PhalconRest\Exceptions\CoreException,
-    Library\PhalconRest\Transformers\UserTransformer,
-    Library\App\Constants\Services as AppServices,
-    PhalconRest\Constants\Services as PhalconRestServices;
+use Library\App\Constants\Services as AppServices;
+use Library\PhalconRest\Transformers\UserTransformer;
 
 /**
  * @resource("User")

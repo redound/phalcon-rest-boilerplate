@@ -1,7 +1,7 @@
 <?php
 
-use PhalconRest\Exceptions\UserException,
-    PhalconRest\Constants\ErrorCodes as ErrorCodes;
+use PhalconRest\Constants\ErrorCodes as ErrorCodes;
+use PhalconRest\Exceptions\UserException;
 
 /**
  * @resource("Product")
@@ -32,7 +32,6 @@ class ProductController extends PhalconRest\Mvc\Controller
         return $this->createCollection($products, new ProductTransformer, 'products');
     }
 
-
     /**
      * @title("Find")
      * @description("Get all products")
@@ -53,7 +52,7 @@ class ProductController extends PhalconRest\Mvc\Controller
 
         $product = Product::findFirstById($product_id);
 
-        if (!$product){
+        if (!$product) {
 
             throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Project with id: #' . $product_id . ' could not be found.');
         }
@@ -93,7 +92,7 @@ class ProductController extends PhalconRest\Mvc\Controller
         // Prepare method is provided by \OA\Phalcon\Mvc\Model
         $product->prepare($data);
 
-        if (!$product->save()){
+        if (!$product->save()) {
 
             throw new UserException(ErrorCodes::DATA_FAIL, 'Could not create product.');
         }
@@ -126,18 +125,17 @@ class ProductController extends PhalconRest\Mvc\Controller
     {
         $product = Product::findFirstById($product_id);
 
-        if (!$product){
+        if (!$product) {
 
             throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Could not find product.');
         }
-
 
         $data = $this->request->getJsonRawBody();
 
         // Prepare method is provided by \OA\Phalcon\Mvc\Model
         $product->prepare($data);
 
-        if (!$product->save()){
+        if (!$product->save()) {
 
             throw new UserException(ErrorCodes::DATA_FAIL, 'Could not update product.');
         }
@@ -156,7 +154,7 @@ class ProductController extends PhalconRest\Mvc\Controller
     public function remove($product_id)
     {
 
-        if (!Product::remove($product_id)){
+        if (!Product::remove($product_id)) {
 
             throw new UserException(ErrorCodes::DATA_FAIL, 'Could not remove product.');
         }

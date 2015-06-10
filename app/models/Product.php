@@ -1,48 +1,41 @@
 <?php
 
-use PhalconRest\Exceptions\UserException;
-use PhalconRest\Constants\ErrorCodes as ErrorCodes;
-
 class Product extends BaseModel
 {
-	protected $_rules;
+    protected $_rules;
 
-	public function getSource()
-	{
+    public function getSource()
+    {
+        return 'product';
+    }
 
-		return 'product';
-	}
+    public function columnMap()
+    {
+        return [
+            'id' => 'id',
+            'title' => 'title',
+            'brand' => 'brand',
+            'color' => 'color',
+            'created_at' => 'createdAt',
+            'updated_at' => 'updatedAt',
+        ];
+    }
 
-	public function columnMap()
-	{
+    public function whitelist()
+    {
+        return [
+            'title',
+            'brand',
+            'color',
+        ];
+    }
 
-	    return [
-	        'id'                        => 'id',
-	        'title'                     => 'title',
-	        'brand'                    	=> 'brand',
-	        'color'           			=> 'color',
-	        'created_at' 	            => 'createdAt',
-	        'updated_at' 	            => 'updatedAt',
-	    ];
-	}
-
-	public function whitelist()
-	{
-
-		return [
-			'title',
-	        'brand',
-	        'color'
-		];
-	}
-
-	public function validateRules()
-	{
-
-		return [
-			'title' => 'min:2|max:55|required',
-			'brand' => 'min:2|max:55',
-			'color' => 'min:2|max:6'
-		];
-	}
+    public function validateRules()
+    {
+        return [
+            'title' => 'min:2|max:55|required',
+            'brand' => 'min:2|max:55',
+            'color' => 'min:2|max:6',
+        ];
+    }
 }
