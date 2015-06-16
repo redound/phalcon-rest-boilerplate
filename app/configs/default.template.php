@@ -45,7 +45,6 @@ return [
             '/products/{product_id}',
         ],
     ],
-
     'errorMessages' => [
 
         // General
@@ -80,6 +79,26 @@ return [
             'message' => 'Action failed',
         ],
 
+        2010 => [
+            'statuscode' => 404,
+            'message' => 'Data: Not Found',
+        ],
+
+        2020 => [
+            'statuscode' => 500,
+            'message' => 'Data: Failed to create',
+        ],
+
+        2030 => [
+            'statuscode' => 500,
+            'message' => 'Data: Failed to update',
+        ],
+
+        2040 => [
+            'statuscode' => 500,
+            'message' => 'Data: Failed to delete',
+        ],
+
         // Authentication
         3006 => [
             'statuscode' => 404,
@@ -109,6 +128,11 @@ return [
         3020 => [
             'statuscode' => 403,
             'message' => 'Auth: Forbidden',
+        ],
+
+        3030 => [
+            'statuscode' => 401,
+            'message' => 'Auth: Session expired',
         ],
 
         4001 => [
