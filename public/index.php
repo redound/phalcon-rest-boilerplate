@@ -1,9 +1,7 @@
 <?php
 
 use Library\App\Constants\Services as AppServices;
-use PhalconRest\Constants\ErrorCodes;
 use PhalconRest\Constants\Services as PhalconRestServices;
-use PhalconRest\Exceptions\UserException;
 
 try {
 
@@ -19,77 +17,27 @@ try {
     // Setup all required services (DI)
     require __DIR__ . "/../app/bootstrap/services.php";
 
+    // Instantiate main application
     $app = new \Phalcon\Mvc\Micro($di);
 
-    $app->setEventsManager($app->di->get(AppServices::EVENTS_MANAGER));
+    /**
+     * We need to attach the EventsManager to the main application
+     * in order to attach Middleware.
+     */
+    $eventsManager = $app->di->get(AppServices::EVENTS_MANAGER);
+    $app->setEventsManager($eventsManager);
 
-    $request = $app->di->get(PhalconRestServices::REQUEST);
-    $response = $app->di->get(PhalconRestServices::RESPONSE);
+    // Attach Middleware to EventsManager
+    require __DIR__ . "/../app/bootstrap/middleware.php";
 
     // Mount Collections
-    $app->mount(new ExportCollection);
-    $app->mount(new ProductCollection);
-    $app->mount(new UserCollection);
+    require __DIR__ . "/../app/bootstrap/collections.php";
 
-    // OPTIONS have no body, send the headers, exit
-    if ($request->getMethod() == 'OPTIONS') {
-
-        $response->send([
-            'result' => 'OK',
-        ]);
-        exit;
-    }
-
-    // Needed for IE
-    $app->get('/proxy.html', function () use ($app, $config) {
-
-        echo $app->di->get(AppServices::VIEW)->render('general/proxy', ['client' => $config->clientHostName]);
-        exit;
-    });
-
-    // Handle not found
-    $app->notFound(function () {
-
-        throw new UserException(ErrorCodes::GEN_NOTFOUND);
-    });
-
-    $app->before(function () use ($app, $request) {
-
-        $fractal = $app->di->get(PhalconRestServices::FRACTAL_MANAGER);
-        $include = $request->getQuery('include');
-
-        if (!is_null($include)) {
-            $fractal->parseIncludes($include);
-        }
-    });
-
-    $app->after(function () use ($app, $response) {
-
-        $response->send($app->getReturnedValue()); // Get return value from controller
-    });
-
+    // Start application
     $app->handle();
-
-} catch (PhalconRest\Exceptions\UserException $e) {
-
-    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
-
-} catch (PhalconRest\CoreException $e) {
-
-    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
-
-} catch (Phalcon\Exception $e) {
-
-    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
-
-} catch (PDOException $e) {
-
-    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 } catch (Exception $e) {
 
-    $app->di->get(PhalconRestServices::RESPONSE)->sendException($e);
+    $di->get(PhalconRestServices::RESPONSE)->sendException($e);
 
 }
-
-// TODO Simplify ^
