@@ -99,6 +99,11 @@ return [
             'message' => 'Data: Failed to delete',
         ],
 
+        2060 => [
+            'statuscode' => 404,
+            'message' => 'Data: Rejected',
+        ],
+
         // Authentication
         3006 => [
             'statuscode' => 404,
