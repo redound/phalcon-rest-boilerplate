@@ -64,23 +64,7 @@ $di->set(AppServices::ROUTER, function () {
  */
 $di->setShared(AppServices::EVENTS_MANAGER, function () use ($di, $config) {
 
-    // Create instance
-    $eventsManager = new \Phalcon\Events\Manager;
-
-    /**
-     * @description PhalconRest - Authenticate user
-     */
-    $eventsManager->attach('micro', new \PhalconRest\Middleware\Authentication);
-
-    /**
-     * @description PhalconRest - Authorize endpoints
-     */
-    $privateEndpoints = $config->acl->privateEndpoints;
-    $publicEndpoints = $config->acl->publicEndpoints;
-
-    $eventsManager->attach('micro', new \PhalconRest\Middleware\Acl($privateEndpoints, $publicEndpoints));
-
-    return $eventsManager;
+    return new \Phalcon\Events\Manager;
 });
 
 /**
@@ -195,6 +179,7 @@ $di->set(PhalconRestServices::RESPONSE, function () use ($config) {
 
     $responseManager = new \PhalconRest\Http\Response\Manager($config->errorMessages->toArray());
     $response = new \PhalconRest\Http\Response;
+    $response->setDebugMode($config->debugMode);
     return $response->setManager($responseManager);
 });
 
