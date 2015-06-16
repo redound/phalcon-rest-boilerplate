@@ -12,6 +12,11 @@ return [
         'template' => 'mail/activation', // in views folder
     ],
 
+    'xdomain' => [
+        'route' => '/proxy.html',
+        'viewPath' => 'general/proxy',
+    ],
+
     'googleClient' => [
         'clientId' => 'your-google-client-id.apps.googleusercontent.com',
         'clientSecret' => 'your-client-secret',
