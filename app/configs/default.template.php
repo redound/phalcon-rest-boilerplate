@@ -104,6 +104,11 @@ return [
             'message' => 'Data: Rejected',
         ],
 
+        2070 => [
+            'statuscode' => 403,
+            'message' => 'Data: Action not allowed',
+        ],
+
         // Authentication
         3006 => [
             'statuscode' => 404,
