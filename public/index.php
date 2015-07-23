@@ -33,6 +33,14 @@ try {
     // Mount Collections
     require __DIR__ . "/../app/bootstrap/collections.php";
 
+    // It's working message
+    $app->get('/', function() use ($app) {
+
+        $view = $app->di->get(AppServices::VIEW);
+        echo $view->render('general/index');
+        exit;
+    });
+
     // Start application
     $app->handle();
 

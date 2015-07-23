@@ -32,6 +32,7 @@ return [
 
     'acl' => [
         'publicEndpoints' => [
+            '/',
             '/proxy.html',
             '/export/documentation.json',
             '/export/postman-collection.json',
