@@ -3,8 +3,8 @@
 return [
 
     'debugMode' => 1, // 0; no developer messages // 1; developer messages and CoreExceptions
-    'hostName' => 'http://phalcon-rest-skeleton.andev.local',
-    'clientHostName' => 'http://phalcon-rest-app.andev.local',
+    'hostName' => 'http://phalcon-rest-boilerplate.vagrantserver.com',
+    'clientHostName' => 'http://phalcon-rest-app.vagrantserver.com',
     'database' => [
 
         // Change to your own configuration
