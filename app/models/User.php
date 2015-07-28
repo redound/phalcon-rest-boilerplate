@@ -32,6 +32,10 @@ class User extends BaseModel
         $this->hasOne('id', 'UsernameAccount', 'userId', [
             'alias' => 'UsernameAccount',
         ]);
+
+        $this->hasOne('id', 'EmailAccount', 'userId', [
+            'alias' => 'EmailAccount',
+        ]);
     }
 
     public function validateRules()
@@ -48,6 +52,8 @@ class User extends BaseModel
             return $this->googleAccount;
         } elseif ($account === \Library\App\Constants\AccountTypes::USERNAME) {
             return $this->usernameAccount;
+        } elseif ($account === \Library\App\Constants\AccountTypes::EMAIL) {
+            return $this->emailAccount;
         }
 
         return false;
@@ -61,6 +67,11 @@ class User extends BaseModel
     public function getByUsername($username)
     {
         return UsernameAccount::findFirstByUsername($username);
+    }
+
+    public function getByEmail($email)
+    {
+        return EmailAccount::findFirstByEmail($email);
     }
 
     public function processGooglePayload($data)

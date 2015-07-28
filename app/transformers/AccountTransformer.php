@@ -5,6 +5,7 @@ use League\Fractal;
 class AccountTransformer extends Fractal\TransformerAbstract
 {
     protected $defaultIncludes = [
+        'email',
         'username',
         'google',
     ];
@@ -19,6 +20,11 @@ class AccountTransformer extends Fractal\TransformerAbstract
             $this->defaultIncludes[] = 'username';
         }
 
+        // Include when email account is present
+        if ($user->emailAccount) {
+            $this->defaultIncludes[] = 'email';
+        }
+
         // Include when google account is present
         if ($user->googleAccount) {
             $this->defaultIncludes[] = 'google';
@@ -31,6 +37,11 @@ class AccountTransformer extends Fractal\TransformerAbstract
     public function includeUsername($user)
     {
         return $this->item($user->usernameAccount, new UsernameAccountTransformer, 'parent');
+    }
+
+    public function includeEmail($user)
+    {
+        return $this->item($user->emailAccount, new EmailAccountTransformer, 'parent');
     }
 
     public function includeGoogle($user)

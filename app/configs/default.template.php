@@ -29,7 +29,6 @@ return [
         'genSalt' => 'should-also-be-in-application-env',
         'expireTime' => 86400 * 7, // One week till token expires
     ],
-
     'acl' => [
         'publicEndpoints' => [
             '/',
@@ -38,10 +37,14 @@ return [
             '/export/postman-collection.json',
             '/users',
             '/users/authenticate/{account}',
+            '/users/register/{account}',
             '/users/activate',
         ],
         'privateEndpoints' => [
             '/users/me',
+            '/users/me/changepassword/{account}',
+            '/users/me/update',
+            '/users/me/delete',
             '/products',
             '/products/{product_id}',
         ],

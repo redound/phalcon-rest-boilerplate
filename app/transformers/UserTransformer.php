@@ -5,7 +5,7 @@ use League\Fractal;
 class UserTransformer extends Fractal\TransformerAbstract
 {
 
-    protected $availableIncludes = [
+    protected $defaultIncludes = [
         'accounts',
     ];
 

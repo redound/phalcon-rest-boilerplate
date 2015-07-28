@@ -32,13 +32,12 @@ class UserController extends \PhalconRest\Mvc\Controller
     }
 
     /**
-     * @title("Create")
-     * @description("Create new user (register)")
+     * @title("Register")
+     * @description("Register new user")
      * @response("User object or Error object")
      * @requestExample({
      *      "name": "John Doe",
      *      "email": "john@doe.com",
-     *      "username": "john",
      *      "password": "supersecretpassword"
      * })
      * @responseExample({
@@ -52,11 +51,11 @@ class UserController extends \PhalconRest\Mvc\Controller
      *     }
      * })
      */
-    public function create()
+    public function register($account)
     {
         $data = $this->request->getJsonRawBody();
 
-        $user = $this->userService->register($data);
+        $user = $this->userService->register($account, $data);
 
         return $this->createItem($user, new \UserTransformer, 'user');
     }
@@ -99,6 +98,21 @@ class UserController extends \PhalconRest\Mvc\Controller
         $user = $this->userService->me();
 
         return $this->createItem($user, new \UserTransformer, 'user');
+    }
+
+    /**
+     * @title("Delete")
+     * @description("Delete user")
+     * @response("Result object or Error object")
+     * @requestExample("GET /users/me/delete")
+     * @responseExample({
+     *      "result": "OK"
+     *  })
+     */
+    public function delete()
+    {
+        $this->userService->delete();
+        return $this->respondWithOK();
     }
 
     /**

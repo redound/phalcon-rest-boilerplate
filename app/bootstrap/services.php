@@ -102,16 +102,59 @@ $di->setShared(PhalconRestServices::GOOGLE_CLIENT, function () use ($config) {
  */
 $di->setShared(PhalconRestServices::AUTH_MANAGER, function () use ($di, $config) {
 
-    $googleClient = $di->get(PhalconRestServices::GOOGLE_CLIENT);
-    $authGoogle = new \PhalconRest\Auth\Account\Google(\Library\App\Constants\AccountTypes::GOOGLE, new \User, $googleClient);
-    $authUsername = new \PhalconRest\Auth\Account\Username(\Library\App\Constants\AccountTypes::USERNAME, new \User);
     $sessionManager = new \PhalconRest\Auth\Session\JWT(new \JWT);
-    $authManager = new \PhalconRest\Auth\Manager($sessionManager);
+    $authManager = new \PhalconRest\Auth\Manager($sessionManager); // extended class
+
+    // Setup Google Account Type
+    // -----------------------------------
+
+    // 1. Instantiate Google Client
+    $googleClient = $di->get(PhalconRestServices::GOOGLE_CLIENT);
+
+    // 2. Instantiate Google Account Type
+    $authGoogle = new \PhalconRest\Auth\Account\Google(\Library\App\Constants\AccountTypes::GOOGLE);
+
+    // 3. Set Google Client
+    $authGoogle->setGoogleClient($googleClient);
+
+    // 4. Set User Model
+    $authGoogle->setUserModel(new \User);
+
+    // Setup Username Account Type
+    // -----------------------------------
+
+    // 1. Instantiate Username Account Type
+    $authUsername = new \PhalconRest\Auth\Account\Username(\Library\App\Constants\AccountTypes::USERNAME);
+
+    // 2. Set User Model
+    $authUsername->setUserModel(new \User);
+
+    // 3. Set Email Account Model
+    $authUsername->setUsernameAccountModel(new \UsernameAccount);
+
+    // 4. Set Mail Service
+    $authUsername->setMailService(AppServices::MAIL_SERVICE);
+
+    // Setup Email Account Type
+    // -----------------------------------
+
+    // 1. Instantiate Email Account Type
+    $authEmail = new \PhalconRest\Auth\Account\Email(\Library\App\Constants\AccountTypes::EMAIL);
+
+    // 2. Set User Model
+    $authEmail->setUserModel(new \User);
+
+    // 3. Set Email Account Model
+    $authEmail->setEmailAccountModel(new \EmailAccount);
+
+    // 4. Set Mail Service
+    $authEmail->setMailService(AppServices::MAIL_SERVICE);
 
     return $authManager
-    ->addAccount(\Library\App\Constants\AccountTypes::GOOGLE, $authGoogle)
-    ->addAccount(\Library\App\Constants\AccountTypes::USERNAME, $authUsername)
-    ->setExpireTime($config->authentication->expireTime);
+        ->addAccount(\Library\App\Constants\AccountTypes::GOOGLE, $authGoogle)
+        ->addAccount(\Library\App\Constants\AccountTypes::USERNAME, $authUsername)
+        ->addAccount(\Library\App\Constants\AccountTypes::EMAIL, $authEmail)
+        ->setExpireTime($config->authentication->expireTime);
 });
 
 /**
