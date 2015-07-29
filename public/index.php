@@ -6,7 +6,7 @@ use PhalconRest\Constants\Services as PhalconRestServices;
 try {
 
     // Setup up environment variable
-    $application_env = defined('APPLICATION_ENV') ? APPLICATION_ENV : 'development';
+    $application_env = getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development';
 
     // Read the configuration based on env
     $config = require __DIR__ . "/../app/bootstrap/config.php";
