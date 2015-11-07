@@ -1,8 +1,9 @@
 {
-    "name": "olivierandriessen/phalcon-rest-skeleton",
-    "description": "Phalcon REST skeleton application",
+    "name": "olivierandriessen/phalcon-rest-boilerplate",
+    "description": "Phalcon REST Boilerplate",
+    "version": "1.0.1",
     "require": {
-        "olivierandriessen/phalcon-rest": "dev-develop",
+        "olivierandriessen/phalcon-rest": "^1.0",
         "league/fractal": "^0.13.0",
         "firebase/php-jwt": "^3.0"
     },
