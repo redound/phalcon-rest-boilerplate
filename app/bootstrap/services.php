@@ -1,9 +1,8 @@
 <?php
 
-use Library\App\Constants\Services as AppServices;
-use PhalconRest\Constants\Services as PhalconRestServices;
+use App\Constants\Services as AppServices;
 
-$di = new \Phalcon\DI\FactoryDefault($config);
+$di = new \PhalconRest\DI\FactoryDefault();
 
 /**
  * @description Phalcon - \Phalcon\Config
@@ -35,6 +34,7 @@ $di->set(AppServices::DB, function () use ($config, $di) {
  * @description Phalcon - \Phalcon\Mvc\Url
  */
 $di->set(AppServices::URL, function () use ($config) {
+
     $url = new \Phalcon\Mvc\Url();
     $url->setBaseUri($config->application->baseUri);
     return $url;
@@ -68,6 +68,26 @@ $di->setShared(AppServices::EVENTS_MANAGER, function () use ($di, $config) {
 });
 
 /**
+ * @description Phalcon - TokenParser
+ */
+$di->setShared(AppServices::TOKEN_PARSER, function () use ($di, $config) {
+
+    return new \PhalconRest\Auth\TokenParser\JWT($config->authentication->secret, \PhalconRest\Auth\TokenParser\JWT::ALGORITHM_HS256);
+});
+
+/**
+ * @description Phalcon - AuthManager
+ */
+$di->setShared(AppServices::AUTH_MANAGER, function () use ($di, $config) {
+
+    $authManager = new \PhalconRest\Auth\Manager($config->authentication->expirationTime);
+    $authManager->registerAccountType(App\Auth\UsernameAccountType::NAME, new \App\Auth\UsernameAccountType());
+
+    return $authManager;
+});
+
+
+/**
  * @description Phalcon - \Phalcon\Mvc\Model\Manager
  */
 $di->setShared(AppServices::MODELS_MANAGER, function () use ($di) {
@@ -79,151 +99,12 @@ $di->setShared(AppServices::MODELS_MANAGER, function () use ($di) {
 /**
  * @description PhalconRest - \League\Fractal\Manager
  */
-$di->setShared(PhalconRestServices::FRACTAL_MANAGER, function () {
+$di->setShared(AppServices::FRACTAL_MANAGER, function () {
 
     $fractal = new \League\Fractal\Manager;
-    $fractal->setSerializer(new \Library\Fractal\CustomSerializer);
+    $fractal->setSerializer(new \App\Fractal\CustomSerializer());
+
     return $fractal;
-});
-
-$di->setShared(PhalconRestServices::GOOGLE_CLIENT, function () use ($config) {
-
-    $googleClient = new \PhalconRest\Facades\GoogleClient(new \Google_Client);
-
-    return $googleClient
-    ->setClientId($config->googleClient->clientId)
-    ->setClientSecret($config->googleClient->clientSecret)
-    ->setRedirectUri($config->googleClient->redirectUri)
-    ->setScopes($config->googleClient->scopes);
-});
-
-/**
- * @description PhalconRest - \PhalconRest\Auth\Auth
- */
-$di->setShared(PhalconRestServices::AUTH_MANAGER, function () use ($di, $config) {
-
-    $sessionManager = new \PhalconRest\Auth\Session\JWT(new \JWT);
-    $authManager = new \PhalconRest\Auth\Manager($sessionManager); // extended class
-
-    // Setup Google Account Type
-    // -----------------------------------
-
-    // 1. Instantiate Google Client
-    $googleClient = $di->get(PhalconRestServices::GOOGLE_CLIENT);
-
-    // 2. Instantiate Google Account Type
-    $authGoogle = new \PhalconRest\Auth\Account\Google(\Library\App\Constants\AccountTypes::GOOGLE);
-
-    // 3. Set Google Client
-    $authGoogle->setGoogleClient($googleClient);
-
-    // 4. Set User Model
-    $authGoogle->setUserModel(new \User);
-
-    // Setup Username Account Type
-    // -----------------------------------
-
-    // 1. Instantiate Username Account Type
-    $authUsername = new \PhalconRest\Auth\Account\Username(\Library\App\Constants\AccountTypes::USERNAME);
-
-    // 2. Set User Model
-    $authUsername->setUserModel(new \User);
-
-    // 3. Set Email Account Model
-    $authUsername->setUsernameAccountModel(new \UsernameAccount);
-
-    // 4. Set Mail Service
-    $authUsername->setMailService(AppServices::MAIL_SERVICE);
-
-    // Setup Email Account Type
-    // -----------------------------------
-
-    // 1. Instantiate Email Account Type
-    $authEmail = new \PhalconRest\Auth\Account\Email(\Library\App\Constants\AccountTypes::EMAIL);
-
-    // 2. Set User Model
-    $authEmail->setUserModel(new \User);
-
-    // 3. Set Email Account Model
-    $authEmail->setEmailAccountModel(new \EmailAccount);
-
-    // 4. Set Mail Service
-    $authEmail->setMailService(AppServices::MAIL_SERVICE);
-
-    return $authManager
-        ->addAccount(\Library\App\Constants\AccountTypes::GOOGLE, $authGoogle)
-        ->addAccount(\Library\App\Constants\AccountTypes::USERNAME, $authUsername)
-        ->addAccount(\Library\App\Constants\AccountTypes::EMAIL, $authEmail)
-        ->setExpireTime($config->authentication->expireTime);
-});
-
-/**
- * @description PhalconRest - \PhalconRest\Mailer\Mailer
- */
-$di->setShared(PhalconRestServices::MAILER, function () use ($di, $config) {
-
-    //Create a new PHPMailer instance
-    $mail = new \PHPMailer;
-
-    //Tell PHPMailer to use SMTP
-    $mail->isSMTP();
-
-    //Enable SMTP debugging
-    // 0 = off (for production use)
-    // 1 = client messages
-    // 2 = client and server messages
-    $mail->SMTPDebug = $config->phpmailer->debugMode;
-
-    //Ask for HTML-friendly debug output
-    $mail->Debugoutput = 'html';
-
-    //Set the hostname of the mail server
-    $mail->Host = $config->phpmailer->host;
-
-    //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-    $mail->Port = $config->phpmailer->port;
-
-    //Set the encryption system to use - ssl (deprecated) or tls
-    $mail->SMTPSecure = $config->phpmailer->smtpSecure;
-
-    //Whether to use SMTP authentication
-    $mail->SMTPAuth = $config->phpmailer->smtpAuth;
-
-    //Username to use for SMTP authentication - use full email address for gmail
-    $mail->Username = $config->phpmailer->username;
-
-    //Password to use for SMTP authentication
-    $mail->Password = $config->phpmailer->password;
-
-    //Set who the message is to be sent from
-    $mail->setFrom($config->phpmailer->from->{0}, $config->phpmailer->from->{1});
-
-    //Set an alternative reply-to address
-    $mail->addReplyTo($config->phpmailer->replyTo->{0}, $config->phpmailer->replyTo->{1});
-
-    //Set the subject line
-    $mail->Subject = 'No subject';
-
-    return new \PhalconRest\Mailer\Adapter\PhpMailer($mail);
-});
-
-/**
- * @description PhalconRest - \PhalconRest\Http\Request
- */
-$di->setShared(PhalconRestServices::REQUEST, function () {
-
-    return new \PhalconRest\Http\Request;
-});
-
-/**
- * @description PhalconRest - Response
- */
-$di->set(PhalconRestServices::RESPONSE, function () use ($config) {
-
-    $responseManager = new \PhalconRest\Http\Response\Manager($config->errorMessages->toArray());
-    $response = new \PhalconRest\Http\Response;
-    $response->setDebugMode($config->debugMode);
-    return $response->setManager($responseManager);
 });
 
 /**
@@ -231,13 +112,7 @@ $di->set(PhalconRestServices::RESPONSE, function () use ($config) {
  */
 $di->setShared(AppServices::USER_SERVICE, function () {
 
-    return new \Library\App\Services\UserService;
+    return new \App\Services\UserService;
 });
 
-/**
- * @description App - \Library\App\Services\MailService
- */
-$di->setShared(AppServices::MAIL_SERVICE, function () {
-
-    return new \Library\App\Services\MailService;
-});
+return $di;

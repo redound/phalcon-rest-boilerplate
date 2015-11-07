@@ -1,7 +1,4 @@
 /vendor
 .DS_Store
 composer.lock
-/app/configs
-!.default.template.php
-!.server.template.php
 .idea
