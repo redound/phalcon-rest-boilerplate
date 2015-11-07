@@ -1,12 +1,15 @@
 <?php
 
-class Product extends BaseModel
+class Product extends \App\Mvc\Model
 {
-    protected $_rules;
+    public $id;
+    public $title;
+    public $brand;
+    public $color;
 
     public function getSource()
     {
-        return 'product';
+        return 'products';
     }
 
     public function columnMap()

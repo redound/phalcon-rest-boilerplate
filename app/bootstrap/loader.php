@@ -1,12 +1,10 @@
 <?php
 
-$appPath = __DIR__ . '/../../app/';
+$appPath = __DIR__ . '/../';
 $vendorPath = __DIR__ . '/../../vendor/';
 
-// Manual autoloader
-require_once $vendorPath . 'google/apiclient/autoload.php';
-require_once $vendorPath . 'phpmailer/phpmailer/class.smtp.php';
-require_once $vendorPath . 'phpmailer/phpmailer/class.phpmailer.php';
+// Require Composer autoload
+require_once $vendorPath . 'autoload.php';
 
 $loader = new \Phalcon\Loader();
 
@@ -15,16 +13,11 @@ $loader->registerDirs([
     $appPath . 'controllers/',
     $appPath . 'models/',
     $appPath . 'transformers/',
-    $appPath . 'views/',
-    $vendorPath . 'phpmailer/phpmailer',
-    $vendorPath . 'firebase/php-jwt/Firebase/PHP-JWT/Authentication',
-    $vendorPath . 'firebase/php-jwt/Firebase/PHP-JWT/Exceptions',
-    $vendorPath . 'olivierandriessen/phalcon-rest/src',
+    $appPath . 'views/'
 ]);
 
 $loader->registerNamespaces([
-    'Library' => $appPath . 'library/',
-    'League\Fractal' => $vendorPath . 'league/fractal/src',
+    'App' => $appPath . 'library/App'
 ]);
 
 $loader->register();

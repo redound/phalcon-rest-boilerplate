@@ -1,9 +1,9 @@
 <?php
 
-use \Library\App\Constants\Services as AppServices;
-
-class ExportController extends \PhalconRest\Mvc\Controller
+class ExportController extends \App\Mvc\Controller
 {
+    /** @var  \PhalconRest\Documentation\Generator */
+    protected $generator;
 
     public function onConstruct()
     {
@@ -21,14 +21,13 @@ class ExportController extends \PhalconRest\Mvc\Controller
     {
         $resources = $this->generator->generate();
 
-        return $this->createCollection($resources, new \PhalconRest\Documentation\ResourceTransformer, 'resources');
+        return $this->respondCollection($resources, new \PhalconRest\Documentation\ResourceTransformer, 'resources');
     }
 
     public function postman()
     {
-        $config = $this->di->get(AppServices::CONFIG);
-        $collection = $this->generator->generatePostmanCollection($config->hostName);
+        $collection = $this->generator->generatePostmanCollection($this->config->hostName);
 
-        return $this->createItem($collection, new \PhalconRest\Documentation\PostmanCollectionTransformer, 'parent');
+        return $this->respondItem($collection, new \PhalconRest\Documentation\PostmanCollectionTransformer, 'parent');
     }
 }
