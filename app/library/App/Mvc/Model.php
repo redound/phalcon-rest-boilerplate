@@ -1,13 +1,26 @@
 <?php
 
+namespace App\Mvc;
+
 use PhalconRest\Constants\ErrorCodes as ErrorCodes;
-use PhalconRest\Exceptions\CoreException;
 use PhalconRest\Exceptions\UserException;
 use PhalconRest\Validation\Validator;
 
-class BaseModel extends \Phalcon\Mvc\Model
+class Model extends \Phalcon\Mvc\Model
 {
+    public $createdAt;
+    public $updatedAt;
+
+    /**
+     * @var Validator
+     */
     protected $validator;
+
+
+    public function assign(array $data, $dataColumnMap = null, $whiteList = null)
+    {
+        return parent::assign($data, $dataColumnMap, $whiteList === null ? $this->whitelist() : $whiteList);
+    }
 
     public function beforeValidationOnCreate()
     {
@@ -23,7 +36,6 @@ class BaseModel extends \Phalcon\Mvc\Model
     public function getValidator()
     {
         if (!$this->validator) {
-
             $this->validator = Validator::make($this, $this->validateRules());
         }
 
@@ -32,18 +44,14 @@ class BaseModel extends \Phalcon\Mvc\Model
 
     public function validation()
     {
-        if (!method_exists($this, 'validateRules')) {
-            return true;
-        }
-
         $this->validator = $this->getValidator();
-
         return $this->validator->passes();
     }
 
     public function onValidationFails()
     {
         $message = null;
+
         if ($this->validator) {
             $message = $this->validator->getFirstMessage();
         }
@@ -60,42 +68,23 @@ class BaseModel extends \Phalcon\Mvc\Model
         throw new UserException(ErrorCodes::DATA_INVALID, $message);
     }
 
-    public function prepare($data)
+
+    public function whitelist()
     {
-
-        $whitelist = $this->whitelist();
-
-        foreach ($whitelist as $field) {
-            if (isset($data->$field)) {
-                $this->$field = $data->$field;
-            }
-        }
+        return null;
     }
 
-    public static function createFrom($data)
+    public function validateRules()
     {
-        $modelName = get_called_class();
-        $modelInstance = new $modelName;
-
-        if (!isset($modelInstance->_whitelist)) {
-            throw new CoreException('No whitelist declared for: ' . $modelName);
-        }
-
+        return [];
     }
 
-    public static function exists($id)
+
+    public static function existsById($id)
     {
-        return self::findFirstById($id);
-    }
-
-    public static function remove($opts)
-    {
-        $result = self::findFirst($opts);
-
-        if (!$result) {
-            return false;
-        }
-
-        return $result->delete();
+        return self::count(array(
+            'id = ?0',
+            'bind' => array($id)
+        )) > 0;
     }
 }
