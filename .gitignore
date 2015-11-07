@@ -4,3 +4,4 @@ composer.lock
 /app/configs
 !.default.template.php
 !.server.template.php
+.idea
