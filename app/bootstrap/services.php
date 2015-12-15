@@ -108,6 +108,48 @@ $di->setShared(AppServices::FRACTAL_MANAGER, function () {
 });
 
 /**
+ * @description PhalconRest - \PhalconRest\Api\Service
+ */
+$di->setShared(AppServices::API_SERVICE, function () {
+
+    $apiService = new \PhalconRest\Api\Service;
+
+    $itemResource = new \PhalconRest\Api\Resource();
+    $itemResource
+        ->setKey('items')
+        ->setModel('\Item')
+        ->setTransformer('\ItemTransformer');
+
+    $apiService->addResource($itemResource);
+
+    return $apiService;
+});
+
+/**
+ * @description PhalconRest - \PhalconRest\Data\Query\Query
+ */
+$di->setShared(AppServices::QUERY, function () {
+
+    return new \PhalconRest\Data\Query\Query;
+});
+
+/**
+ * @description PhalconRest - \PhalconRest\Data\Query\Parser\Phql
+ */
+$di->setShared(AppServices::PHQL_QUERY_PARSER, function () {
+
+    return new \PhalconRest\Data\Query\Parser\Phql;
+});
+
+/**
+ * @description PhalconRest - \PhalconRest\Data\Query\Parser\Url
+ */
+$di->setShared(AppServices::URL_QUERY_PARSER, function () {
+
+    return new \PhalconRest\Data\Query\Parser\Url;
+});
+
+/**
  * @description App - \Library\App\Services\UserService
  */
 $di->setShared(AppServices::USER_SERVICE, function () {

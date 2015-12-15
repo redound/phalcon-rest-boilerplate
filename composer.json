@@ -1,9 +1,9 @@
 {
-    "name": "olivierandriessen/phalcon-rest-boilerplate",
+    "name": "redound/phalcon-rest-boilerplate",
     "description": "Phalcon REST Boilerplate",
-    "version": "1.0.1",
+    "version": "1.1.6",
     "require": {
-        "olivierandriessen/phalcon-rest": "^1.0",
+        "redound/phalcon-rest": "^1.1.6",
         "league/fractal": "^0.13.0",
         "firebase/php-jwt": "^3.0"
     },

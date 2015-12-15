@@ -22,9 +22,14 @@ $eventsManager->attach('micro', new \PhalconRest\Middleware\Acl($config->acl->pr
 /**
  * Fractal - Set includes
  */
-$eventsManager->attach('micro', new \PhalconRest\Middleware\Fractal());
+$eventsManager->attach('micro', new \PhalconRest\Middleware\Fractal);
 
 /**
  * Request - Allow OPTIONS
  */
-$eventsManager->attach('micro', new \PhalconRest\Middleware\OptionsResponse());
+$eventsManager->attach('micro', new \PhalconRest\Middleware\OptionsResponse);
+
+/**
+ * Queries - Process queries
+ */
+$eventsManager->attach('micro', new \PhalconRest\Middleware\Queries);
