@@ -32,4 +32,4 @@ $eventsManager->attach('micro', new \PhalconRest\Middleware\OptionsResponse);
 /**
  * Queries - Process queries
  */
-$eventsManager->attach('micro', new \PhalconRest\Middleware\Queries);
+$eventsManager->attach('micro', new \PhalconRest\Middleware\UrlQuery);
