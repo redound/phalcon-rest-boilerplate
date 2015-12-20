@@ -10,5 +10,18 @@ When you use [this database scheme](https://github.com/redound/phalcon-rest-boil
 - Username **demo**
 - Password **test123** (is stored as bcrypt)
 
-## External links ##
-Blog on [Getting Started with Phalcon REST](http://olivierandriessen.com/getting-started-with-phalcon-rest/)
+## Learn More
+- [Website](http://www.phalcon-rest.org)
+- [Documentation](http://www.phalcon-rest.org/docs/start/installation.html)
+
+## Contributing ##
+Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
+
+## Credits
+
+- [Bart Blok](https://github.com/bblok11)
+- [Olivier Andriessen](https://github.com/olivierandriessen)
+
+## License
+
+Phalcon REST is licensed under the MIT license. See [License File](LICENSE.md) for more information.
