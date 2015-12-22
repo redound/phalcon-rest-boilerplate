@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Transformer;
+
 use League\Fractal;
 
 class ProductTransformer extends Fractal\TransformerAbstract
@@ -7,10 +9,10 @@ class ProductTransformer extends Fractal\TransformerAbstract
     /**
      * Turn this resource object into a generic array
      *
-     * @var \Product $product The product to transform
+     * @var \App\Model\Product $product The product to transform
      * @return array
      */
-    public function transform(\Product $product)
+    public function transform(\App\Model\Product $product)
     {
         return [
             'id' => (int) $product->id,

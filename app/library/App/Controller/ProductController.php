@@ -1,7 +1,9 @@
 <?php
 
-use PhalconRest\Constants\ErrorCodes as ErrorCodes;
-use PhalconRest\Exceptions\UserException;
+namespace App\Controller;
+
+use PhalconRest\Constant\ErrorCode as ErrorCode;
+use PhalconRest\Exception;
 
 /**
  * @resource("Product")
@@ -51,7 +53,7 @@ class ProductController extends \App\Mvc\Controller
         $product = Product::findFirst((int)$product_id);
 
         if (!$product) {
-            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Product with id: #' . (int)$product_id . ' could not be found.');
+            throw new Exception(ErrorCode::DATA_NOTFOUND, 'Product with id: #' . (int)$product_id . ' could not be found.');
         }
 
         return $this->respondItem($product, new ProductTransformer, 'product');
@@ -87,7 +89,7 @@ class ProductController extends \App\Mvc\Controller
         $product->assign((array)$data);
 
         if (!$product->save()) {
-            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not create product.');
+            throw new Exception(ErrorCode::DATA_FAIL, 'Could not create product.');
         }
 
         return $this->respondItem($product, new ProductTransformer, 'product');
@@ -116,14 +118,14 @@ class ProductController extends \App\Mvc\Controller
         $product = Product::findFirst((int)$product_id);
 
         if (!$product) {
-            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Could not find product.');
+            throw new Exception(ErrorCode::DATA_NOTFOUND, 'Could not find product.');
         }
 
         $data = $this->request->getJsonRawBody();
         $product->assign((array)$data);
 
         if (!$product->save()) {
-            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not update product.');
+            throw new Exception(ErrorCode::DATA_FAIL, 'Could not update product.');
         }
 
         return $this->respondItem($product, new ProductTransformer, 'product');
@@ -142,11 +144,11 @@ class ProductController extends \App\Mvc\Controller
         $product = Product::findFirst((int)$product_id);
 
         if (!$product) {
-            throw new UserException(ErrorCodes::DATA_NOTFOUND, 'Could not find product.');
+            throw new Exception(ErrorCode::DATA_NOTFOUND, 'Could not find product.');
         }
 
         if (!$product->delete()) {
-            throw new UserException(ErrorCodes::DATA_FAIL, 'Could not remove product.');
+            throw new Exception(ErrorCode::DATA_FAIL, 'Could not remove product.');
         }
 
         return $this->respondOK();

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controller;
+
 class ExportController extends \App\Mvc\Controller
 {
     /** @var  \PhalconRest\Documentation\Generator */

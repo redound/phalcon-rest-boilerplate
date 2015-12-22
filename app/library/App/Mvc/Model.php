@@ -2,8 +2,8 @@
 
 namespace App\Mvc;
 
-use PhalconRest\Constants\ErrorCodes as ErrorCodes;
-use PhalconRest\Exceptions\UserException;
+use PhalconRest\Constant\ErrorCode as ErrorCode;
+use PhalconRest\Exception;
 use PhalconRest\Validation\Validator;
 
 class Model extends \Phalcon\Mvc\Model
@@ -65,7 +65,7 @@ class Model extends \Phalcon\Mvc\Model
             $message = 'Could not validate data';
         }
 
-        throw new UserException(ErrorCodes::DATA_INVALID, $message);
+        throw new Exception(ErrorCode::DATA_INVALID, $message);
     }
 
 

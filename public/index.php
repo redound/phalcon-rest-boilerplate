@@ -1,89 +1,85 @@
 <?php
 
-use App\Constants\Services as AppServices;
-
-// Setup up environment variable
-$application_env = getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development';
-
-/** @var \PhalconRest\Http\Response $response */
-$response = null;
-
 try {
 
-    // Read the configuration based on env
-    $config = require __DIR__ . "/../app/bootstrap/config.php";
+    // Define application environment
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development');
 
-    // Include loader
-    require __DIR__ . "/../app/bootstrap/loader.php";
+    // Define application path
+    define('APP_PATH', __DIR__ . '/../app/');
 
-    // Setup all required services (DI)
-    $di = require __DIR__ . "/../app/bootstrap/services.php";
+    // Load vendor libraries
+    require_once APP_PATH . '../vendor/autoload.php';
 
+    $defaultConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/default.php');
 
-    // Instantiate main application
-    $app = new \Phalcon\Mvc\Micro($di);
+    switch (APPLICATION_ENV) {
 
-    // Attach the EventsManager to the main application in order to attach Middleware
-    $eventsManager = $app->di->get(AppServices::EVENTS_MANAGER);
-    $app->setEventsManager($eventsManager);
+        case 'production':
+            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.production.php');
+            break;
+        case 'staging':
+            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.staging.php');
+            break;
+        case 'development':
+        default:
+            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.develop.php');
+            break;
+    }
 
+    $config = $defaultConfig->merge($serverConfig);
 
-    // Attach Middleware to EventsManager
-    require __DIR__ . "/../app/bootstrap/middleware.php";
+    // Load classes
+    $loader = new \Phalcon\Loader();
+    $loader
+        ->registerDirs([
+            APP_PATH . 'views/'
+        ])
+        ->registerNamespaces([
+            'App' => APP_PATH . 'library/App'
+        ])
+        ->register();
 
+    $di = new PhalconRest\Di\FactoryDefault();
 
-    // Mount Collections
-    require __DIR__ . "/../app/bootstrap/collections.php";
-
-
-    // Other routes
-    $app->get('/', function() use ($app) {
-
-        /** @var Phalcon\Mvc\View\Simple $view */
-        $view = $app->di->get(AppServices::VIEW);
-
-        return $view->render('general/index');
+    $di->setShared(\App\Constant\Service::CONFIG, function() use ($config) {
+        return $config;
     });
 
-    $app->get('/proxy.html', function() use ($app, $config) {
+    $api = new PhalconRest\Api($di);
 
-        /** @var Phalcon\Mvc\View\Simple $view */
-        $view = $app->di->get(AppServices::VIEW);
+    // Bootstrap application
+    $bootstrap = new \PhalconRest\Bootstrap(
+        new \App\Bootstrap\ServiceBootstrap,
+        new \App\Bootstrap\MiddlewareBootstrap,
+        new \App\Bootstrap\ResourceBootstrap
+    );
 
-        $view->setVar('client', $config->clientHostName);
-        return $view->render('general/proxy');
-    });
+    $bootstrap->run($api, $di, $config);
 
+    $api->handle();
 
-    // Start application
-    $app->handle();
+    $returnedValue = $api->getReturnedValue();
 
-    // Set content
-    $returnedValue = $app->getReturnedValue();
+    if ($returnedValue !== null) {
 
-    if($returnedValue !== null){
-
-        if(is_string($returnedValue)){
-
-            $app->response->setContent($returnedValue);
-        }
-        else {
-
-            $app->response->setJsonContent($returnedValue);
+        if (is_string($returnedValue)) {
+            $api->response->setContent($returnedValue);
+        } else {
+            $api->response->setJsonContent($returnedValue);
         }
     }
 
-    $response = $app->response;
+} catch (\Exception $e) {
 
-} catch (Exception $e) {
+    /** @var \PhalconRest\Http\Response $response */
+    $response = $di->get(\App\Constant\Service::RESPONSE);
+    $debugMode = (APPLICATION_ENV == 'development');
 
-    $response = $di->get(AppServices::RESPONSE);
-    $response->setErrorContent($e, $application_env == 'development');
+    $response->setErrorContent($e, $debugMode);
 }
 
-// Send response
-if($response){
-
-    $response->sendHeaders();
-    $response->send();
+if ($api->response) {
+    $api->response->sendHeaders();
+    $api->response->send();
 }

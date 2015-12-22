@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Transformer;
+
 use League\Fractal;
 
 class UserTransformer extends Fractal\TransformerAbstract
 {
-    public function transform(\User $user)
+    public function transform(\App\Model\User $user)
     {
         return [
             'id' => (int)$user->id,

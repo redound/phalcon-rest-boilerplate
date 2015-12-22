@@ -1,7 +1,8 @@
 <?php
 
-use Library\App\Constants\Services as AppServices;
-use Library\PhalconRest\Transformers\UserTransformer;
+namespace App\Controller;
+
+use PhalconRest\Transformer\UserTransformer;
 
 /**
  * @resource("User")

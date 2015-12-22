@@ -2,8 +2,8 @@
 
 namespace App\Mvc;
 
-use App\Constants\Services;
-use App\Services\UserService;
+use App\Constant\Service;
+use App\Service\UserService;
 
 /**
  * App\Mvc\Controller
@@ -12,10 +12,10 @@ use App\Services\UserService;
  * @property \PhalconRest\Http\Response $response;
  * @property \PhalconRest\Auth\Manager $authManager
  * @property \PhalconRest\Auth\TokenParser $tokenParser
- * @property \App\Services\UserService $userService
+ * @property \App\Service\UserService $userService
  * @property mixed $config
  */
-class Controller extends \PhalconRest\Mvc\FractalController
+class Controller extends \PhalconRest\Mvc\Controller\FractalController
 {
     /** @var \User Currently logged in user */
     protected $user;

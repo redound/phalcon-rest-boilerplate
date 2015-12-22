@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Model;
+
 class Item extends \App\Mvc\Model
 {
     public $id;

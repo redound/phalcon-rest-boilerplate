@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Transformer;
+
 use League\Fractal;
 
 class ItemTransformer extends Fractal\TransformerAbstract

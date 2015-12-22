@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Collections;
+
 class ExportCollection extends \Phalcon\Mvc\Micro\Collection
 {
     public function __construct()

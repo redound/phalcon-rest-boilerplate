@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Collections;
+
 class ProductCollection extends \Phalcon\Mvc\Micro\Collection
 {
     public function __construct()

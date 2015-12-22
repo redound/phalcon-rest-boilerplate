@@ -2,7 +2,7 @@
 
 namespace App\Auth;
 
-use App\Constants\Services;
+use App\Constant\Service;
 use Phalcon\Di;
 use PhalconRest\Auth\Manager;
 
@@ -13,13 +13,13 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
     public function login($data)
     {
         /** @var \Phalcon\Security $security */
-        $security = Di::getDefault()->get(Services::SECURITY);
+        $security = Di::getDefault()->get(Service::SECURITY);
 
         $username = $data[Manager::LOGIN_DATA_USERNAME];
         $password = $data[Manager::LOGIN_DATA_PASSWORD];
 
-        /** @var \User $user */
-        $user = \User::findFirst([
+        /** @var \App\Model\User $user */
+        $user = \App\Model\User::findFirst([
             'conditions' => 'username = :username:',
             'bind' => ['username' => $username]
         ]);
@@ -37,6 +37,6 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
 
     public function authenticate($identity)
     {
-        return \User::existsById((int)$identity);
+        return \App\Model\User::existsById((int)$identity);
     }
 }
