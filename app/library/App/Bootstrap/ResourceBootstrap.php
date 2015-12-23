@@ -6,6 +6,7 @@ use App\Constants\Resources;
 use App\Model\Item;
 use App\Model\Product;
 use App\Model\User;
+use App\Transformers\UserTransformer;
 use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
@@ -13,46 +14,39 @@ use PhalconRest\Api;
 use PhalconRest\Api\Resource;
 use PhalconRest\Constants\AclRoles;
 use PhalconRest\Constants\HttpMethods;
+use PhalconRest\Api\Endpoint;
 
 class ResourceBootstrap extends \App\Bootstrap
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {
         $api
-            ->resource(Resource::crud('/users')
-                ->allow(AclRoles::ADMINISTRATOR)
-                ->allow(AclRoles::MANAGER)
-                ->deny(AclRoles::NONE)
-                ->deny(AclRoles::USER)
-                ->name(Resources::USER)
+            ->resource(Resource::crud('/users', Resources::USER)
+                ->deny(AclRoles::UNAUTHORIZED, AclRoles::AUTHORIZED, AclRoles::USER)
+                ->model(User::class)
+                ->transformer(UserTransformer::class)
                 ->singleKey('user')
                 ->multipleKey('users')
-                ->model(User::class)
-                ->endpoint(Api\Endpoint::factory('/me', HttpMethods::GET, 'me')
+                ->endpoint(Endpoint::get('/me', 'me')
                     ->allow(AclRoles::USER)
                 )
-                ->endpoint(Api\Endpoint::factory('/authenticate', HttpMethods::POST, 'authenticate')
+                ->endpoint(Endpoint::post('/authenticate', 'authenticate')
                     ->deny(AclRoles::AUTHORIZED)
                 )
             )
-            ->resource(Resource::factory('/items')
-//                ->allow(AclRoles::ADMINISTRATOR)
-                ->endpoint(Api\Endpoint::all()
-//                    ->deny(AclRoles::ADMINISTRATOR)
-                )
-                ->endpoint(Api\Endpoint::find()
-                    ->allow(AclRoles::ADMINISTRATOR)
-                )
-                ->name(Resources::ITEM)
+
+            ->resource(Resource::factory('/items', Resources::ITEM)
+                ->model(Item::class)
                 ->singleKey('item')
                 ->multipleKey('items')
-                ->model(Item::class)
+                ->endpoint(Endpoint::all())
+                ->endpoint(Endpoint::find())
             )
-            ->resource(Resource::crud('/products')
-                ->name(Resources::PRODUCT)
+
+            ->resource(Resource::crud('/products', Resources::PRODUCT)
+                ->model(Product::class)
                 ->singleKey('product')
                 ->multipleKey('products')
-                ->model(Product::class)
             );
     }
 }

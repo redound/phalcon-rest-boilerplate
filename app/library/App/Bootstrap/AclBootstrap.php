@@ -2,19 +2,12 @@
 
 namespace App\Bootstrap;
 
-use App\Constants\Resources;
 use App\Constants\Services;
-use App\Model\Item;
-use App\Model\Product;
-use App\Model\User;
 use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
-use PhalconRest\Acl\Helper;
 use PhalconRest\Api;
-use PhalconRest\Api\Resource;
 use PhalconRest\Constants\AclRoles;
-use PhalconRest\Constants\HttpMethods;
 
 class AclBootstrap extends \App\Bootstrap
 {
@@ -23,9 +16,7 @@ class AclBootstrap extends \App\Bootstrap
         /** @var \Phalcon\Acl\Adapter $acl */
         $acl = $di->get(Services::ACL);
 
-        $acl->setDefaultAction(\Phalcon\Acl::DENY);
-
-        $acl->addRole(new Acl\Role(AclRoles::NONE));
+        $acl->addRole(new Acl\Role(AclRoles::UNAUTHORIZED));
         $acl->addRole(new Acl\Role(AclRoles::AUTHORIZED));
         $acl->addRole(new Acl\Role(AclRoles::ADMINISTRATOR));
         $acl->addRole(new Acl\Role(AclRoles::MANAGER));

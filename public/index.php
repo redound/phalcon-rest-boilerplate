@@ -8,9 +8,7 @@ try {
     // Define application path
     define('APP_PATH', __DIR__ . '/../app/');
 
-    // Load vendor libraries
-    require_once APP_PATH . '../vendor/autoload.php';
-
+    // Load config
     $defaultConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/default.php');
 
     switch (APPLICATION_ENV) {
@@ -29,6 +27,9 @@ try {
 
     $config = $defaultConfig->merge($serverConfig);
 
+    // Load vendor libraries
+    require_once APP_PATH . '../vendor/autoload.php';
+
     // Load classes
     $loader = new \Phalcon\Loader();
     $loader
@@ -40,27 +41,25 @@ try {
         ])
         ->register();
 
+    // Initialize API & DI
     $di = new PhalconRest\Di\FactoryDefault();
-
-    $di->setShared(\App\Constants\Services::CONFIG, function() use ($config) {
-        return $config;
-    });
-
     $api = new PhalconRest\Api($di);
 
     // Bootstrap application
     $bootstrap = new \App\Bootstrap(
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
-        new \App\Bootstrap\CollectionBootstrap,
         new \App\Bootstrap\ResourceBootstrap,
+        new \App\Bootstrap\CollectionBootstrap,
         new \App\Bootstrap\AclBootstrap
     );
 
     $bootstrap->run($api, $di, $config);
 
+    // Run app
     $api->handle();
 
+    // Set response content
     $returnedValue = $api->getReturnedValue();
 
     if ($returnedValue !== null) {
@@ -71,7 +70,6 @@ try {
             $api->response->setJsonContent($returnedValue);
         }
     }
-
 } catch (\Exception $e) {
 
     /** @var \PhalconRest\Http\Response $response */
@@ -81,7 +79,9 @@ try {
     $response->setErrorContent($e, $debugMode);
 }
 
+// Send response
 if ($api->response) {
+
     $api->response->sendHeaders();
     $api->response->send();
 }

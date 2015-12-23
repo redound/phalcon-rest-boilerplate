@@ -12,6 +12,11 @@ class ServiceBootstrap extends \App\Bootstrap
     public function run(Api $api, DiInterface $di, Config $config)
     {
         /**
+         * @description Config - \Phalcon\Config
+         */
+        $di->setShared(\App\Constants\Services::CONFIG, $config);
+
+        /**
          * @description Phalcon - \Phalcon\Db\Adapter\Pdo\Mysql
          */
         $di->set(Services::DB, function () use ($config, $di) {
