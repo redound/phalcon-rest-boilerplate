@@ -39,7 +39,8 @@ class UserController extends FractalController
         $username = $this->request->getUsername();
         $password = $this->request->getPassword();
 
-        $session = $this->authManager->loginWithUsernamePassword(\App\Auth\UsernameAccountType::NAME, $username, $password);
+        $session = $this->authManager->loginWithUsernamePassword(\App\Auth\UsernameAccountType::NAME, $username,
+            $password);
         $response = [
             'token' => $session->getToken(),
             'expires' => $session->getExpirationTime()

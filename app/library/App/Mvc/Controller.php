@@ -3,7 +3,6 @@
 namespace App\Mvc;
 
 use App\Constant\Service;
-use App\Service\UserService;
 use PhalconRest\Mvc\Controllers\FractalController;
 
 /**

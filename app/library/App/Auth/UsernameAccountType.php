@@ -24,11 +24,11 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
             'bind' => ['username' => $username]
         ]);
 
-        if(!$user){
+        if (!$user) {
             return null;
         }
 
-        if(!$security->checkHash($password, $user->password)){
+        if (!$security->checkHash($password, $user->password)) {
             return null;
         }
 

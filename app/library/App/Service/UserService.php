@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-use App\Auth\UsernameAccountType;
-use PhalconRest\Constants\ErrorCodes;
 use PhalconRest\Exception;
 
 class UserService extends \PhalconRest\Mvc\Plugin
@@ -16,12 +14,12 @@ class UserService extends \PhalconRest\Mvc\Plugin
      */
     public function getUser()
     {
-        if($this->user === false){
+        if ($this->user === false) {
 
             $user = null;
 
             $session = $this->authManager->getSession();
-            if($session){
+            if ($session) {
 
                 $identity = $session->getIdentity();
                 $user = \App\Model\User::findFirst((int)$identity);

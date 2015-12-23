@@ -15,7 +15,7 @@ class ItemTransformer extends Fractal\TransformerAbstract
             'title' => $item->title,
             'likes' => $item->likes,
             'author' => $item->author,
-            'createdAt' => (int) strtotime($item->createdAt),
+            'createdAt' => (int)strtotime($item->createdAt),
             'updatedAt' => $updatedTime ? (int)$updatedTime : null
         ];
     }

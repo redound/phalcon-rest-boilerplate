@@ -15,12 +15,12 @@ class ProductTransformer extends Fractal\TransformerAbstract
     public function transform(\App\Model\Product $product)
     {
         return [
-            'id' => (int) $product->id,
+            'id' => (int)$product->id,
             'title' => $product->title,
             'brand' => $product->brand,
             'color' => $product->color,
-            'createdAt' => (int) strtotime($product->createdAt) * 1000,
-            'updatedAt' => (int) strtotime($product->updatedAt) * 1000,
+            'createdAt' => (int)strtotime($product->createdAt) * 1000,
+            'updatedAt' => (int)strtotime($product->updatedAt) * 1000,
         ];
     }
 }

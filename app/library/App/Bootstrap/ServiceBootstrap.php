@@ -44,7 +44,7 @@ class ServiceBootstrap extends \App\Bootstrap
          */
         $di->set(Services::VIEW, function () use ($config) {
 
-            $view = new Phalcon\Mvc\View\Simple();
+            $view = new \Phalcon\Mvc\View\Simple();
             $view->setViewsDir($config->application->viewsDir);
 
             return $view;
@@ -71,7 +71,8 @@ class ServiceBootstrap extends \App\Bootstrap
          */
         $di->setShared(Services::TOKEN_PARSER, function () use ($di, $config) {
 
-            return new \PhalconRest\Auth\TokenParser\JWT($config->authentication->secret, \PhalconRest\Auth\TokenParser\JWT::ALGORITHM_HS256);
+            return new \PhalconRest\Auth\TokenParsers\JWT($config->authentication->secret,
+                \PhalconRest\Auth\TokenParsers\JWT::ALGORITHM_HS256);
         });
 
         /**
