@@ -12,8 +12,7 @@ use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
 use PhalconRest\Api\Resource;
-use PhalconRest\Constants\AclRoles;
-use PhalconRest\Constants\HttpMethods;
+use App\Constants\AclRoles;
 use PhalconRest\Api\Endpoint;
 
 class ResourceBootstrap extends \App\Bootstrap

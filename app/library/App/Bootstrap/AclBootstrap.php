@@ -7,7 +7,7 @@ use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
-use PhalconRest\Constants\AclRoles;
+use App\Constants\AclRoles;
 
 class AclBootstrap extends \App\Bootstrap
 {
