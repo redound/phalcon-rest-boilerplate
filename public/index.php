@@ -53,7 +53,8 @@ try {
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
         new \App\Bootstrap\CollectionBootstrap,
-        new \App\Bootstrap\ResourceBootstrap
+        new \App\Bootstrap\ResourceBootstrap,
+        new \App\Bootstrap\AclBootstrap
     );
 
     $bootstrap->run($api, $di, $config);
