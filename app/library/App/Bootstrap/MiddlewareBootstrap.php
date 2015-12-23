@@ -12,11 +12,10 @@ use PhalconRest\Middleware\NotFoundMiddleware;
 use PhalconRest\Middleware\OptionsResponseMiddleware;
 use PhalconRest\Middleware\UrlQueryMiddleware;
 
-class MiddlewareBootstrap extends \PhalconRest\Bootstrap
+class MiddlewareBootstrap extends \App\Bootstrap
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {
-
         $api
             ->attach(new NotFoundMiddleware)
             ->attach(new AuthenticationMiddleware)

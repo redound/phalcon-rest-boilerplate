@@ -2,20 +2,19 @@
 
 namespace App\Bootstrap;
 
-use App\Constant\Service;
+use App\Constants\Services;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
 
-class ServiceBootstrap extends \PhalconRest\Bootstrap
+class ServiceBootstrap extends \App\Bootstrap
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {
-
         /**
          * @description Phalcon - \Phalcon\Db\Adapter\Pdo\Mysql
          */
-        $di->set(Service::DB, function () use ($config, $di) {
+        $di->set(Services::DB, function () use ($config, $di) {
 
             $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
                 "host" => $config->database->host,
@@ -25,7 +24,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
             ));
 
             //Assign the eventsManager to the db adapter instance
-            $connection->setEventsManager($di->get(Service::EVENTS_MANAGER));
+            $connection->setEventsManager($di->get(Services::EVENTS_MANAGER));
 
             return $connection;
         });
@@ -33,7 +32,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - \Phalcon\Mvc\Url
          */
-        $di->set(Service::URL, function () use ($config) {
+        $di->set(Services::URL, function () use ($config) {
 
             $url = new \Phalcon\Mvc\Url();
             $url->setBaseUri($config->application->baseUri);
@@ -43,7 +42,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - \Phalcon\Mvc\View\Simple
          */
-        $di->set(Service::VIEW, function () use ($config) {
+        $di->set(Services::VIEW, function () use ($config) {
 
             $view = new Phalcon\Mvc\View\Simple();
             $view->setViewsDir($config->application->viewsDir);
@@ -54,7 +53,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - \Phalcon\Mvc\Router
          */
-        $di->set(Service::ROUTER, function () {
+        $di->set(Services::ROUTER, function () {
 
             return new \Phalcon\Mvc\Router;
         });
@@ -62,15 +61,15 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - EventsManager
          */
-        $di->setShared(Service::EVENTS_MANAGER, function () use ($di, $config) {
+        $di->setShared(Services::EVENTS_MANAGER, function () use ($di, $config) {
 
             return new \Phalcon\Events\Manager;
         });
 
         /**
-         * @description Phalcon - TokenParser
+         * @description Phalcon - TokenParsers
          */
-        $di->setShared(Service::TOKEN_PARSER, function () use ($di, $config) {
+        $di->setShared(Services::TOKEN_PARSER, function () use ($di, $config) {
 
             return new \PhalconRest\Auth\TokenParser\JWT($config->authentication->secret, \PhalconRest\Auth\TokenParser\JWT::ALGORITHM_HS256);
         });
@@ -78,7 +77,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - AuthManager
          */
-        $di->setShared(Service::AUTH_MANAGER, function () use ($di, $config) {
+        $di->setShared(Services::AUTH_MANAGER, function () use ($di, $config) {
 
             $authManager = new \PhalconRest\Auth\Manager($config->authentication->expirationTime);
             $authManager->registerAccountType(\App\Auth\UsernameAccountType::NAME, new \App\Auth\UsernameAccountType());
@@ -89,16 +88,16 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description Phalcon - \Phalcon\Mvc\Model\Manager
          */
-        $di->setShared(Service::MODELS_MANAGER, function () use ($di) {
+        $di->setShared(Services::MODELS_MANAGER, function () use ($di) {
 
             $modelsManager = new \Phalcon\Mvc\Model\Manager;
-            return $modelsManager->setEventsManager($di->get(Service::EVENTS_MANAGER));
+            return $modelsManager->setEventsManager($di->get(Services::EVENTS_MANAGER));
         });
 
         /**
          * @description PhalconRest - \League\Fractal\Manager
          */
-        $di->setShared(Service::FRACTAL_MANAGER, function () {
+        $di->setShared(Services::FRACTAL_MANAGER, function () {
 
             $fractal = new \League\Fractal\Manager;
             $fractal->setSerializer(new \App\Fractal\CustomSerializer());
@@ -109,7 +108,7 @@ class ServiceBootstrap extends \PhalconRest\Bootstrap
         /**
          * @description App - \Library\App\Service\UserService
          */
-        $di->setShared(Service::USER_SERVICE, function () {
+        $di->setShared(Services::USER_SERVICE, function () {
 
             return new \App\Service\UserService;
         });

@@ -4,6 +4,8 @@ namespace App\Model;
 
 class Product extends \App\Mvc\Model
 {
+    use \App\Mvc\Model\DateTrait;
+
     public $id;
     public $title;
     public $brand;

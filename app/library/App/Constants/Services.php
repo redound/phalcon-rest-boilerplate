@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Constant;
+namespace App\Constants;
 
-class Service extends \PhalconRest\Constant\Service
+class Services extends \PhalconRest\Constants\Services
 {
     const CONFIG = 'config';
     const VIEW = 'view';

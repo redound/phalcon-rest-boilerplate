@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
-use PhalconRest\Transformer\UserTransformer;
+use PhalconRest\Mvc\Controllers\FractalController;
+use PhalconRest\Transformers\UserTransformer;
 
 /**
  * @resource("User")
  */
-class UserController extends \App\Mvc\Controller
+class UserController extends FractalController
 {
     /**
      * @title("Me")

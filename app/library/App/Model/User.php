@@ -4,6 +4,8 @@ namespace App\Model;
 
 class User extends \App\Mvc\Model
 {
+    use \App\Mvc\Model\DateTrait;
+
     public $id;
     public $firstName;
     public $lastName;

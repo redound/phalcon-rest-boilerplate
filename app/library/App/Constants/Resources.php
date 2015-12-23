@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Constant;
+namespace App\Constants;
 
-class Resource
+class Resources
 {
     const USER = 'user';
     const ITEM = 'item';

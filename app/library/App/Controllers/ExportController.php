@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
 class ExportController extends \App\Mvc\Controller
 {
@@ -10,13 +10,7 @@ class ExportController extends \App\Mvc\Controller
     public function onConstruct()
     {
         parent::onConstruct();
-
-        $collections = [
-            'ProductCollection',
-            'UserCollection',
-        ];
-
-        $this->generator = new \PhalconRest\Documentation\Generator($collections);
+        
     }
 
     public function documentation()

@@ -13,7 +13,7 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
     public function login($data)
     {
         /** @var \Phalcon\Security $security */
-        $security = Di::getDefault()->get(Service::SECURITY);
+        $security = Di::getDefault()->get(Services::SECURITY);
 
         $username = $data[Manager::LOGIN_DATA_USERNAME];
         $password = $data[Manager::LOGIN_DATA_PASSWORD];

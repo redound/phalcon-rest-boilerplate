@@ -42,16 +42,17 @@ try {
 
     $di = new PhalconRest\Di\FactoryDefault();
 
-    $di->setShared(\App\Constant\Service::CONFIG, function() use ($config) {
+    $di->setShared(\App\Constants\Services::CONFIG, function() use ($config) {
         return $config;
     });
 
     $api = new PhalconRest\Api($di);
 
     // Bootstrap application
-    $bootstrap = new \PhalconRest\Bootstrap(
+    $bootstrap = new \App\Bootstrap(
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
+        new \App\Bootstrap\CollectionBootstrap,
         new \App\Bootstrap\ResourceBootstrap
     );
 
@@ -73,7 +74,7 @@ try {
 } catch (\Exception $e) {
 
     /** @var \PhalconRest\Http\Response $response */
-    $response = $di->get(\App\Constant\Service::RESPONSE);
+    $response = $di->get(\App\Constants\Services::RESPONSE);
     $debugMode = (APPLICATION_ENV == 'development');
 
     $response->setErrorContent($e, $debugMode);

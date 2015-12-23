@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Auth\UsernameAccountType;
-use PhalconRest\Constant\ErrorCode;
+use PhalconRest\Constants\ErrorCodes;
 use PhalconRest\Exception;
 
 class UserService extends \PhalconRest\Mvc\Plugin
