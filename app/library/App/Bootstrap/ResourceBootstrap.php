@@ -3,6 +3,9 @@
 namespace App\Bootstrap;
 
 use App\Constants\Resources;
+use App\Model\Item;
+use App\Model\Product;
+use App\Model\User;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
@@ -14,31 +17,25 @@ class ResourceBootstrap extends \App\Bootstrap
     public function run(Api $api, DiInterface $di, Config $config)
     {
         $api
-            ->resource(Resource::crud(Resources::USER)
-                ->prefix('/users')
+            ->resource(Resource::crud('/users')
+                ->name(Resources::USER)
                 ->singleKey('user')
                 ->multipleKey('users')
-                ->model('App\Model\User')
-                ->endpoint(Api\Endpoint::factory()
-                    ->httpMethod(HttpMethods::GET)
-                    ->handlerMethod('me')
-                )
-                ->endpoint(Api\Endpoint::factory()
-                    ->httpMethod(HttpMethods::POST)
-                    ->handlerMethod('authenticate')
-                )
+                ->model(User::class)
+                ->endpoint(Api\Endpoint::factory('/me', HttpMethods::GET, 'me'))
+                ->endpoint(Api\Endpoint::factory('/authenticate', HttpMethods::POST, 'authenticate'))
             )
-            ->resource(Resource::crud(Resources::ITEM)
-                ->prefix('/items')
+            ->resource(Resource::crud('/items')
+                ->name(Resources::ITEM)
                 ->singleKey('item')
                 ->multipleKey('items')
-                ->model('App\Model\Item')
+                ->model(Item::class)
             )
-            ->resource(Resource::crud(Resources::PRODUCT)
-                ->prefix('/products')
+            ->resource(Resource::crud('/products')
+                ->name(Resources::PRODUCT)
                 ->singleKey('product')
                 ->multipleKey('products')
-                ->model('App\Model\Product')
+                ->model(Product::class)
             );
     }
 }
