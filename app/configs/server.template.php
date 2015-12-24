@@ -13,5 +13,8 @@ return [
         'username' => 'root',
         'password' => 'root',
         'name' => 'phalcon_rest_boilerplate',
+    ],
+    'cors' => [
+        'allowedOrigins' => ['*']
     ]
 ];

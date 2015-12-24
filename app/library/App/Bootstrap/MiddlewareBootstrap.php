@@ -7,6 +7,7 @@ use Phalcon\DiInterface;
 use PhalconRest\Api;
 use PhalconRest\Middleware\AuthenticationMiddleware;
 use PhalconRest\Middleware\AuthorizationMiddleware;
+use PhalconRest\Middleware\CorsMiddleware;
 use PhalconRest\Middleware\FractalMiddleware;
 use PhalconRest\Middleware\NotFoundMiddleware;
 use PhalconRest\Middleware\OptionsResponseMiddleware;
@@ -21,6 +22,7 @@ class MiddlewareBootstrap extends \App\Bootstrap
             ->attach(new AuthenticationMiddleware)
             ->attach(new AuthorizationMiddleware)
             ->attach(new FractalMiddleware)
+            ->attach(new CorsMiddleware($config->cors->allowedOrigins->toArray()))
             ->attach(new OptionsResponseMiddleware)
             ->attach(new UrlQueryMiddleware);
     }
