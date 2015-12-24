@@ -2,7 +2,7 @@
 
 namespace App\Auth;
 
-use App\Constant\Service;
+use App\Constants\Services;
 use Phalcon\Di;
 use PhalconRest\Auth\Manager;
 
@@ -37,6 +37,9 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
 
     public function authenticate($identity)
     {
-        return \App\Model\User::existsById((int)$identity);
+        return \App\Model\User::count([
+            'conditions' => 'id = :id:',
+            'bind' => ['id' => (int)$identity]
+        ]) > 0;
     }
 }
