@@ -3,7 +3,7 @@
     "description": "Phalcon REST Boilerplate",
     "version": "1.1.8",
     "require": {
-        "redound/phalcon-rest": "dev-develop",
+        "redound/phalcon-rest": "dev-dev-1.2.0",
         "league/fractal": "^0.13.0",
         "firebase/php-jwt": "^3.0"
     },

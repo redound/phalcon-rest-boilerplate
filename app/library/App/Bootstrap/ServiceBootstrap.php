@@ -68,8 +68,8 @@ class ServiceBootstrap extends \App\Bootstrap
          */
         $di->setShared(Services::TOKEN_PARSER, function () use ($di, $config) {
 
-            return new \PhalconRest\Auth\TokenParsers\JWT($config->authentication->secret,
-                \PhalconRest\Auth\TokenParsers\JWT::ALGORITHM_HS256);
+            return new \PhalconRest\Auth\TokenParsers\JWTTokenParser($config->authentication->secret,
+                \PhalconRest\Auth\TokenParsers\JWTTokenParser::ALGORITHM_HS256);
         });
 
         /**
