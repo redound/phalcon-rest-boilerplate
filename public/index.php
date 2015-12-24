@@ -4,8 +4,11 @@ $response = null;
 
 try {
 
+    define('APPLICATION_ENV_DEVELOPMENT', 'development');
+    define('APPLICATION_ENV_PRODUCTION', 'production');
+
     // Define application environment
-    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development');
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
 
     // Define application path
     define('APP_PATH', __DIR__ . '/../app/');
@@ -15,13 +18,10 @@ try {
 
     switch (APPLICATION_ENV) {
 
-        case 'production':
+        case APPLICATION_ENV_PRODUCTION:
             $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.production.php');
             break;
-        case 'staging':
-            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.staging.php');
-            break;
-        case 'development':
+        case APPLICATION_ENV_DEVELOPMENT:
         default:
             $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.develop.php');
             break;
@@ -74,12 +74,11 @@ try {
     }
 
     $response = $api->response;
-
 } catch (\Exception $e) {
 
     /** @var \PhalconRest\Http\Response $response */
     $response = $di->getShared(\App\Constants\Services::RESPONSE);
-    $debugMode = (APPLICATION_ENV == 'development');
+    $debugMode = isset($config) ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
 
     $response->setErrorContent($e, $debugMode);
 }
