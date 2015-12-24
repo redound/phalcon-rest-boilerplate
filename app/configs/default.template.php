@@ -4,6 +4,7 @@ return [
 
     'application' => [
         'title' => 'Phalcon REST Boilerplate',
+        'description' => 'This repository provides an boilerplate application with all of the classes of Phalcon REST library implemented.',
         'baseUri' => '/',
         'viewsDir' => __DIR__ . '/../views/',
     ],

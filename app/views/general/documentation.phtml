@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><?php echo $title ?></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body ng-app="app" ng-controller="AppController as vm">
+
+<div class="container">
+
+    <h1><?php echo $title ?></h1>
+    <p class="lead"><?php echo $description ?></p>
+
+    <h2>Routes</h2>
+
+    <div class="panel panel-default" ng-repeat="route in vm.documentation.routes">
+        <div class="panel-heading">
+            {{ route.pattern }}
+        </div>
+    </div>
+
+    <h2>Resources</h2>
+
+    <div ng-repeat="resource in vm.documentation.resources">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {{ resource.prefix }}
+            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>
+                        description
+                    </th>
+                    <td>
+                        {{ resource.description }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        model
+                    </th>
+                    <td>
+                        {{ resource.model }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        source
+                    </th>
+                    <td>
+                        {{ resource.source }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        columnMap
+                    </th>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr ng-repeat="(key, value) in resource.columnMap">
+                                <th>
+                                    {{ key }}
+                                </th>
+                                <td>
+                                    {{ value }}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        whitelist
+                    </th>
+                    <td>
+                        <li ng-repeat="value in resource.whitelist">
+                            {{ value }}
+                        </li>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        dataTypes
+                    </th>
+                    <td>
+                        <table class="table table-bordered">
+                            <tr ng-repeat="(key, value) in resource.dataTypes">
+                                <th>
+                                    {{ key }}
+                                </th>
+                                <td>
+                                    <div class="label label-primary">
+                                        {{ value }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        allowedRoles
+                    </th>
+                    <td>
+                        <ul>
+                            <li ng-repeat="role in resource.allowedRoles">
+                                {{ role }}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        deniedRoles
+                    </th>
+                    <td>
+                        <ul>
+                            <li ng-repeat="role in resource.deniedRoles">
+                                {{ role }}
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+            <div class="panel-footer">
+
+                <div class="panel panel-primary" ng-repeat="endpoint in resource.endpoints">
+                    <div class="panel-heading">
+                        {{ resource.prefix + endpoint.path }}
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                httpMethod
+                            </th>
+                            <th ng-bind-html="endpoint.httpMethod | method"></th>
+                        </tr>
+                        <tr>
+                            <th>
+                                description
+                            </th>
+                            <th>
+                                {{ endpoint.description }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                url
+                            </th>
+                            <td>
+                                <a ng-href="{{ vm.documentation.basePath + resource.prefix + endpoint.path }}" target="_blank">
+                                    {{ vm.documentation.basePath + resource.prefix + endpoint.path }}
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                allowedRoles
+                            </th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="role in endpoint.allowedRoles">
+                                        {{ role }}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                deniedRoles
+                            </th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="role in endpoint.deniedRoles">
+                                        {{ role }}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://code.angularjs.org/1.4.8/angular-sanitize.min.js"></script>
+<script>
+    var documentationPath = '<?php echo $documentationPath ?>';
+    var app = angular.module('app', [
+        'ngSanitize'
+    ]);
+
+    app.controller('AppController', AppController);
+
+    function AppController($http) {
+
+        var vm = this;
+
+        $http.get(documentationPath).then(function(response) {
+            vm.documentation = response.data.documentation;
+        });
+    }
+
+    app.filter('method', function() {
+
+        return function(input) {
+
+            switch(input) {
+                case 'GET':
+                    return '<div class="label label-success">' + input + '</div>';
+                case 'POST':
+                    return '<div class="label label-warning">' + input + '</div>';
+                case 'PUT':
+                    return '<div class="label label-info">' + input + '</div>';
+                case 'DELETE':
+                    return '<div class="label label-danger">' + input + '</div>';
+                default:
+                    return null;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
