@@ -2,11 +2,11 @@
 
 namespace App\Bootstrap;
 
-use App\Constants\Resources;
 use App\Model\Item;
 use App\Model\Product;
 use App\Model\User;
 use App\Transformers\UserTransformer;
+use App\Controllers\UserController;
 use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
@@ -23,6 +23,7 @@ class ResourceBootstrap extends \App\Bootstrap
             ->resource(Resource::crud('/users')
                 ->model(User::class)
                 ->transformer(UserTransformer::class)
+                ->handler(UserController::class)
                 ->singleKey('user')
                 ->multipleKey('users')
                 ->deny(AclRoles::UNAUTHORIZED, AclRoles::USER)
