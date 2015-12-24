@@ -2,38 +2,15 @@
 
 namespace App\Controllers;
 
-use PhalconRest\Mvc\Controllers\FractalController;
-use PhalconRest\Transformers\UserTransformer;
+use PhalconRest\Mvc\Controllers\CrudResourceController;
 
-/**
- * @resource("User")
- */
-class UserController extends FractalController
+class UserController extends CrudResourceController
 {
-    /**
-     * @title("Me")
-     * @description("Get the current user")
-     * @includeTypes({
-     *      "accounts": "Adds accounts object to the response"
-     * })
-     * @requestExample("GET /users/me")
-     * @response("User object or Error object")
-     */
     public function me()
     {
-        return $this->respondItem($this->user, new \UserTransformer, 'user');
+        return $this->createResourceResponse($this->userService->getDetails());
     }
 
-
-    /**
-     * @title("Authenticate")
-     * @description("Authenticate user")
-     * @headers({
-     *      "Authorization": "'Basic sd9u19221934y='"
-     * })
-     * @requestExample("POST /users/authenticate")
-     * @response("Data object or Error object")
-     */
     public function authenticate()
     {
         $username = $this->request->getUsername();
@@ -46,6 +23,6 @@ class UserController extends FractalController
             'expires' => $session->getExpirationTime()
         ];
 
-        return $this->respondArray($response, 'data');
+        return $this->createArrayResponse($response, 'data');
     }
 }

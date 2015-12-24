@@ -2,10 +2,8 @@
 
 namespace App\Model;
 
-class Product extends \App\Mvc\Model
+class Product extends \App\Mvc\DateTrackingModel
 {
-    use \App\Mvc\Model\DateTrait;
-
     public $id;
     public $title;
     public $brand;
@@ -18,13 +16,11 @@ class Product extends \App\Mvc\Model
 
     public function columnMap()
     {
-        return [
+        return parent::columnMap() + [
             'id' => 'id',
             'title' => 'title',
             'brand' => 'brand',
-            'color' => 'color',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt',
+            'color' => 'color'
         ];
     }
 
@@ -34,15 +30,6 @@ class Product extends \App\Mvc\Model
             'title',
             'brand',
             'color',
-        ];
-    }
-
-    public function validateRules()
-    {
-        return [
-            'title' => 'min:2|max:55|required',
-            'brand' => 'min:2|max:55',
-            'color' => 'min:2|max:6',
         ];
     }
 }

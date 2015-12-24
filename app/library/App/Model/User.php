@@ -2,10 +2,8 @@
 
 namespace App\Model;
 
-class User extends \App\Mvc\Model
+class User extends \App\Mvc\DateTrackingModel
 {
-    use \App\Mvc\Model\DateTrait;
-
     public $id;
     public $role;
     public $firstName;
@@ -20,15 +18,13 @@ class User extends \App\Mvc\Model
 
     public function columnMap()
     {
-        return [
+        return parent::columnMap() + [
             'id' => 'id',
             'role' => 'role',
             'first_name' => 'firstName',
             'last_name' => 'lastName',
             'username' => 'username',
-            'password' => 'password',
-            'updated_at' => 'updatedAt',
-            'created_at' => 'createdAt',
+            'password' => 'password'
         ];
     }
 

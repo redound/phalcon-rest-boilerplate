@@ -2,12 +2,12 @@
 
 namespace App\Model;
 
-class Item extends \App\Mvc\Model
+class Item extends \App\Mvc\DateTrackingModel
 {
-    use \App\Mvc\Model\DateTrait;
-
     public $id;
     public $title;
+    public $author;
+    public $likes;
 
     public function getSource()
     {
@@ -16,13 +16,11 @@ class Item extends \App\Mvc\Model
 
     public function columnMap()
     {
-        return [
+        return parent::columnMap() + [
             'id' => 'id',
             'title' => 'title',
-            'likes' => 'likes',
             'author' => 'author',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt',
+            'likes' => 'likes'
         ];
     }
 
