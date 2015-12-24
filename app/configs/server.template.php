@@ -2,7 +2,7 @@
 
 return [
 
-    'debugMode' => 1, // 0; no developer messages // 1; developer messages and CoreExceptions
+    'debug' => true,
     'hostName' => 'http://phalcon-rest-boilerplate.vagrantserver.com',
     'clientHostName' => 'http://phalcon-rest-app.vagrantserver.com',
     'database' => [
