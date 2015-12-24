@@ -7,6 +7,7 @@ class User extends \App\Mvc\Model
     use \App\Mvc\Model\DateTrait;
 
     public $id;
+    public $role;
     public $firstName;
     public $lastName;
     public $username;
@@ -21,6 +22,7 @@ class User extends \App\Mvc\Model
     {
         return [
             'id' => 'id',
+            'role' => 'role',
             'first_name' => 'firstName',
             'last_name' => 'lastName',
             'username' => 'username',

@@ -56,14 +56,6 @@ class ServiceBootstrap extends \App\Bootstrap
         });
 
         /**
-         * @description Phalcon - \Phalcon\Mvc\Router
-         */
-        $di->set(Services::ROUTER, function () {
-
-            return new \Phalcon\Mvc\Router;
-        });
-
-        /**
          * @description Phalcon - EventsManager
          */
         $di->setShared(Services::EVENTS_MANAGER, function () use ($di, $config) {
@@ -112,11 +104,8 @@ class ServiceBootstrap extends \App\Bootstrap
         });
 
         /**
-         * @description App - \Library\App\Service\UserService
+         * @description PhalconRest - \PhalconRest\User\Service
          */
-        $di->setShared(Services::USER_SERVICE, function () {
-
-            return new \App\Service\UserService;
-        });
+        $di->setShared(Services::USER_SERVICE, new \App\User\Service);
     }
 }
