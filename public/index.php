@@ -1,5 +1,7 @@
 <?php
 
+$response = null;
+
 try {
 
     // Define application environment
@@ -70,18 +72,23 @@ try {
             $api->response->setJsonContent($returnedValue);
         }
     }
+
+    $response = $api->response;
+
 } catch (\Exception $e) {
 
     /** @var \PhalconRest\Http\Response $response */
-    $response = $di->get(\App\Constants\Services::RESPONSE);
+    $response = $di->getShared(\App\Constants\Services::RESPONSE);
     $debugMode = (APPLICATION_ENV == 'development');
 
     $response->setErrorContent($e, $debugMode);
 }
+finally {
 
-// Send response
-if ($api->response) {
+    // Send response
+    if ($response) {
 
-    $api->response->sendHeaders();
-    $api->response->send();
+        $response->sendHeaders();
+        $response->send();
+    }
 }
