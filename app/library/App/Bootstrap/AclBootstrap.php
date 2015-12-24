@@ -13,18 +13,19 @@ class AclBootstrap extends \App\Bootstrap
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {
-        /** @var \Phalcon\Acl\Adapter $acl */
+        /** @var \PhalconRest\Acl\MountingEnabledAdapterInterface $acl */
         $acl = $di->get(Services::ACL);
 
-        $acl->addRole(new Acl\Role(AclRoles::UNAUTHORIZED));
-        $acl->addRole(new Acl\Role(AclRoles::AUTHORIZED));
-        $acl->addRole(new Acl\Role(AclRoles::ADMINISTRATOR));
-        $acl->addRole(new Acl\Role(AclRoles::MANAGER));
-        $acl->addRole(new Acl\Role(AclRoles::USER));
+        $unauthorizedRole = new Acl\Role(AclRoles::UNAUTHORIZED);
+        $authorizedRole = new Acl\Role(AclRoles::AUTHORIZED);
 
-        /** @var \PhalconRest\Acl\Helper $aclHelper */
-        $aclHelper = $di->get(Services::ACL_HELPER);
+        $acl->addRole($unauthorizedRole);
+        $acl->addRole($authorizedRole);
 
-        $aclHelper->importManyApiResources($acl, $api->getResources());
+        $acl->addRole(new Acl\Role(AclRoles::ADMINISTRATOR), $authorizedRole);
+        $acl->addRole(new Acl\Role(AclRoles::MANAGER), $authorizedRole);
+        $acl->addRole(new Acl\Role(AclRoles::USER), $authorizedRole);
+
+        $acl->mountMany($api->getResources());
     }
 }

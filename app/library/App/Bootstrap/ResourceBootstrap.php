@@ -20,32 +20,37 @@ class ResourceBootstrap extends \App\Bootstrap
     public function run(Api $api, DiInterface $di, Config $config)
     {
         $api
-            ->resource(Resource::crud('/users', Resources::USER)
-                ->deny(AclRoles::UNAUTHORIZED, AclRoles::AUTHORIZED, AclRoles::USER)
+            ->resource(Resource::crud('/users')
                 ->model(User::class)
                 ->transformer(UserTransformer::class)
                 ->singleKey('user')
                 ->multipleKey('users')
+                ->deny(AclRoles::UNAUTHORIZED, AclRoles::USER)
+
                 ->endpoint(Endpoint::get('/me', 'me')
                     ->allow(AclRoles::USER)
                 )
                 ->endpoint(Endpoint::post('/authenticate', 'authenticate')
+                    ->allow(AclRoles::UNAUTHORIZED)
                     ->deny(AclRoles::AUTHORIZED)
                 )
             )
 
-            ->resource(Resource::factory('/items', Resources::ITEM)
+            ->resource(Resource::factory('/items')
                 ->model(Item::class)
                 ->singleKey('item')
                 ->multipleKey('items')
+                ->deny(AclRoles::UNAUTHORIZED)
+
                 ->endpoint(Endpoint::all())
                 ->endpoint(Endpoint::find())
             )
 
-            ->resource(Resource::crud('/products', Resources::PRODUCT)
+            ->resource(Resource::crud('/products')
                 ->model(Product::class)
                 ->singleKey('product')
                 ->multipleKey('products')
+                ->deny(AclRoles::UNAUTHORIZED)
             );
     }
 }
