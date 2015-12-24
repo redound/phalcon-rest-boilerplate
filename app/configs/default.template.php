@@ -3,6 +3,7 @@
 return [
 
     'application' => [
+        'title' => 'Phalcon REST Boilerplate',
         'baseUri' => '/',
         'viewsDir' => __DIR__ . '/../views/',
     ],
