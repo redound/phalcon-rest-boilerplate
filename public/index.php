@@ -1,53 +1,28 @@
 <?php
 
-$response = null;
+/**
+ * PhalconRest - a library focused on simplifying the creation of RESTful API's
+ *
+ * @package  redound/phalcon-rest
+ * @author   Bart Blok <bart@wittig.nl>
+ * @author   Olivier Andriessen <olivierandriessen@gmail.com>
+ */
 
 try {
 
-    define('APPLICATION_ENV_DEVELOPMENT', 'development');
-    define('APPLICATION_ENV_PRODUCTION', 'production');
+    // Autoload dependencies
+    require_once __DIR__ . '/../app/bootstrap/autoload.php';
 
-    // Define application environment
-    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
+    // Set environment
+    require_once __DIR__ . '/../app/bootstrap/environment.php';
 
-    // Define application path
-    define('APP_PATH', __DIR__ . '/../app/');
+    // Create config
+    $config = require_once __DIR__ . '/../app/bootstrap/config.php';
 
-    // Load config
-    $defaultConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/default.php');
+    // Instantiate application
+    $app = require_once __DIR__ . '/../app/bootstrap/app.php';
 
-    switch (APPLICATION_ENV) {
-
-        case APPLICATION_ENV_PRODUCTION:
-            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.production.php');
-            break;
-        case APPLICATION_ENV_DEVELOPMENT:
-        default:
-            $serverConfig = new \Phalcon\Config(require_once APP_PATH . 'configs/server.develop.php');
-            break;
-    }
-
-    $config = $defaultConfig->merge($serverConfig);
-
-    // Load vendor libraries
-    require_once APP_PATH . '../vendor/autoload.php';
-
-    // Load classes
-    $loader = new \Phalcon\Loader();
-    $loader
-        ->registerDirs([
-            APP_PATH . 'views/'
-        ])
-        ->registerNamespaces([
-            'App' => APP_PATH . 'library/App'
-        ])
-        ->register();
-
-    // Initialize API & DI
-    $di = new PhalconRest\Di\FactoryDefault();
-    $api = new PhalconRest\Api($di);
-
-    // Bootstrap application
+    // Bootstrap components
     $bootstrap = new \App\Bootstrap(
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
@@ -57,38 +32,35 @@ try {
         new \App\Bootstrap\AclBootstrap
     );
 
-    $bootstrap->run($api, $di, $config);
+    $bootstrap->run($app, $app->di, $config);
 
-    // Run app
-    $api->handle();
+    // Start application
+    $app->handle();
 
-    // Set response content
-    $returnedValue = $api->getReturnedValue();
+    // Set appropriate response value
+    /** @var \PhalconRest\Http\Response $response */
+    $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
 
-    if ($returnedValue !== null) {
+    $returnedValue = $app->getReturnedValue();
 
-        if (is_string($returnedValue)) {
-            $api->response->setContent($returnedValue);
-        } else {
-            $api->response->setJsonContent($returnedValue);
-        }
+    if (is_string($returnedValue)) {
+        $response->setContent($returnedValue);
+    } else {
+        $response->setJsonContent($returnedValue);
     }
 
-    $response = $api->response;
-} catch (\Exception $e) {
+} catch(\Exception $e) {
 
+    // Handle exceptions
     /** @var \PhalconRest\Http\Response $response */
-    $response = $di->getShared(\App\Constants\Services::RESPONSE);
+    $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
     $debugMode = isset($config) ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
-
     $response->setErrorContent($e, $debugMode);
-}
-finally {
+
+} finally {
 
     // Send response
-    if ($response) {
-
-        $response->sendHeaders();
-        $response->send();
-    }
+    $response = $app->di->getShared(\PhalconRest\Constants\Services::RESPONSE);
+    $response->send();
 }
+
