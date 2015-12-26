@@ -4,11 +4,11 @@ namespace App\Constants;
 
 class AclRoles
 {
-    const UNAUTHORIZED = 'unauthorized';
-    const AUTHORIZED = 'authorized';
-    const USER = 'user';
-    const MANAGER = 'manager';
-    const ADMINISTRATOR = 'administrator';
+    const UNAUTHORIZED = 'Unauthorized';
+    const AUTHORIZED = 'Authorized';
+    const USER = 'User';
+    const MANAGER = 'Manager';
+    const ADMINISTRATOR = 'Administrator';
 
     const ALL_ROLES = [self::UNAUTHORIZED, self::AUTHORIZED, self::USER, self::MANAGER, self::ADMINISTRATOR];
 }

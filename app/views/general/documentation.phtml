@@ -25,115 +25,36 @@
     <h1><?php echo $title ?></h1>
     <p class="lead"><?php echo $description ?></p>
 
-    <h2>Routes</h2>
-
-    <div class="panel panel-default" ng-repeat="route in vm.documentation.routes">
-        <div class="panel-heading">
-            {{ route.pattern }}
-        </div>
-    </div>
-
     <h2>Resources</h2>
 
     <div ng-repeat="resource in vm.documentation.resources">
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                {{ resource.prefix }}
+                {{ resource.name || resource.prefix }}
             </div>
             <table class="table table-bordered">
-                <tr>
-                    <th>
-                        description
-                    </th>
-                    <td>
-                        {{ resource.description }}
-                    </td>
+                <tr ng-show="resource.description">
+                    <th>Description</th>
+                    <td>{{ resource.description }}</td>
                 </tr>
                 <tr>
-                    <th>
-                        model
-                    </th>
-                    <td>
-                        {{ resource.model }}
-                    </td>
+                    <th>Base path</th>
+                    <td>{{ resource.prefix }}</td>
                 </tr>
                 <tr>
-                    <th>
-                        source
-                    </th>
-                    <td>
-                        {{ resource.source }}
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        columnMap
-                    </th>
+                    <th>Fields</th>
                     <td>
                         <table class="table table-bordered">
-                            <tr ng-repeat="(key, value) in resource.columnMap">
+                            <tr ng-repeat="(field, dataType) in resource.fields">
                                 <th>
-                                    {{ key }}
+                                    {{ field }}
                                 </th>
                                 <td>
-                                    {{ value }}
+                                    <div class="label label-primary">{{ dataType | dataType }}</div>
                                 </td>
                             </tr>
                         </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        whitelist
-                    </th>
-                    <td>
-                        <li ng-repeat="value in resource.whitelist">
-                            {{ value }}
-                        </li>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        dataTypes
-                    </th>
-                    <td>
-                        <table class="table table-bordered">
-                            <tr ng-repeat="(key, value) in resource.dataTypes">
-                                <th>
-                                    {{ key }}
-                                </th>
-                                <td>
-                                    <div class="label label-primary">
-                                        {{ value }}
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        allowedRoles
-                    </th>
-                    <td>
-                        <ul>
-                            <li ng-repeat="role in resource.allowedRoles">
-                                {{ role }}
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        deniedRoles
-                    </th>
-                    <td>
-                        <ul>
-                            <li ng-repeat="role in resource.deniedRoles">
-                                {{ role }}
-                            </li>
-                        </ul>
                     </td>
                 </tr>
             </table>
@@ -141,27 +62,15 @@
 
                 <div class="panel panel-primary" ng-repeat="endpoint in resource.endpoints">
                     <div class="panel-heading">
-                        {{ resource.prefix + endpoint.path }}
+                        <span ng-bind-html="endpoint.httpMethod | method"></span> {{ resource.prefix + endpoint.path }}
                     </div>
                     <table class="table table-bordered">
-                        <tr>
-                            <th>
-                                httpMethod
-                            </th>
-                            <th ng-bind-html="endpoint.httpMethod | method"></th>
+                        <tr ng-show="endpoint.description">
+                            <th>Description</th>
+                            <th>{{ endpoint.description }}</th>
                         </tr>
                         <tr>
-                            <th>
-                                description
-                            </th>
-                            <th>
-                                {{ endpoint.description }}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                url
-                            </th>
+                            <th>Full URL</th>
                             <td>
                                 <a ng-href="{{ vm.documentation.basePath + resource.prefix + endpoint.path }}" target="_blank">
                                     {{ vm.documentation.basePath + resource.prefix + endpoint.path }}
@@ -169,27 +78,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>
-                                allowedRoles
-                            </th>
+                            <th>Allowed roles</th>
                             <td>
-                                <ul>
-                                    <li ng-repeat="role in endpoint.allowedRoles">
-                                        {{ role }}
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                deniedRoles
-                            </th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="role in endpoint.deniedRoles">
-                                        {{ role }}
-                                    </li>
-                                </ul>
+                                <div class="label label-primary" ng-repeat="role in endpoint.allowedRoles" style="margin-right: 5px">{{ role }}</div>
                             </td>
                         </tr>
                     </table>
@@ -197,6 +88,14 @@
             </div>
         </div>
 
+    </div>
+
+    <h2>Other routes</h2>
+
+    <div class="panel panel-default" ng-repeat="route in vm.documentation.routes">
+        <div class="panel-heading">
+            {{ route.pattern }}
+        </div>
     </div>
 
 </div><!-- /.container -->
@@ -244,6 +143,32 @@
             }
         }
     });
+
+    app.filter('dataType', function() {
+
+        return function(input) {
+
+            switch(input) {
+                case 1:
+                    return 'Integer';
+                case 2:
+                    return 'Float';
+                case 3:
+                    return 'Double';
+                case 4:
+                    return 'Boolean';
+                case 5:
+                    return 'String';
+                case 6:
+                    return 'Timestamp';
+                case 7:
+                    return 'JSON';
+                default:
+                    return 'Unknown';
+            }
+        }
+    });
+
 </script>
 
 </body>
