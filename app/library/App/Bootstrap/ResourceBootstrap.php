@@ -36,6 +36,10 @@ class ResourceBootstrap extends \App\Bootstrap
                     ->allow(AclRoles::UNAUTHORIZED)
                     ->deny(AclRoles::AUTHORIZED)
                     ->description('Authenticates user credentials provided in the authorization header and returns an access token')
+                    ->exampleResponse([
+                        'token' => 'co126bbm40wqp41i3bo7pj1gfsvt9lp6',
+                        'expires' => 1451139067
+                    ])
                 )
             )
 

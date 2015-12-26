@@ -77,6 +77,10 @@
                                 </a>
                             </td>
                         </tr>
+                        <tr ng-show="endpoint.exampleResponse">
+                            <th>Example response</th>
+                            <th><pre style="font-weight: normal;">{{ endpoint.exampleResponse | json }}</pre></th>
+                        </tr>
                         <tr>
                             <th>Allowed roles</th>
                             <td>
