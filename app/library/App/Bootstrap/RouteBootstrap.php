@@ -12,6 +12,8 @@ class RouteBootstrap extends \App\Bootstrap
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {
+        $api->mount(new \App\Collections\ExportCollection);
+
         $api->get('/', function() use ($api) {
 
             /** @var \Phalcon\Mvc\View\Simple $view */
