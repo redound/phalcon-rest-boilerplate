@@ -20,7 +20,7 @@ class ResourceBootstrap extends \App\Bootstrap
     public function run(Api $api, DiInterface $di, Config $config)
     {
         $api
-            ->resource(Resource::crud('/users')
+            ->resource(Resource::crud('/users', 'User')
                 ->model(User::class)
                 ->transformer(UserTransformer::class)
                 ->handler(UserController::class)
@@ -30,14 +30,20 @@ class ResourceBootstrap extends \App\Bootstrap
 
                 ->endpoint(Endpoint::get('/me', 'me')
                     ->allow(AclRoles::USER)
+                    ->description('Returns the currently logged in user')
                 )
                 ->endpoint(Endpoint::post('/authenticate', 'authenticate')
                     ->allow(AclRoles::UNAUTHORIZED)
                     ->deny(AclRoles::AUTHORIZED)
+                    ->description('Authenticates user credentials provided in the authorization header and returns an access token')
+                    ->exampleResponse([
+                        'token' => 'co126bbm40wqp41i3bo7pj1gfsvt9lp6',
+                        'expires' => 1451139067
+                    ])
                 )
             )
 
-            ->resource(Resource::factory('/items')
+            ->resource(Resource::factory('/items', 'Item')
                 ->model(Item::class)
                 ->singleKey('item')
                 ->multipleKey('items')
@@ -47,7 +53,7 @@ class ResourceBootstrap extends \App\Bootstrap
                 ->endpoint(Endpoint::find())
             )
 
-            ->resource(Resource::crud('/products')
+            ->resource(Resource::crud('/products', 'Product')
                 ->model(Product::class)
                 ->singleKey('product')
                 ->multipleKey('products')

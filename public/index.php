@@ -8,26 +8,68 @@
  * @author   Olivier Andriessen <olivierandriessen@gmail.com>
  */
 
+/** @var \Phalcon\Config $config */
+$config = null;
+
+/** @var \PhalconRest\Api $app */
+$app = null;
+
+/** @var \PhalconRest\Http\Response $response */
+$response = null;
+
 try {
 
-    // Autoload dependencies
-    require_once __DIR__ . '/../app/bootstrap/autoload.php';
-
     // Set environment
-    require_once __DIR__ . '/../app/bootstrap/environment.php';
+    define('APPLICATION_ENV_DEVELOPMENT', 'development');
+    define('APPLICATION_ENV_PRODUCTION', 'production');
+
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
+
+    // Autoload dependencies
+    require __DIR__ . '/../vendor/autoload.php';
+
+    $loader = new \Phalcon\Loader();
+
+    $loader->registerDirs([
+        __DIR__ . '/../app/views/'
+    ]);
+
+    $loader->registerNamespaces([
+        'App' => __DIR__ . '/../app/library/App'
+    ]);
+
+    $loader->register();
 
     // Create config
-    $config = require_once __DIR__ . '/../app/bootstrap/config.php';
+    $defaultConfig = new \Phalcon\Config(require_once __DIR__ . '/../app/configs/default.php');
 
-    // Instantiate application
-    $app = require_once __DIR__ . '/../app/bootstrap/app.php';
+    switch (APPLICATION_ENV) {
+
+        case APPLICATION_ENV_PRODUCTION:
+            $serverConfigPath = __DIR__ . '/../app/configs/server.production.php';
+            break;
+        case APPLICATION_ENV_DEVELOPMENT:
+        default:
+            $serverConfigPath = __DIR__ . '/../app/configs/server.develop.php';
+            break;
+    }
+
+    if (!file_exists($serverConfigPath)) {
+        throw new \Exception('Config file ' . $serverConfigPath . ' doesn\'t exist.');
+    }
+
+    $serverConfig = new \Phalcon\Config(require_once $serverConfigPath);
+    $config = $defaultConfig->merge($serverConfig);
+
+    // Instantiate application & DI
+    $di = new PhalconRest\Di\FactoryDefault();
+    $app = new PhalconRest\Api($di);
 
     // Bootstrap components
     $bootstrap = new \App\Bootstrap(
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
         new \App\Bootstrap\ResourceBootstrap,
-        new \App\Bootstrap\CollectionBootstrap,
         new \App\Bootstrap\RouteBootstrap,
         new \App\Bootstrap\AclBootstrap
     );
@@ -38,7 +80,6 @@ try {
     $app->handle();
 
     // Set appropriate response value
-    /** @var \PhalconRest\Http\Response $response */
     $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
 
     $returnedValue = $app->getReturnedValue();
@@ -48,19 +89,17 @@ try {
     } else {
         $response->setJsonContent($returnedValue);
     }
-
-} catch(\Exception $e) {
+} catch (\Exception $e) {
 
     // Handle exceptions
-    /** @var \PhalconRest\Http\Response $response */
-    $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
-    $debugMode = isset($config) ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
-    $response->setErrorContent($e, $debugMode);
+    $response = $app ? $app->di->getShared(\App\Constants\Services::RESPONSE) : new \PhalconRest\Http\Response();
+    $debugMode = $config ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
 
-} finally {
+    $response->setErrorContent($e, $debugMode);
+}
+finally {
 
     // Send response
-    $response = $app->di->getShared(\PhalconRest\Constants\Services::RESPONSE);
     $response->send();
 }
 
