@@ -11,7 +11,7 @@ class Product extends \App\Mvc\DateTrackingModel
 
     public function getSource()
     {
-        return 'products';
+        return 'product';
     }
 
     public function columnMap()
@@ -22,6 +22,13 @@ class Product extends \App\Mvc\DateTrackingModel
             'brand' => 'brand',
             'color' => 'color'
         ];
+    }
+
+    public function initialize() {
+
+        $this->hasManyToMany('id', ItemProduct::class, 'productId', 'itemId', Item::class, 'id', [
+            'alias' => 'Items',
+        ]);
     }
 
     public function whitelist()

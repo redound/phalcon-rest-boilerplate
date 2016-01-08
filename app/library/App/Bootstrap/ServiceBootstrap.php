@@ -77,8 +77,8 @@ class ServiceBootstrap extends \App\Bootstrap
          */
         $di->setShared(Services::AUTH_MANAGER, function () use ($di, $config) {
 
-            $authManager = new \PhalconRest\Auth\Manager($config->authentication->expirationTime);
-            $authManager->registerAccountType(\App\Auth\UsernameAccountType::NAME, new \App\Auth\UsernameAccountType());
+            $authManager = new \App\Auth\Manager($config->authentication->expirationTime);
+            $authManager->registerAccountType(\App\Auth\EmailAccountType::NAME, new \App\Auth\EmailAccountType());
 
             return $authManager;
         });

@@ -5,31 +5,35 @@ namespace App\Model;
 class Item extends \App\Mvc\DateTrackingModel
 {
     public $id;
-    public $title;
-    public $author;
-    public $likes;
+    public $body;
+    public $completed;
 
     public function getSource()
     {
-        return 'items';
+        return 'item';
     }
 
     public function columnMap()
     {
         return parent::columnMap() + [
             'id' => 'id',
-            'title' => 'title',
-            'author' => 'author',
-            'likes' => 'likes'
+            'body' => 'body',
+            'completed' => 'completed'
         ];
+    }
+
+    public function initialize() {
+
+        $this->hasManyToMany('id', ItemProduct::class, 'itemId', 'productId', Product::class, 'id', [
+            'alias' => 'Products',
+        ]);
     }
 
     public function whitelist()
     {
         return [
-            'title',
-            'likes',
-            'author'
+            'body',
+            'completed'
         ];
     }
 }

@@ -13,7 +13,7 @@ class User extends \App\Mvc\DateTrackingModel
 
     public function getSource()
     {
-        return 'users';
+        return 'user';
     }
 
     public function columnMap()
@@ -21,9 +21,11 @@ class User extends \App\Mvc\DateTrackingModel
         return parent::columnMap() + [
             'id' => 'id',
             'role' => 'role',
+            'email' => 'email',
+            'username' => 'username',
             'first_name' => 'firstName',
             'last_name' => 'lastName',
-            'username' => 'username',
+            'location' => 'location',
             'password' => 'password'
         ];
     }

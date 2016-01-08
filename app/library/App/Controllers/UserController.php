@@ -16,11 +16,18 @@ class UserController extends CrudResourceController
         $username = $this->request->getUsername();
         $password = $this->request->getPassword();
 
-        $session = $this->authManager->loginWithUsernamePassword(\App\Auth\UsernameAccountType::NAME, $username,
+        $session = $this->authManager->loginWithEmailPassword(\App\Auth\EmailAccountType::NAME, $username,
             $password);
+
+        $transformer = new \App\Transformers\UserTransformer;
+        $transformer->setModelClass('App\Model\User');
+
+        $user = $this->createItemResponse(\App\Model\User::findFirst($session->getIdentity()), $transformer, 'parent');
+
         $response = [
             'token' => $session->getToken(),
-            'expires' => $session->getExpirationTime()
+            'expires' => $session->getExpirationTime(),
+            'user' => $user
         ];
 
         return $this->createArrayResponse($response, 'data');
