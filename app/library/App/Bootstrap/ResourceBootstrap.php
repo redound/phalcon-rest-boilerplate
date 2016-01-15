@@ -3,10 +3,10 @@
 namespace App\Bootstrap;
 
 use App\Model\Item;
-use App\Model\Product;
+use App\Model\Project;
 use App\Model\User;
 use App\Transformers\ItemTransformer;
-use App\Transformers\ProductTransformer;
+use App\Transformers\ProjectTransformer;
 use App\Transformers\UserTransformer;
 use App\Controllers\UserController;
 use Phalcon\Acl;
@@ -25,11 +25,13 @@ class ResourceBootstrap extends \App\Bootstrap
         $api
             ->resource(Resource::factory('/users', 'User')
                 ->model(User::class)
+                ->expectsJsonData()
                 ->transformer(UserTransformer::class)
                 ->handler(UserController::class)
                 ->singleKey('user')
                 ->multipleKey('users')
                 ->deny(AclRoles::UNAUTHORIZED, AclRoles::USER)
+
                 ->endpoint(Endpoint::all()
                     ->allow(AclRoles::USER)
                     ->description('Returns all registered users')
@@ -49,26 +51,21 @@ class ResourceBootstrap extends \App\Bootstrap
                 )
             )
 
-            ->resource(Resource::factory('/items', 'Item')
+            ->resource(Resource::crud('/projects', 'Project')
+                ->model(Project::class)
+                ->expectsJsonData()
+                ->transformer(ProjectTransformer::class)
+                ->singleKey('project')
+                ->multipleKey('projects')
+                ->deny(AclRoles::UNAUTHORIZED)
+            )
+
+            ->resource(Resource::crud('/items', 'Item')
                 ->model(Item::class)
-                ->postedDataMethod(PostedDataMethods::JSON_BODY)
+                ->expectsJsonData()
                 ->transformer(ItemTransformer::class)
                 ->singleKey('item')
                 ->multipleKey('items')
-                ->deny(AclRoles::UNAUTHORIZED)
-
-                ->endpoint(Endpoint::all())
-                ->endpoint(Endpoint::find())
-                ->endpoint(Endpoint::create())
-                ->endpoint(Endpoint::update())
-                ->endpoint(Endpoint::remove())
-            )
-
-            ->resource(Resource::crud('/products', 'Product')
-                ->model(Product::class)
-                ->transformer(ProductTransformer::class)
-                ->singleKey('product')
-                ->multipleKey('products')
                 ->deny(AclRoles::UNAUTHORIZED)
             );
     }

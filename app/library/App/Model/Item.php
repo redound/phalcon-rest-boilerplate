@@ -24,8 +24,8 @@ class Item extends \App\Mvc\DateTrackingModel
 
     public function initialize() {
 
-        $this->hasManyToMany('id', ItemProduct::class, 'itemId', 'productId', Product::class, 'id', [
-            'alias' => 'Products',
+        $this->hasManyToMany('id', ProjectItem::class, 'itemId', 'projectId', Project::class, 'id', [
+            'alias' => 'Projects',
         ]);
     }
 

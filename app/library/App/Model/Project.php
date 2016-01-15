@@ -2,16 +2,15 @@
 
 namespace App\Model;
 
-class Product extends \App\Mvc\DateTrackingModel
+class Project extends \App\Mvc\DateTrackingModel
 {
     public $id;
     public $title;
-    public $brand;
     public $color;
 
     public function getSource()
     {
-        return 'product';
+        return 'project';
     }
 
     public function columnMap()
@@ -19,14 +18,13 @@ class Product extends \App\Mvc\DateTrackingModel
         return parent::columnMap() + [
             'id' => 'id',
             'title' => 'title',
-            'brand' => 'brand',
             'color' => 'color'
         ];
     }
 
     public function initialize() {
 
-        $this->hasManyToMany('id', ItemProduct::class, 'productId', 'itemId', Item::class, 'id', [
+        $this->hasManyToMany('id', ProjectItem::class, 'projectId', 'itemId', Item::class, 'id', [
             'alias' => 'Items',
         ]);
     }
@@ -35,7 +33,6 @@ class Product extends \App\Mvc\DateTrackingModel
     {
         return [
             'title',
-            'brand',
             'color',
         ];
     }
