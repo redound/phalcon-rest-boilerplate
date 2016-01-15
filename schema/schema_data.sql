@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 10.0.22-MariaDB)
+# Host: 127.0.0.1 (MySQL 10.0.21-MariaDB)
 # Database: phalcon_rest_boilerplate
-# Generation Time: 2015-12-24 13:07:06 +0000
+# Generation Time: 2016-01-15 15:41:04 +0000
 # ************************************************************
 
 
@@ -20,93 +20,80 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table items
+# Dump of table item
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `items`;
+DROP TABLE IF EXISTS `item`;
 
-CREATE TABLE `items` (
+CREATE TABLE `item` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  `likes` int(11) DEFAULT NULL,
+  `body` varchar(255) DEFAULT NULL,
+  `completed` tinyint(1) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `items` WRITE;
-/*!40000 ALTER TABLE `items` DISABLE KEYS */;
-
-INSERT INTO `items` (`id`, `title`, `author`, `likes`, `created_at`, `updated_at`)
-VALUES
-	(1,'Item 1','Jake',12,'2015-12-14 12:22:02',NULL),
-	(2,'Item 2','Billy',12,'2015-12-14 12:22:02',NULL),
-	(3,'Item 3','Billy',53,'2015-12-14 12:22:02',NULL),
-	(4,'Item 4','Alex',6,'2015-12-14 12:22:02',NULL),
-	(5,'Item 5','Jake',17,'2015-12-14 12:22:02',NULL),
-	(6,'Item 6','Alex',9,'2015-12-14 12:22:02',NULL);
-
-/*!40000 ALTER TABLE `items` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
-# Dump of table products
+# Dump of table project
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `products`;
+DROP TABLE IF EXISTS `project`;
 
-CREATE TABLE `products` (
+CREATE TABLE `project` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
-  `brand` varchar(255) DEFAULT NULL,
   `color` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-
-INSERT INTO `products` (`id`, `title`, `brand`, `color`, `created_at`, `updated_at`)
-VALUES
-	(1,'Title 1','Brand 1','green','2015-11-07 11:49:00','2015-11-07 11:49:00'),
-	(2,'Title 2','Brand 2','yellow','2015-11-07 11:49:02','2015-11-07 11:49:02'),
-	(3,'Title 3','Brand 3','blue','2015-11-07 11:49:02','2015-11-07 11:49:02'),
-	(5,'Title 5','Brand 5','purple','2015-11-07 11:49:03','2015-11-07 11:49:03'),
-	(6,'Title 6','Brand 6','pink','2015-11-07 11:49:03','2015-11-07 11:49:03'),
-	(7,'Title 7','Brand 7','green','2015-11-07 11:49:03','2015-11-07 11:49:03');
-
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
-# Dump of table users
+# Dump of table project_item
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `project_item`;
 
-CREATE TABLE `users` (
+CREATE TABLE `project_item` (
+  `project_id` int(11) unsigned NOT NULL,
+  `item_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`item_id`,`project_id`),
+  KEY `item_id` (`item_id`),
+  KEY `project_id` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `role` varchar(255) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `username` varchar(255) NOT NULL DEFAULT '',
+  `password` varchar(255) NOT NULL DEFAULT '',
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
 
-INSERT INTO `users` (`id`, `role`, `first_name`, `last_name`, `username`, `password`, `created_at`, `updated_at`)
+INSERT INTO `user` (`id`, `role`, `email`, `username`, `password`, `first_name`, `last_name`, `location`, `created_at`, `updated_at`)
 VALUES
-	(1,'user','Demo','Account','demo','$2y$10$1/U1yo5yMdXsrsU3RaeULu7dm7UFX1qq3rnfpbQugv7uIPdo2kMcC','2015-12-24 13:43:34',NULL);
+	(1,'User','test@example.com','demo','$2y$10$1/U1yo5yMdXsrsU3RaeULu7dm7UFX1qq3rnfpbQugv7uIPdo2kMcC','Demo','Account',NULL,'2015-12-28 16:20:58',NULL);
 
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
