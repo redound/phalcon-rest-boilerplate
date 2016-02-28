@@ -4,7 +4,7 @@ return [
 
     'debug' => true,
     'hostName' => 'http://phalcon-rest-boilerplate.redound.org',
-    'clientHostName' => 'http://angular-boilerplate.redound.org',
+    'clientHostName' => 'http://phalcon-rest-boilerplate.redound.org',
     'database' => [
 
         // Change to your own configuration
