@@ -16,7 +16,7 @@ class UserController extends CrudResourceController
         $username = $this->request->getUsername();
         $password = $this->request->getPassword();
 
-        $session = $this->authManager->loginWithEmailPassword(\App\Auth\EmailAccountType::NAME, $username,
+        $session = $this->authManager->loginWithUsernamePassword(\App\Auth\UsernameAccountType::NAME, $username,
             $password);
 
         $transformer = new \App\Transformers\UserTransformer;
