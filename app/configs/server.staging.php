@@ -3,8 +3,8 @@
 return [
 
     'debug' => true,
-    'hostName' => 'http://phalcon-rest-boilerplate.redound.dev',
-    'clientHostName' => 'http://phalcon-rest-app.redound.dev',
+    'hostName' => 'http://phalcon-rest-boilerplate.redound.org',
+    'clientHostName' => 'http://phalcon-rest-boilerplate.redound.org',
     'database' => [
 
         // Change to your own configuration

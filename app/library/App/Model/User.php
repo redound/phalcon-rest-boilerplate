@@ -1,8 +1,11 @@
 <?php
 
-class User extends \App\Mvc\Model
+namespace App\Model;
+
+class User extends \App\Mvc\DateTrackingModel
 {
     public $id;
+    public $role;
     public $firstName;
     public $lastName;
     public $username;
@@ -10,19 +13,20 @@ class User extends \App\Mvc\Model
 
     public function getSource()
     {
-        return 'users';
+        return 'user';
     }
 
     public function columnMap()
     {
-        return [
+        return parent::columnMap() + [
             'id' => 'id',
+            'role' => 'role',
+            'email' => 'email',
+            'username' => 'username',
             'first_name' => 'firstName',
             'last_name' => 'lastName',
-            'username' => 'username',
-            'password' => 'password',
-            'updated_at' => 'updatedAt',
-            'created_at' => 'createdAt',
+            'location' => 'location',
+            'password' => 'password'
         ];
     }
 

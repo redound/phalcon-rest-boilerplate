@@ -4,7 +4,7 @@ return [
 
     'debug' => true,
     'hostName' => 'http://phalcon-rest-boilerplate.redound.dev',
-    'clientHostName' => 'http://phalcon-rest-app.redound.dev',
+    'clientHostName' => 'http://phalcon-rest-boilerplate.redound.dev',
     'database' => [
 
         // Change to your own configuration
@@ -15,6 +15,6 @@ return [
         'name' => 'phalcon_rest_boilerplate',
     ],
     'cors' => [
-        'allowedOrigins' => ['*']
+        'allowedOrigins' => ['phalcon-rest-boilerplate.dev']
     ]
 ];

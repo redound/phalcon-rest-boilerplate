@@ -1,5 +1,4 @@
 /vendor
 .DS_Store
 composer.lock
-server.develop.php
 .idea

@@ -4,9 +4,8 @@ namespace App\Auth;
 
 use App\Constants\Services;
 use Phalcon\Di;
-use PhalconRest\Auth\Manager;
 
-class UsernameAccountType implements \PhalconRest\Auth\AccountType
+class EmailAccountType implements \PhalconRest\Auth\AccountType
 {
     const NAME = "username";
 
@@ -15,13 +14,13 @@ class UsernameAccountType implements \PhalconRest\Auth\AccountType
         /** @var \Phalcon\Security $security */
         $security = Di::getDefault()->get(Services::SECURITY);
 
-        $username = $data[Manager::LOGIN_DATA_USERNAME];
+        $email = $data[Manager::LOGIN_DATA_EMAIL];
         $password = $data[Manager::LOGIN_DATA_PASSWORD];
 
         /** @var \App\Model\User $user */
         $user = \App\Model\User::findFirst([
-            'conditions' => 'username = :username:',
-            'bind' => ['username' => $username]
+            'conditions' => 'email = :email:',
+            'bind' => ['email' => $email]
         ]);
 
         if (!$user) {

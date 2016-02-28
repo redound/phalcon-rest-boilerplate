@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4499
+# Version 4529
 #
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 10.0.21-MariaDB)
+# Host: 127.0.0.1 (MySQL 5.5.5-10.0.21-MariaDB)
 # Database: phalcon_rest_boilerplate
-# Generation Time: 2015-12-15 20:50:54 +0000
+# Generation Time: 2016-02-28 12:01:39 +0000
 # ************************************************************
 
 
@@ -20,33 +20,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table items
+# Dump of table album
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `items`;
+DROP TABLE IF EXISTS `album`;
 
-CREATE TABLE `items` (
+CREATE TABLE `album` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  `likes` int(11) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table products
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `products`;
-
-CREATE TABLE `products` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `brand` varchar(255) DEFAULT NULL,
-  `color` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -54,19 +35,38 @@ CREATE TABLE `products` (
 
 
 
-# Dump of table users
+# Dump of table photo
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `photo`;
 
-CREATE TABLE `users` (
+CREATE TABLE `photo` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `album_id` int(11) unsigned NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table user
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `role` varchar(255) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `username` varchar(255) NOT NULL DEFAULT '',
+  `password` varchar(255) NOT NULL DEFAULT '',
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `password` varchar(256) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

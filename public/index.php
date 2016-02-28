@@ -1,89 +1,105 @@
 <?php
 
-use App\Constants\Services as AppServices;
+/**
+ * PhalconRest - a library focused on simplifying the creation of RESTful API's
+ *
+ * @package  redound/phalcon-rest
+ * @author   Bart Blok <bart@wittig.nl>
+ * @author   Olivier Andriessen <olivierandriessen@gmail.com>
+ */
 
-// Setup up environment variable
-$application_env = getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development';
+/** @var \Phalcon\Config $config */
+$config = null;
+
+/** @var \PhalconRest\Api $app */
+$app = null;
 
 /** @var \PhalconRest\Http\Response $response */
 $response = null;
 
 try {
 
-    // Read the configuration based on env
-    $config = require __DIR__ . "/../app/bootstrap/config.php";
+    // Set environment
+    define('APPLICATION_ENV_DEVELOPMENT', 'development');
+    define('APPLICATION_ENV_PRODUCTION', 'production');
 
-    // Include loader
-    require __DIR__ . "/../app/bootstrap/loader.php";
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
 
-    // Setup all required services (DI)
-    $di = require __DIR__ . "/../app/bootstrap/services.php";
+    // Autoload dependencies
+    require __DIR__ . '/../vendor/autoload.php';
 
+    $loader = new \Phalcon\Loader();
 
-    // Instantiate main application
-    $app = new \Phalcon\Mvc\Micro($di);
+    $loader->registerDirs([
+        __DIR__ . '/../app/views/'
+    ]);
 
-    // Attach the EventsManager to the main application in order to attach Middleware
-    $eventsManager = $app->di->get(AppServices::EVENTS_MANAGER);
-    $app->setEventsManager($eventsManager);
+    $loader->registerNamespaces([
+        'App' => __DIR__ . '/../app/library/App'
+    ]);
 
+    $loader->register();
 
-    // Attach Middleware to EventsManager
-    require __DIR__ . "/../app/bootstrap/middleware.php";
+    // Create config
+    $defaultConfig = new \Phalcon\Config(require_once __DIR__ . '/../app/configs/default.php');
 
+    switch (APPLICATION_ENV) {
 
-    // Mount Collections
-    require __DIR__ . "/../app/bootstrap/collections.php";
+        case APPLICATION_ENV_PRODUCTION:
+            $serverConfigPath = __DIR__ . '/../app/configs/server.production.php';
+            break;
+        case APPLICATION_ENV_DEVELOPMENT:
+        default:
+            $serverConfigPath = __DIR__ . '/../app/configs/server.develop.php';
+            break;
+    }
 
+    if (!file_exists($serverConfigPath)) {
+        throw new \Exception('Config file ' . $serverConfigPath . ' doesn\'t exist.');
+    }
 
-    // Other routes
-    $app->get('/', function() use ($app) {
+    $serverConfig = new \Phalcon\Config(require_once $serverConfigPath);
+    $config = $defaultConfig->merge($serverConfig);
 
-        /** @var Phalcon\Mvc\View\Simple $view */
-        $view = $app->di->get(AppServices::VIEW);
+    // Instantiate application & DI
+    $di = new PhalconRest\Di\FactoryDefault();
+    $app = new PhalconRest\Api($di);
 
-        return $view->render('general/index');
-    });
+    // Bootstrap components
+    $bootstrap = new \App\Bootstrap(
+        new \App\Bootstrap\ServiceBootstrap,
+        new \App\Bootstrap\MiddlewareBootstrap,
+        new \App\Bootstrap\ResourceBootstrap,
+        new \App\Bootstrap\RouteBootstrap,
+        new \App\Bootstrap\AclBootstrap
+    );
 
-    $app->get('/proxy.html', function() use ($app, $config) {
-
-        /** @var Phalcon\Mvc\View\Simple $view */
-        $view = $app->di->get(AppServices::VIEW);
-
-        $view->setVar('client', $config->clientHostName);
-        return $view->render('general/proxy');
-    });
-
+    $bootstrap->run($app, $app->di, $config);
 
     // Start application
     $app->handle();
 
-    // Set content
+    // Set appropriate response value
+    $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
+
     $returnedValue = $app->getReturnedValue();
 
-    if($returnedValue !== null){
-
-        if(is_string($returnedValue)){
-
-            $app->response->setContent($returnedValue);
-        }
-        else {
-
-            $app->response->setJsonContent($returnedValue);
-        }
+    if (is_string($returnedValue)) {
+        $response->setContent($returnedValue);
+    } else {
+        $response->setJsonContent($returnedValue);
     }
+} catch (\Exception $e) {
 
-    $response = $app->response;
+    // Handle exceptions
+    $response = $app ? $app->di->getShared(\App\Constants\Services::RESPONSE) : new \PhalconRest\Http\Response();
+    $debugMode = $config ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
 
-} catch (Exception $e) {
-
-    $response = $di->get(AppServices::RESPONSE);
-    $response->setErrorContent($e, $application_env == 'development');
+    $response->setErrorContent($e, $debugMode);
 }
+finally {
 
-// Send response
-if($response){
-
-    $response->sendHeaders();
+    // Send response
     $response->send();
 }
+
