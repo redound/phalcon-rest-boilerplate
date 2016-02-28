@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4499
+# Version 4529
 #
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 10.0.21-MariaDB)
+# Host: 127.0.0.1 (MySQL 5.5.5-10.0.21-MariaDB)
 # Database: phalcon_rest_boilerplate
-# Generation Time: 2016-01-15 15:41:04 +0000
+# Generation Time: 2016-02-28 12:01:12 +0000
 # ************************************************************
 
 
@@ -20,51 +20,56 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table item
+# Dump of table photo
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `item`;
+DROP TABLE IF EXISTS `photo`;
 
-CREATE TABLE `item` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `body` varchar(255) DEFAULT NULL,
-  `completed` tinyint(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table project
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `project`;
-
-CREATE TABLE `project` (
+CREATE TABLE `photo` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
-  `color` varchar(255) DEFAULT NULL,
+  `album_id` int(11) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `photo` WRITE;
+/*!40000 ALTER TABLE `photo` DISABLE KEYS */;
+
+INSERT INTO `photo` (`id`, `title`, `album_id`, `created_at`, `updated_at`)
+VALUES
+	(1,'Photo of Album 1',1,'2016-02-28 11:34:38','2016-02-28 11:34:38'),
+	(2,'Another Photo of Album 1',1,'2016-02-28 11:34:38','2016-02-28 11:34:38'),
+	(3,'Photo of Album 2',2,'2016-02-28 11:34:38','2016-02-28 11:34:38');
+
+/*!40000 ALTER TABLE `photo` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
-# Dump of table project_item
+# Dump of table album
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `project_item`;
+DROP TABLE IF EXISTS `album`;
 
-CREATE TABLE `project_item` (
-  `project_id` int(11) unsigned NOT NULL,
-  `item_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`item_id`,`project_id`),
-  KEY `item_id` (`item_id`),
-  KEY `project_id` (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `album` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `album` WRITE;
+/*!40000 ALTER TABLE `album` DISABLE KEYS */;
+
+INSERT INTO `album` (`id`, `title`, `created_at`, `updated_at`)
+VALUES
+	(1,'Album 1','2016-02-28 11:28:33','2016-02-28 11:28:33'),
+	(2,'Album 2','2016-02-28 11:28:33','2016-02-28 11:28:33');
+
+/*!40000 ALTER TABLE `album` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table user

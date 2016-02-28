@@ -2,11 +2,11 @@
 
 namespace App\Bootstrap;
 
-use App\Model\Item;
-use App\Model\Project;
+use App\Model\Album;
+use App\Model\Photo;
 use App\Model\User;
-use App\Transformers\ItemTransformer;
-use App\Transformers\ProjectTransformer;
+use App\Transformers\AlbumTransformer;
+use App\Transformers\PhotoTransformer;
 use App\Transformers\UserTransformer;
 use App\Controllers\UserController;
 use Phalcon\Acl;
@@ -51,21 +51,21 @@ class ResourceBootstrap extends \App\Bootstrap
                 )
             )
 
-            ->resource(Resource::crud('/projects', 'Project')
-                ->model(Project::class)
+            ->resource(Resource::crud('/albums', 'Album')
+                ->model(Album::class)
                 ->expectsJsonData()
-                ->transformer(ProjectTransformer::class)
-                ->singleKey('project')
-                ->multipleKey('projects')
+                ->transformer(AlbumTransformer::class)
+                ->singleKey('album')
+                ->multipleKey('albums')
                 ->deny(AclRoles::UNAUTHORIZED)
             )
 
-            ->resource(Resource::crud('/items', 'Item')
-                ->model(Item::class)
+            ->resource(Resource::crud('/photos', 'Photo')
+                ->model(Photo::class)
                 ->expectsJsonData()
-                ->transformer(ItemTransformer::class)
-                ->singleKey('item')
-                ->multipleKey('items')
+                ->transformer(PhotoTransformer::class)
+                ->singleKey('photo')
+                ->multipleKey('photos')
                 ->deny(AclRoles::UNAUTHORIZED)
             );
     }

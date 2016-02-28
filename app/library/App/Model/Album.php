@@ -2,38 +2,35 @@
 
 namespace App\Model;
 
-class Project extends \App\Mvc\DateTrackingModel
+class Album extends \App\Mvc\DateTrackingModel
 {
     public $id;
     public $title;
-    public $color;
 
     public function getSource()
     {
-        return 'project';
+        return 'album';
     }
 
     public function columnMap()
     {
         return parent::columnMap() + [
             'id' => 'id',
-            'title' => 'title',
-            'color' => 'color'
+            'title' => 'title'
         ];
     }
 
     public function initialize() {
 
-        $this->hasManyToMany('id', ProjectItem::class, 'projectId', 'itemId', Item::class, 'id', [
-            'alias' => 'Items',
+        $this->hasMany('id', Photo::class, 'albumId', [
+            'alias' => 'Photos',
         ]);
     }
 
     public function whitelist()
     {
         return [
-            'title',
-            'color',
+            'title'
         ];
     }
 }
