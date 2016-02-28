@@ -4,7 +4,6 @@ namespace App\Auth;
 
 use App\Constants\Services;
 use Phalcon\Di;
-use App\Auth\Manager;
 
 class EmailAccountType implements \PhalconRest\Auth\AccountType
 {
