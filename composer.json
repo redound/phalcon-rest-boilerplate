@@ -1,9 +1,9 @@
 {
     "name": "redound/phalcon-rest-boilerplate",
     "description": "Phalcon REST Boilerplate",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "require": {
-        "redound/phalcon-rest": "^1.2.0",
+        "redound/phalcon-rest": "^1.2.1",
         "league/fractal": "^0.13.0",
         "firebase/php-jwt": "^3.0"
     },
