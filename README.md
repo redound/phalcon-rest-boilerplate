@@ -11,8 +11,8 @@ When you use [this database scheme](https://github.com/redound/phalcon-rest-boil
 - Password **test123** (is stored as bcrypt)
 
 ## Learn More
-- [Website](http://www.phalcon-rest.org)
-- [Documentation](http://www.phalcon-rest.org/docs/start/installation.html)
+- [Website](http://www.phalcon-rest.redound.org)
+- [Documentation](http://www.phalcon-rest.redound.org/docs/start/installation.html)
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
