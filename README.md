@@ -1,4 +1,4 @@
-#Phalcon REST Boilerplate#
+# Phalcon REST Boilerplate
 ![Phalcon REST Boilerplate](http://phalconist.com/redound/phalcon-rest-boilerplate/default.svg)
 
 This repository provides an boilerplate application with all of the classes of [Phalcon REST library](https://github.com/redound/phalcon-rest) implemented.
@@ -11,9 +11,11 @@ When you use [this database scheme](https://github.com/redound/phalcon-rest-boil
 - Password **test123** (is stored as bcrypt)
 
 ## Learn More
-- [Documentation](https://redound.gitbooks.io/phalcon-rest/content/index.html)
 
-## Contributing ##
+- [Documentation](http://phalcon-rest.redound.org)
+
+## Contributing
+
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
 
 ## Credits
