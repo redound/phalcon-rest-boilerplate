@@ -5,7 +5,7 @@ This repository provides an boilerplate application with all of the classes of [
 
 ## Authentication
 
-When you use [this database scheme](https://github.com/redound/phalcon-rest-boilerplate/blob/master/schema/schema_with_data.sql) you will be able to authenticate using the following credentials:
+When you use [this database scheme](https://github.com/redound/phalcon-rest-boilerplate/blob/master/schema/schema_data.sql) you will be able to authenticate using the following credentials:
 
 - Username **demo**
 - Password **test123** (is stored as bcrypt)
