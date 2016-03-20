@@ -11,9 +11,9 @@ use App\Constants\AclRoles;
 
 class UserResource extends Resource {
 
-    public static function factory($prefix, $name = null)
+    public function initialize()
     {
-        return parent::factory($prefix, $name)
+        $this
             ->name('User')
             ->model(User::class)
             ->expectsJsonData()

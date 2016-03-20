@@ -9,9 +9,9 @@ use App\Constants\AclRoles;
 
 class AlbumResource extends Resource {
 
-    public static function crud($prefix, $name = null)
+    public function initialize()
     {
-        return parent::crud($prefix, $name)
+        $this
             ->name('Album')
             ->model(Album::class)
             ->expectsJsonData()
