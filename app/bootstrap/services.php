@@ -17,12 +17,13 @@ $di->setShared(AppServices::CONFIG, function () use ($config) {
  */
 $di->set(AppServices::DB, function () use ($config, $di) {
 
-    $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-        "host" => $config->database->host,
-        "username" => $config->database->username,
-        "password" => $config->database->password,
-        "dbname" => $config->database->name,
-    ));
+    $dbConfig = $config->database->toArray();
+    $adapter = $dbConfig['adapter'];
+    unset($dbConfig['adapter']);
+
+    $class = 'Phalcon\Db\Adapter\Pdo\\' . $adapter;
+
+    $connection = new $class($dbConfig);
 
     //Assign the eventsManager to the db adapter instance
     $connection->setEventsManager($di->get(AppServices::EVENTS_MANAGER));
