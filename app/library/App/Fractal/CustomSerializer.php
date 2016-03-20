@@ -6,19 +6,19 @@ class CustomSerializer extends \League\Fractal\Serializer\ArraySerializer
 {
     public function collection($resourceKey, array $data)
     {
-        if ($resourceKey == 'parent') {
+        if ($resourceKey == null) {
             return $data;
         }
 
-        return array($resourceKey ?: 'data' => $data);
+        return [$resourceKey ?: 'data' => $data];
     }
 
     public function item($resourceKey, array $data)
     {
-        if ($resourceKey == 'parent') {
+        if ($resourceKey == null) {
             return $data;
         }
 
-        return array($resourceKey ?: 'data' => $data);
+        return [$resourceKey ?: 'data' => $data];
     }
 }

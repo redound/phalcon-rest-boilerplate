@@ -3,6 +3,10 @@
 namespace App\Controllers;
 
 use App\Constants\Services;
+use PhalconRest\Export\Documentation;
+use PhalconRest\Export\Postman\Collection;
+use PhalconRest\Transformers\DocumentationTransformer;
+use PhalconRest\Transformers\Postman\CollectionTransformer;
 
 class ExportController extends \PhalconRest\Mvc\Controllers\FractalController
 {
@@ -11,12 +15,11 @@ class ExportController extends \PhalconRest\Mvc\Controllers\FractalController
         /** @var \Phalcon\Config $config */
         $config = $this->di->get(Services::CONFIG);
 
-        $documentation = new \PhalconRest\Export\Documentation($config->application->title, $config->hostName);
-        $documentation->addManyResources($this->application->getResources());
+        $documentation = new Documentation($config->application->title, $config->hostName);
+        $documentation->addManyCollections($this->application->getCollections());
         $documentation->addManyRoutes($this->application->getRouter()->getRoutes());
 
-        return $this->createItemResponse($documentation, new \PhalconRest\Transformers\DocumentationTransformer,
-            'documentation');
+        return $this->createItemResponse($documentation, new DocumentationTransformer(), 'documentation');
     }
 
     public function postman()
@@ -24,11 +27,10 @@ class ExportController extends \PhalconRest\Mvc\Controllers\FractalController
         /** @var \Phalcon\Config $config */
         $config = $this->di->get(Services::CONFIG);
 
-        $postmanCollection = new \PhalconRest\Export\Postman\Collection($config->application->title, $config->hostName);
-        $postmanCollection->addManyResources($this->application->getResources());
+        $postmanCollection = new Collection($config->application->title, $config->hostName);
+        $postmanCollection->addManyCollections($this->application->getCollections());
         $postmanCollection->addManyRoutes($this->application->getRouter()->getRoutes());
 
-        return $this->createItemResponse($postmanCollection,
-            new \PhalconRest\Transformers\Postman\CollectionTransformer, 'parent');
+        return $this->createItemResponse($postmanCollection, new CollectionTransformer());
     }
 }

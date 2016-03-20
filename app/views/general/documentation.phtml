@@ -25,28 +25,28 @@
     <h1><?php echo $title ?></h1>
     <p class="lead"><?php echo $description ?></p>
 
-    <h2>Resources</h2>
+    <h2>Collections</h2>
 
-    <div ng-repeat="resource in vm.documentation.resources">
+    <div ng-repeat="collection in vm.documentation.collections">
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                {{ resource.name || resource.prefix }}
+                {{ collection.name || collection.prefix }}
             </div>
             <table class="table table-bordered">
-                <tr ng-show="resource.description">
+                <tr ng-show="collection.description">
                     <th>Description</th>
-                    <td>{{ resource.description }}</td>
+                    <td>{{ collection.description }}</td>
                 </tr>
                 <tr>
                     <th>Base path</th>
-                    <td>{{ resource.prefix }}</td>
+                    <td>{{ collection.prefix }}</td>
                 </tr>
-                <tr>
+                <tr ng-show="collection.fields">
                     <th>Fields</th>
                     <td>
                         <table class="table table-bordered">
-                            <tr ng-repeat="(field, dataType) in resource.fields">
+                            <tr ng-repeat="(field, dataType) in collection.fields">
                                 <th>
                                     {{ field }}
                                 </th>
@@ -60,9 +60,9 @@
             </table>
             <div class="panel-footer">
 
-                <div class="panel panel-primary" ng-repeat="endpoint in resource.endpoints">
+                <div class="panel panel-primary" ng-repeat="endpoint in collection.endpoints">
                     <div class="panel-heading">
-                        <span ng-bind-html="endpoint.httpMethod | method"></span> {{ resource.prefix + endpoint.path }}
+                        <span ng-bind-html="endpoint.httpMethod | method"></span> {{ collection.prefix + endpoint.path }}
                     </div>
                     <table class="table table-bordered">
                         <tr ng-show="endpoint.description">
@@ -72,8 +72,8 @@
                         <tr>
                             <th>Full URL</th>
                             <td>
-                                <a ng-href="{{ vm.documentation.basePath + resource.prefix + endpoint.path }}" target="_blank">
-                                    {{ vm.documentation.basePath + resource.prefix + endpoint.path }}
+                                <a ng-href="{{ vm.documentation.basePath + collection.prefix + endpoint.path }}" target="_blank">
+                                    {{ vm.documentation.basePath + collection.prefix + endpoint.path }}
                                 </a>
                             </td>
                         </tr>
