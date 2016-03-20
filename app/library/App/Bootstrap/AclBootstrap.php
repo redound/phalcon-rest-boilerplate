@@ -2,6 +2,7 @@
 
 namespace App\Bootstrap;
 
+use App\BootstrapInterface;
 use App\Constants\Services;
 use Phalcon\Acl;
 use Phalcon\Config;
@@ -9,7 +10,7 @@ use Phalcon\DiInterface;
 use PhalconRest\Api;
 use App\Constants\AclRoles;
 
-class AclBootstrap extends \App\Bootstrap
+class AclBootstrap implements BootstrapInterface
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {

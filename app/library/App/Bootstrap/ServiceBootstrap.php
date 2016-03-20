@@ -2,12 +2,13 @@
 
 namespace App\Bootstrap;
 
+use App\BootstrapInterface;
 use App\Constants\Services;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
 
-class ServiceBootstrap extends \App\Bootstrap
+class ServiceBootstrap implements BootstrapInterface
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {

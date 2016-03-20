@@ -2,6 +2,7 @@
 
 namespace App\Bootstrap;
 
+use App\BootstrapInterface;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
@@ -13,7 +14,7 @@ use PhalconRest\Middleware\NotFoundMiddleware;
 use PhalconRest\Middleware\OptionsResponseMiddleware;
 use PhalconRest\Middleware\UrlQueryMiddleware;
 
-class MiddlewareBootstrap extends \App\Bootstrap
+class MiddlewareBootstrap implements BootstrapInterface
 {
     public function run(Api $api, DiInterface $di, Config $config)
     {

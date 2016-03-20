@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', '1');
+error_reporting(E_STRICT);
+
 /**
  * PhalconRest - a library focused on simplifying the creation of RESTful API's
  *
