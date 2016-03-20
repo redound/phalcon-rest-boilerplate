@@ -15,6 +15,6 @@ class AlbumTransformer extends ModelTransformer
 
     public function includePhotos(Album $album)
     {
-        return $this->collection($album->getPhotos(), new PhotoTransformer, 'parent');
+        return $this->collection($album->getPhotos(), new PhotoTransformer);
     }
 }

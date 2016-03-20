@@ -69,7 +69,7 @@ try {
     $bootstrap = new \App\Bootstrap(
         new \App\Bootstrap\ServiceBootstrap,
         new \App\Bootstrap\MiddlewareBootstrap,
-        new \App\Bootstrap\ResourceBootstrap,
+        new \App\Bootstrap\CollectionBootstrap,
         new \App\Bootstrap\RouteBootstrap,
         new \App\Bootstrap\AclBootstrap
     );

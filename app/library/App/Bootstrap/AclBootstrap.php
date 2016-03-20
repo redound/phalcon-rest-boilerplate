@@ -26,6 +26,6 @@ class AclBootstrap extends \App\Bootstrap
         $acl->addRole(new Acl\Role(AclRoles::MANAGER), $authorizedRole);
         $acl->addRole(new Acl\Role(AclRoles::USER), $authorizedRole);
 
-        $acl->mountMany($api->getResources());
+        $acl->mountMany($api->getCollections());
     }
 }
