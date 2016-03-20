@@ -16,5 +16,8 @@
             "name": "Bart Blok",
             "email": "bart@wittig.nl"
         }
-    ]
+    ],
+    "require-dev": {
+        "codeception/codeception": "^2.1"
+    }
 }

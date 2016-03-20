@@ -2,3 +2,4 @@
 .DS_Store
 composer.lock
 .idea
+tests/_output/*
