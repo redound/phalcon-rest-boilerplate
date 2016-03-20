@@ -73,7 +73,7 @@ $di->setShared(AppServices::EVENTS_MANAGER, function () use ($di, $config) {
  */
 $di->setShared(AppServices::TOKEN_PARSER, function () use ($di, $config) {
 
-    return new \PhalconRest\Auth\TokenParser\JWT($config->authentication->secret, \PhalconRest\Auth\TokenParser\JWT::ALGORITHM_HS256);
+    return new \PhalconRest\Auth\TokenParsers\JWTTokenParser($config->authentication->secret, \PhalconRest\Auth\TokenParsers\JWTTokenParser::ALGORITHM_HS256);
 });
 
 /**
@@ -115,7 +115,7 @@ $di->setShared(AppServices::API_SERVICE, function () {
 
     $apiService = new \PhalconRest\Api\Service;
 
-    $itemResource = new \PhalconRest\Api\Resource();
+    $itemResource = new \PhalconRest\Api\Resource('example');
     $itemResource
         ->setKey('items')
         ->setModel('\Item')
@@ -131,7 +131,7 @@ $di->setShared(AppServices::API_SERVICE, function () {
  */
 $di->setShared(AppServices::QUERY, function () {
 
-    return new \PhalconRest\Data\Query\Query;
+    return new \PhalconRest\Data\Query;
 });
 
 /**
@@ -139,7 +139,7 @@ $di->setShared(AppServices::QUERY, function () {
  */
 $di->setShared(AppServices::PHQL_QUERY_PARSER, function () {
 
-    return new \PhalconRest\Data\Query\Parser\Phql;
+    return new \PhalconRest\Data\Query\QueryParsers\UrlQueryParser;
 });
 
 /**
@@ -147,15 +147,14 @@ $di->setShared(AppServices::PHQL_QUERY_PARSER, function () {
  */
 $di->setShared(AppServices::URL_QUERY_PARSER, function () {
 
-    return new \PhalconRest\Data\Query\Parser\Url;
+    return new \PhalconRest\Data\Query\QueryParsers\UrlQueryParser;
 });
 
 /**
  * @description App - \Library\App\Services\UserService
  */
 $di->setShared(AppServices::USER_SERVICE, function () {
-
-    return new \App\Services\UserService;
+    return new \App\User\Service;
 });
 
 return $di;
