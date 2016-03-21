@@ -97,6 +97,8 @@ try {
     $response->setErrorContent($e, $debugMode);
 } finally {
     // Send response
-    $response->send();
+    if (!$response->isSent()) {
+        $response->send();
+    }
 }
 
