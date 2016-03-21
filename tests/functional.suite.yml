@@ -9,3 +9,7 @@ modules:
     enabled:
         # add framework module here
         - \Helper\Functional
+        - Phalcon2
+    config:
+        Phalcon2:
+            bootstrap: 'tests/_config/bootstrap.php'
