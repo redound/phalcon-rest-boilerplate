@@ -18,7 +18,6 @@ $app = null;
 $response = null;
 
 try {
-
     // Set environment
     define('APPLICATION_ENV_DEVELOPMENT', 'development');
     define('APPLICATION_ENV_PRODUCTION', 'production');
@@ -28,7 +27,7 @@ try {
     // Autoload dependencies
     require __DIR__ . '/../vendor/autoload.php';
 
-    $loader = new \Phalcon\Loader();
+    $loader = new Phalcon\Loader();
 
     $loader->registerDirs([
         __DIR__ . '/../app/views/'
@@ -41,7 +40,7 @@ try {
     $loader->register();
 
     // Create config
-    $defaultConfig = new \Phalcon\Config(require_once __DIR__ . '/../app/configs/default.php');
+    $defaultConfig = new Phalcon\Config(require_once __DIR__ . '/../app/configs/default.php');
 
     switch (APPLICATION_ENV) {
 
@@ -55,10 +54,10 @@ try {
     }
 
     if (!file_exists($serverConfigPath)) {
-        throw new \Exception('Config file ' . $serverConfigPath . ' doesn\'t exist.');
+        throw new Exception('Config file ' . $serverConfigPath . ' doesn\'t exist.');
     }
 
-    $serverConfig = new \Phalcon\Config(require_once $serverConfigPath);
+    $serverConfig = new Phalcon\Config(require_once $serverConfigPath);
     $config = $defaultConfig->merge($serverConfig);
 
     // Instantiate application & DI
@@ -66,12 +65,12 @@ try {
     $app = new PhalconRest\Api($di);
 
     // Bootstrap components
-    $bootstrap = new \App\Bootstrap(
-        new \App\Bootstrap\ServiceBootstrap,
-        new \App\Bootstrap\MiddlewareBootstrap,
-        new \App\Bootstrap\CollectionBootstrap,
-        new \App\Bootstrap\RouteBootstrap,
-        new \App\Bootstrap\AclBootstrap
+    $bootstrap = new App\Bootstrap(
+        new App\Bootstrap\ServiceBootstrap,
+        new App\Bootstrap\MiddlewareBootstrap,
+        new App\Bootstrap\CollectionBootstrap,
+        new App\Bootstrap\RouteBootstrap,
+        new App\Bootstrap\AclBootstrap
     );
 
     $bootstrap->run($app, $app->di, $config);
@@ -80,7 +79,7 @@ try {
     $app->handle();
 
     // Set appropriate response value
-    $response = $app->di->getShared(\App\Constants\Services::RESPONSE);
+    $response = $app->di->getShared(App\Constants\Services::RESPONSE);
 
     $returnedValue = $app->getReturnedValue();
 
@@ -92,13 +91,11 @@ try {
 } catch (\Exception $e) {
 
     // Handle exceptions
-    $response = $app ? $app->di->getShared(\App\Constants\Services::RESPONSE) : new \PhalconRest\Http\Response();
+    $response = $app ? $app->di->getShared(App\Constants\Services::RESPONSE) : new PhalconRest\Http\Response();
     $debugMode = $config ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
 
     $response->setErrorContent($e, $debugMode);
-}
-finally {
-
+} finally {
     // Send response
     $response->send();
 }
