@@ -1,6 +1,5 @@
 {
     "name": "redound/phalcon-rest-boilerplate",
-    "version": "1.3.0",
     "keywords": ["RESTful", "rest", "api", "phalcon", "boilerplate"],
     "description": "Phalcon REST Boilerplate to use with Phalcon REST library",
     "type": "project",
