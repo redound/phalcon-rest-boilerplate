@@ -2,11 +2,21 @@
 
 namespace App\Bootstrap;
 
+use Phalcon\Config;
+use PhalconRest\Api;
+use Phalcon\DiInterface;
 use App\BootstrapInterface;
 use App\Constants\Services;
-use Phalcon\Config;
-use Phalcon\DiInterface;
-use PhalconRest\Api;
+use App\Auth\UsernameAccountType;
+use App\Fractal\CustomSerializer;
+use Phalcon\Mvc\Url as UrlResolver;
+use Phalcon\Mvc\View\Simple as View;
+use App\User\Service as UserService;
+use App\Auth\Manager as AuthManager;
+use Phalcon\Events\Manager as EventsManager;
+use League\Fractal\Manager as FractalManager;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
+use PhalconRest\Auth\TokenParsers\JWTTokenParser;
 
 class ServiceBootstrap implements BootstrapInterface
 {
@@ -15,21 +25,21 @@ class ServiceBootstrap implements BootstrapInterface
         /**
          * @description Config - \Phalcon\Config
          */
-        $di->setShared(\App\Constants\Services::CONFIG, $config);
+        $di->setShared(Services::CONFIG, $config);
 
         /**
          * @description Phalcon - \Phalcon\Db\Adapter\Pdo\Mysql
          */
         $di->set(Services::DB, function () use ($config, $di) {
 
-            $connection = new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-                "host" => $config->database->host,
-                "username" => $config->database->username,
-                "password" => $config->database->password,
-                "dbname" => $config->database->name,
-            ));
+            $config = $config->get('database')->toArray();
+            $adapter = $config['adapter'];
+            unset($config['adapter']);
+            $class = 'Phalcon\Db\Adapter\Pdo\\' . $adapter;
 
-            //Assign the eventsManager to the db adapter instance
+            $connection = new $class($config);
+
+            // Assign the eventsManager to the db adapter instance
             $connection->setEventsManager($di->get(Services::EVENTS_MANAGER));
 
             return $connection;
@@ -40,8 +50,8 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->set(Services::URL, function () use ($config) {
 
-            $url = new \Phalcon\Mvc\Url();
-            $url->setBaseUri($config->application->baseUri);
+            $url = new UrlResolver;
+            $url->setBaseUri($config->get('application')->baseUri);
             return $url;
         });
 
@@ -50,8 +60,8 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->set(Services::VIEW, function () use ($config) {
 
-            $view = new \Phalcon\Mvc\View\Simple();
-            $view->setViewsDir($config->application->viewsDir);
+            $view = new View;
+            $view->setViewsDir($config->get('application')->viewsDir);
 
             return $view;
         });
@@ -61,7 +71,7 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->setShared(Services::EVENTS_MANAGER, function () use ($di, $config) {
 
-            return new \Phalcon\Events\Manager;
+            return new EventsManager;
         });
 
         /**
@@ -69,8 +79,7 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->setShared(Services::TOKEN_PARSER, function () use ($di, $config) {
 
-            return new \PhalconRest\Auth\TokenParsers\JWTTokenParser($config->authentication->secret,
-                \PhalconRest\Auth\TokenParsers\JWTTokenParser::ALGORITHM_HS256);
+            return new JWTTokenParser($config->get('authentication')->secret, JWTTokenParser::ALGORITHM_HS256);
         });
 
         /**
@@ -78,8 +87,8 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->setShared(Services::AUTH_MANAGER, function () use ($di, $config) {
 
-            $authManager = new \App\Auth\Manager($config->authentication->expirationTime);
-            $authManager->registerAccountType(\App\Auth\UsernameAccountType::NAME, new \App\Auth\UsernameAccountType());
+            $authManager = new AuthManager($config->get('authentication')->expirationTime);
+            $authManager->registerAccountType(UsernameAccountType::NAME, new UsernameAccountType);
 
             return $authManager;
         });
@@ -89,7 +98,7 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->setShared(Services::MODELS_MANAGER, function () use ($di) {
 
-            $modelsManager = new \Phalcon\Mvc\Model\Manager;
+            $modelsManager = new ModelsManager;
             return $modelsManager->setEventsManager($di->get(Services::EVENTS_MANAGER));
         });
 
@@ -98,8 +107,8 @@ class ServiceBootstrap implements BootstrapInterface
          */
         $di->setShared(Services::FRACTAL_MANAGER, function () {
 
-            $fractal = new \League\Fractal\Manager;
-            $fractal->setSerializer(new \App\Fractal\CustomSerializer());
+            $fractal = new FractalManager;
+            $fractal->setSerializer(new CustomSerializer);
 
             return $fractal;
         });
@@ -107,6 +116,6 @@ class ServiceBootstrap implements BootstrapInterface
         /**
          * @description PhalconRest - \PhalconRest\User\Service
          */
-        $di->setShared(Services::USER_SERVICE, new \App\User\Service);
+        $di->setShared(Services::USER_SERVICE, new UserService);
     }
 }
