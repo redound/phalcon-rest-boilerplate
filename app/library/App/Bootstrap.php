@@ -4,6 +4,8 @@ namespace App;
 
 class Bootstrap
 {
+    protected $_executables;
+
     public function __construct(...$executables)
     {
         $this->_executables = $executables;
