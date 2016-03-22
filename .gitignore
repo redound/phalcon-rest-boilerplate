@@ -3,3 +3,5 @@
 composer.lock
 .idea
 tests/_output/*
+app/configs/default.php
+app/configs/server.develop.php
