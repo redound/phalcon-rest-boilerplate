@@ -11,21 +11,11 @@
 /** @var \Phalcon\Config $config */
 $config = null;
 
-/** @var \PhalconRest\Api $app */
-$app = null;
-
-/** @var \PhalconRest\Http\Response $response */
-$response = null;
-
 try {
-    // Set environment
+
     define('APPLICATION_ENV_DEVELOPMENT', 'development');
-    define('APPLICATION_ENV_STAGING', 'staging');
-    define('APPLICATION_ENV_PRODUCTION', 'production');
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'APPLICATION_ENV_DEVELOPMENT');
 
-    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
-
-    // Autoload dependencies
     require __DIR__ . '/../vendor/autoload.php';
 
     $loader = new Phalcon\Loader();
@@ -40,35 +30,28 @@ try {
 
     $loader->register();
 
-    // Create config
-    $defaultConfig = new Phalcon\Config(require_once __DIR__ . '/../app/configs/default.php');
+    $configsPath = __DIR__ . '/../app/configs/';
+    $configPath = $configsPath . 'default.php';
 
-    switch (APPLICATION_ENV) {
-
-        case APPLICATION_ENV_PRODUCTION:
-            $serverConfigPath = __DIR__ . '/../app/configs/server.production.php';
-            break;
-        case APPLICATION_ENV_STAGING:
-            $serverConfigPath = __DIR__ . '/../app/configs/server.staging.php';
-            break;
-        case APPLICATION_ENV_DEVELOPMENT:
-        default:
-            $serverConfigPath = __DIR__ . '/../app/configs/server.develop.php';
-            break;
+    if (!is_readable($configPath)) {
+        throw new Exception('Unable to read config from ' . $configPath);
     }
 
-    if (!file_exists($serverConfigPath)) {
-        throw new Exception('Config file ' . $serverConfigPath . ' doesn\'t exist.');
+    $config = new Phalcon\Config(include_once $configPath);
+
+    $overridePath = __DIR__ . '/../app/configs/server.' . APPLICATION_ENV . '.php';
+
+    if (!is_readable($overridePath)) {
+        throw new Exception('Unable to read config from ' . $overridePath);
     }
 
-    $serverConfig = new Phalcon\Config(require_once $serverConfigPath);
-    $config = $defaultConfig->merge($serverConfig);
+    $override = new Phalcon\Config(include_once $overridePath);
 
-    // Instantiate application & DI
+    $config = $config->merge($override);
+
     $di = new PhalconRest\Di\FactoryDefault();
     $app = new PhalconRest\Api($di);
 
-    // Bootstrap components
     $bootstrap = new App\Bootstrap(
         new App\Bootstrap\ServiceBootstrap,
         new App\Bootstrap\MiddlewareBootstrap,
@@ -79,10 +62,8 @@ try {
 
     $bootstrap->run($app, $app->di, $config);
 
-    // Start application
     $app->handle();
 
-    // Set appropriate response value
     $response = $app->di->getShared(App\Constants\Services::RESPONSE);
 
     $returnedValue = $app->getReturnedValue();
@@ -92,15 +73,22 @@ try {
     } else {
         $response->setJsonContent($returnedValue);
     }
+
 } catch (\Exception $e) {
 
-    // Handle exceptions
-    $response = $app ? $app->di->getShared(App\Constants\Services::RESPONSE) : new PhalconRest\Http\Response();
-    $debugMode = $config ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
+    $di = new PhalconRest\Di\FactoryDefault();
+    $app = new \PhalconRest\Api($di);
+
+    $response = $app->di->getShared(App\Constants\Services::RESPONSE);
+
+    $debugMode = $config && $config->offsetExists('debug') ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
 
     $response->setErrorContent($e, $debugMode);
+
 } finally {
-    // Send response
+
+    $response = $app->di->getShared(App\Constants\Services::RESPONSE);
+
     if (!$response->isSent()) {
         $response->send();
     }
