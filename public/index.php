@@ -13,8 +13,7 @@ $config = null;
 
 try {
 
-    define('APPLICATION_ENV_DEVELOPMENT', 'development');
-    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'APPLICATION_ENV_DEVELOPMENT');
+    define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'development');
 
     require __DIR__ . '/../vendor/autoload.php';
 
@@ -81,7 +80,7 @@ try {
 
     $response = $app->di->getShared(App\Constants\Services::RESPONSE);
 
-    $debugMode = $config && $config->offsetExists('debug') ? $config->debug : (APPLICATION_ENV == APPLICATION_ENV_DEVELOPMENT);
+    $debugMode = $config && $config->offsetExists('debug') ? $config->debug : (APPLICATION_ENV == 'development');
 
     $response->setErrorContent($e, $debugMode);
 
