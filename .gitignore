@@ -5,3 +5,5 @@ composer.lock
 tests/_output/*
 app/configs/default.php
 app/configs/server.develop.php
+app/configs/server.staging.php
+app/configs/server.production.php
