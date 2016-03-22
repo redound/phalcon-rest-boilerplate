@@ -20,6 +20,7 @@ $response = null;
 try {
     // Set environment
     define('APPLICATION_ENV_DEVELOPMENT', 'development');
+    define('APPLICATION_ENV_STAGING', 'staging');
     define('APPLICATION_ENV_PRODUCTION', 'production');
 
     define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: APPLICATION_ENV_DEVELOPMENT);
@@ -46,6 +47,9 @@ try {
 
         case APPLICATION_ENV_PRODUCTION:
             $serverConfigPath = __DIR__ . '/../app/configs/server.production.php';
+            break;
+        case APPLICATION_ENV_STAGING:
+            $serverConfigPath = __DIR__ . '/../app/configs/server.staging.php';
             break;
         case APPLICATION_ENV_DEVELOPMENT:
         default:
