@@ -4,7 +4,6 @@ namespace App\Auth;
 
 use App\Constants\Services;
 use Phalcon\Di;
-use PhalconRest\Auth\Manager;
 
 class UsernameAccountType implements \PhalconRest\Auth\AccountType
 {
