@@ -84,10 +84,13 @@ try {
 
     $returnedValue = $app->getReturnedValue();
 
-    if (is_string($returnedValue)) {
-        $response->setContent($returnedValue);
-    } else {
-        $response->setJsonContent($returnedValue);
+    if($returnedValue !== null) {
+
+        if (is_string($returnedValue)) {
+            $response->setContent($returnedValue);
+        } else {
+            $response->setJsonContent($returnedValue);
+        }
     }
 
 } catch (\Exception $e) {
