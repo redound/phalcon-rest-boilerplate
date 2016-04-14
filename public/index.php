@@ -93,7 +93,7 @@ try {
 } catch (\Exception $e) {
 
     // Handle exceptions
-    $di = $app && $app->di ?: new PhalconRest\Di\FactoryDefault();
+    $di = $app && $app->di ? $app->di : new PhalconRest\Di\FactoryDefault();
     $response = $di->getShared(App\Constants\Services::RESPONSE);
     if(!$response || !$response instanceof PhalconRest\Http\Response){
         $response = new PhalconRest\Http\Response();
