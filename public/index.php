@@ -93,12 +93,13 @@ try {
 } catch (\Exception $e) {
 
     // Handle exceptions
-    $response = $app ? $app->di->getShared(App\Constants\Services::RESPONSE) : null;
+    $di = $app && $app->di ?: new PhalconRest\Di\FactoryDefault();
+    $response = $di->getShared(App\Constants\Services::RESPONSE);
     if(!$response || !$response instanceof PhalconRest\Http\Response){
         $response = new PhalconRest\Http\Response();
     }
 
-    $debugMode = isset($config) ? $config->debug : (APPLICATION_ENV == 'development');
+    $debugMode = isset($config->debug) ? $config->debug : (APPLICATION_ENV == 'development');
 
     $response->setErrorContent($e, $debugMode);
 }

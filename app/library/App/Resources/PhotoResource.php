@@ -2,6 +2,7 @@
 
 namespace App\Resources;
 
+use PhalconRest\Api\Endpoint;
 use PhalconRest\Api\Resource;
 use App\Model\Photo;
 use App\Transformers\PhotoTransformer;
@@ -18,6 +19,11 @@ class PhotoResource extends Resource {
             ->transformer(PhotoTransformer::class)
             ->itemKey('photo')
             ->collectionKey('photos')
-            ->deny(AclRoles::UNAUTHORIZED);
+            ->deny(AclRoles::UNAUTHORIZED)
+
+            ->endpoint(Endpoint::create())
+            ->endpoint(Endpoint::find())
+            ->endpoint(Endpoint::update())
+            ->endpoint(Endpoint::remove());
     }
 }

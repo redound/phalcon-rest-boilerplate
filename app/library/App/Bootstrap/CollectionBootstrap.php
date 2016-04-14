@@ -17,9 +17,10 @@ class CollectionBootstrap implements BootstrapInterface
     public function run(Api $api, DiInterface $di, Config $config)
     {
         $api
-            ->collection(ExportCollection::factory('/export'))
-            ->resource(UserResource::factory('/users'))
-            ->resource(AlbumResource::crud('/albums'))
-            ->resource(PhotoResource::crud('/photos'));
+            ->collection(new ExportCollection('/export'))
+            
+            ->resource(new UserResource('/users'))
+            ->resource(new AlbumResource('/albums'))
+            ->resource(new PhotoResource('/photos'));
     }
 }

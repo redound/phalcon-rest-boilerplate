@@ -8,11 +8,12 @@ use PhalconRest\Api\Endpoint;
 
 class ExportCollection extends Collection
 {
-    public static function factory($prefix, $name = null)
+    protected function initialize()
     {
-        return parent::factory($prefix, $name)
+        $this
             ->name('Export')
             ->handler(ExportController::class, true)
+
             ->endpoint(Endpoint::get('/documentation.json', 'documentation'))
             ->endpoint(Endpoint::get('/postman.json', 'postman'));
     }

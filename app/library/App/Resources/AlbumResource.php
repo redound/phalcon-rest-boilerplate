@@ -2,6 +2,7 @@
 
 namespace App\Resources;
 
+use PhalconRest\Api\Endpoint;
 use PhalconRest\Api\Resource;
 use App\Model\Album;
 use App\Transformers\AlbumTransformer;
@@ -18,6 +19,11 @@ class AlbumResource extends Resource {
             ->transformer(AlbumTransformer::class)
             ->itemKey('album')
             ->collectionKey('albums')
-            ->deny(AclRoles::UNAUTHORIZED);
+            ->deny(AclRoles::UNAUTHORIZED)
+
+            ->endpoint(Endpoint::create())
+            ->endpoint(Endpoint::find())
+            ->endpoint(Endpoint::update())
+            ->endpoint(Endpoint::remove());
     }
 }
