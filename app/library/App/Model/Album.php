@@ -26,11 +26,4 @@ class Album extends \App\Mvc\DateTrackingModel
             'alias' => 'Photos',
         ]);
     }
-
-    public function whitelist()
-    {
-        return [
-            'title'
-        ];
-    }
 }

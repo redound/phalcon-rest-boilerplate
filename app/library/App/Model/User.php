@@ -29,13 +29,4 @@ class User extends \App\Mvc\DateTrackingModel
             'password' => 'password'
         ];
     }
-
-    public function whitelist()
-    {
-        return [
-            'firstName',
-            'lastName',
-            'password'
-        ];
-    }
 }

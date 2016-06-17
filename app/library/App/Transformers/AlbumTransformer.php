@@ -3,12 +3,10 @@
 namespace App\Transformers;
 
 use App\Model\Album;
-use PhalconRest\Transformers\ModelTransformer;
+use PhalconRest\Transformers\Transformer;
 
-class AlbumTransformer extends ModelTransformer
+class AlbumTransformer extends Transformer
 {
-    protected $modelClass = Album::class;
-
     protected $availableIncludes = [
         'photos'
     ];
@@ -16,5 +14,15 @@ class AlbumTransformer extends ModelTransformer
     public function includePhotos(Album $album)
     {
         return $this->collection($album->getPhotos(), new PhotoTransformer);
+    }
+
+    public function transform(Album $album)
+    {
+        return [
+            'id' => $this->int($album->id),
+            'title' => $album->title,
+            'updated_at' => $album->updatedAt,
+            'created_at' => $album->createdAt
+        ];
     }
 }

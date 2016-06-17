@@ -22,7 +22,7 @@ class UserController extends CrudResourceController
         $transformer = new \App\Transformers\UserTransformer;
         $transformer->setModelClass('App\Model\User');
 
-        $user = $this->createItemResponse(\App\Model\User::findFirst($session->getIdentity()), $transformer, 'parent');
+        $user = $this->createItemResponse(\App\Model\User::findFirst($session->getIdentity()), $transformer);
 
         $response = [
             'token' => $session->getToken(),
@@ -31,5 +31,14 @@ class UserController extends CrudResourceController
         ];
 
         return $this->createArrayResponse($response, 'data');
+    }
+
+    public function whitelist()
+    {
+        return [
+            'firstName',
+            'lastName',
+            'password'
+        ];
     }
 }

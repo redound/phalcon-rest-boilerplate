@@ -6,6 +6,7 @@ class Photo extends \App\Mvc\DateTrackingModel
 {
     public $id;
     public $title;
+    public $albumId;
 
     public function getSource()
     {
@@ -26,12 +27,5 @@ class Photo extends \App\Mvc\DateTrackingModel
         $this->belongsTo('albumId', Album::class, 'id', [
             'alias' => 'Album',
         ]);
-    }
-
-    public function whitelist()
-    {
-        return [
-            'title'
-        ];
     }
 }
