@@ -5,10 +5,11 @@ namespace App\Controllers;
 use App\Constants\Services;
 use PhalconRest\Export\Documentation;
 use PhalconRest\Export\Postman\Collection;
+use PhalconRest\Mvc\Controllers\CollectionController;
 use PhalconRest\Transformers\DocumentationTransformer;
 use PhalconRest\Transformers\Postman\CollectionTransformer;
 
-class ExportController extends \PhalconRest\Mvc\Controllers\FractalController
+class ExportController extends CollectionController
 {
     public function documentation()
     {

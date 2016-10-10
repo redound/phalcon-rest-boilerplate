@@ -11,7 +11,7 @@ class PhotoTransformer extends Transformer
         'album'
     ];
 
-    public function includeAlbum(Photo $photo)
+    public function includeAlbum($photo)
     {
         return $this->item($photo->getAlbum(), new AlbumTransformer());
     }
