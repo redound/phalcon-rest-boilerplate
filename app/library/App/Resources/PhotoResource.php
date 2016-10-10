@@ -7,6 +7,7 @@ use PhalconRest\Api\Resource;
 use App\Model\Photo;
 use App\Transformers\PhotoTransformer;
 use App\Constants\AclRoles;
+use PhalconRest\Mvc\Controllers\CrudResourceController;
 
 class PhotoResource extends Resource {
 
@@ -20,7 +21,9 @@ class PhotoResource extends Resource {
             ->itemKey('photo')
             ->collectionKey('photos')
             ->deny(AclRoles::UNAUTHORIZED)
+            ->handler(CrudResourceController::class)
 
+            ->endpoint(Endpoint::all())
             ->endpoint(Endpoint::create())
             ->endpoint(Endpoint::find())
             ->endpoint(Endpoint::update())

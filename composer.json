@@ -6,8 +6,7 @@
     "license": "MIT",
     "homepage": "http://phalcon-rest.redound.org",
     "require": {
-        "php": ">= 5.6",
-        "redound/phalcon-rest": "^1.4.0",
+        "redound/phalcon-rest": "^1.5.0",
         "league/fractal": "^0.13.0",
         "firebase/php-jwt": "^3.0"
     },

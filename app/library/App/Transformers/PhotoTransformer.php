@@ -3,10 +3,17 @@
 namespace App\Transformers;
 
 use App\Model\Photo;
-use PhalconRest\Transformers\Transformer;
+use PhalconRest\Transformers\ModelTransformer;
 
-class PhotoTransformer extends Transformer
+class PhotoTransformer extends ModelTransformer
 {
+    /**
+     * Transforms are automatically handled
+     * based on your model when you extend ModelTransformer
+     * and assign the modelClass property
+     */
+    protected $modelClass = Photo::class;
+
     protected $availableIncludes = [
         'album'
     ];
@@ -16,6 +23,10 @@ class PhotoTransformer extends Transformer
         return $this->item($photo->getAlbum(), new AlbumTransformer());
     }
 
+    /**
+     * You can always transform manually by using
+     * the following code (below):
+     *
     public function transform(Photo $photo)
     {
         return [
@@ -24,4 +35,5 @@ class PhotoTransformer extends Transformer
             'albumId' => $this->int($photo->albumId)
         ];
     }
+    */
 }

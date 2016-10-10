@@ -12,7 +12,7 @@ class ExportCollection extends Collection
     {
         $this
             ->name('Export')
-            ->handler(ExportController::class, true)
+            ->handler(ExportController::class)
 
             ->endpoint(Endpoint::get('/documentation.json', 'documentation'))
             ->endpoint(Endpoint::get('/postman.json', 'postman'));

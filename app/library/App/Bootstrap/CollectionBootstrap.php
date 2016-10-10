@@ -18,7 +18,6 @@ class CollectionBootstrap implements BootstrapInterface
     {
         $api
             ->collection(new ExportCollection('/export'))
-            
             ->resource(new UserResource('/users'))
             ->resource(new AlbumResource('/albums'))
             ->resource(new PhotoResource('/photos'));
