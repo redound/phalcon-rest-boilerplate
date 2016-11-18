@@ -16,7 +16,7 @@ use App\Auth\Manager as AuthManager;
 use Phalcon\Events\Manager as EventsManager;
 use League\Fractal\Manager as FractalManager;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use PhalconRest\Auth\TokenParsers\JWTTokenParser;
+use PhalconApi\Auth\TokenParsers\JWTTokenParser;
 
 class ServiceBootstrap implements BootstrapInterface
 {

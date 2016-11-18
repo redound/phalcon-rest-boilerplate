@@ -4,7 +4,6 @@ namespace App\Bootstrap;
 
 use App\BootstrapInterface;
 use App\Constants\Services;
-use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;

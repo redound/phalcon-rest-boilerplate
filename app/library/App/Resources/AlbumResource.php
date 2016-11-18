@@ -2,14 +2,14 @@
 
 namespace App\Resources;
 
-use PhalconRest\Api\Endpoint;
-use PhalconRest\Api\Resource;
+use PhalconRest\Api\ApiEndpoint;
+use PhalconRest\Api\ApiResource;
 use App\Model\Album;
 use App\Transformers\AlbumTransformer;
 use App\Constants\AclRoles;
 use PhalconRest\Mvc\Controllers\CrudResourceController;
 
-class AlbumResource extends Resource {
+class AlbumResource extends ApiResource {
 
     public function initialize()
     {
@@ -23,10 +23,10 @@ class AlbumResource extends Resource {
             ->deny(AclRoles::UNAUTHORIZED)
             ->handler(CrudResourceController::class)
 
-            ->endpoint(Endpoint::all())
-            ->endpoint(Endpoint::create())
-            ->endpoint(Endpoint::find())
-            ->endpoint(Endpoint::update())
-            ->endpoint(Endpoint::remove());
+            ->endpoint(ApiEndpoint::all())
+            ->endpoint(ApiEndpoint::create())
+            ->endpoint(ApiEndpoint::find())
+            ->endpoint(ApiEndpoint::update())
+            ->endpoint(ApiEndpoint::remove());
     }
 }

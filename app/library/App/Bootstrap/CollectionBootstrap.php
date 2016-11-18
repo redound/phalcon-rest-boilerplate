@@ -7,7 +7,6 @@ use App\Collections\ExportCollection;
 use App\Resources\UserResource;
 use App\Resources\AlbumResource;
 use App\Resources\PhotoResource;
-use Phalcon\Acl;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;

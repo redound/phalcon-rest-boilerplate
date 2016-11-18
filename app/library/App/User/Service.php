@@ -5,7 +5,7 @@ namespace App\User;
 use App\Constants\AclRoles;
 use App\Model\User;
 
-class Service extends \PhalconRest\User\Service
+class Service extends \PhalconApi\User\Service
 {
     protected $detailsCache = [];
 

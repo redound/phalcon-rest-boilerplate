@@ -4,10 +4,10 @@ namespace App\Controllers;
 
 use App\Constants\Services;
 use PhalconRest\Export\Documentation;
-use PhalconRest\Export\Postman\Collection;
+use PhalconRest\Export\Postman\ApiCollection;
 use PhalconRest\Mvc\Controllers\CollectionController;
 use PhalconRest\Transformers\DocumentationTransformer;
-use PhalconRest\Transformers\Postman\CollectionTransformer;
+use PhalconRest\Transformers\Postman\ApiCollectionTransformer;
 
 class ExportController extends CollectionController
 {
@@ -28,10 +28,10 @@ class ExportController extends CollectionController
         /** @var \Phalcon\Config $config */
         $config = $this->di->get(Services::CONFIG);
 
-        $postmanCollection = new Collection($config->application->title, $config->hostName);
+        $postmanCollection = new ApiCollection($config->application->title, $config->hostName);
         $postmanCollection->addManyCollections($this->application->getCollections());
         $postmanCollection->addManyRoutes($this->application->getRouter()->getRoutes());
 
-        return $this->createItemResponse($postmanCollection, new CollectionTransformer());
+        return $this->createItemResponse($postmanCollection, new ApiCollectionTransformer());
     }
 }

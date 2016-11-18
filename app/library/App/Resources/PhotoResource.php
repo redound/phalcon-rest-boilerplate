@@ -2,14 +2,14 @@
 
 namespace App\Resources;
 
-use PhalconRest\Api\Endpoint;
-use PhalconRest\Api\Resource;
+use PhalconRest\Api\ApiEndpoint;
+use PhalconRest\Api\ApiResource;
 use App\Model\Photo;
 use App\Transformers\PhotoTransformer;
 use App\Constants\AclRoles;
 use PhalconRest\Mvc\Controllers\CrudResourceController;
 
-class PhotoResource extends Resource {
+class PhotoResource extends ApiResource {
 
     public function initialize()
     {
@@ -23,10 +23,10 @@ class PhotoResource extends Resource {
             ->deny(AclRoles::UNAUTHORIZED)
             ->handler(CrudResourceController::class)
 
-            ->endpoint(Endpoint::all())
-            ->endpoint(Endpoint::create())
-            ->endpoint(Endpoint::find())
-            ->endpoint(Endpoint::update())
-            ->endpoint(Endpoint::remove());
+            ->endpoint(ApiEndpoint::all())
+            ->endpoint(ApiEndpoint::create())
+            ->endpoint(ApiEndpoint::find())
+            ->endpoint(ApiEndpoint::update())
+            ->endpoint(ApiEndpoint::remove());
     }
 }

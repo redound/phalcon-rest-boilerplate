@@ -6,7 +6,7 @@ $config = null;
 /** @var \PhalconRest\Api $app */
 $app = null;
 
-/** @var \PhalconRest\Http\Response $response */
+/** @var \PhalconApi\Http\Response $response */
 $response = null;
 
 try {
@@ -90,8 +90,8 @@ try {
     // Handle exceptions
     $di = $app && $app->di ? $app->di : new PhalconRest\Di\FactoryDefault();
     $response = $di->getShared(App\Constants\Services::RESPONSE);
-    if(!$response || !$response instanceof PhalconRest\Http\Response){
-        $response = new PhalconRest\Http\Response();
+    if(!$response || !$response instanceof PhalconApi\Http\Response){
+        $response = new PhalconApi\Http\Response();
     }
 
     $debugMode = isset($config->debug) ? $config->debug : (APPLICATION_ENV == 'development');

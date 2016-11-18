@@ -6,13 +6,13 @@ use App\BootstrapInterface;
 use Phalcon\Config;
 use Phalcon\DiInterface;
 use PhalconRest\Api;
-use PhalconRest\Middleware\AuthenticationMiddleware;
+use PhalconApi\Middleware\AuthenticationMiddleware;
 use PhalconRest\Middleware\AuthorizationMiddleware;
-use PhalconRest\Middleware\CorsMiddleware;
+use PhalconApi\Middleware\CorsMiddleware;
 use PhalconRest\Middleware\FractalMiddleware;
-use PhalconRest\Middleware\NotFoundMiddleware;
-use PhalconRest\Middleware\OptionsResponseMiddleware;
-use PhalconRest\Middleware\UrlQueryMiddleware;
+use PhalconApi\Middleware\NotFoundMiddleware;
+use PhalconApi\Middleware\OptionsResponseMiddleware;
+use PhalconApi\Middleware\UrlQueryMiddleware;
 
 class MiddlewareBootstrap implements BootstrapInterface
 {

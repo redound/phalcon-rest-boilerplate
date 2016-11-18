@@ -2,14 +2,14 @@
 
 namespace App\Resources;
 
-use PhalconRest\Api\Resource;
-use PhalconRest\Api\Endpoint;
+use PhalconRest\Api\ApiResource;
+use PhalconRest\Api\ApiEndpoint;
 use App\Model\User;
 use App\Transformers\UserTransformer;
 use App\Controllers\UserController;
 use App\Constants\AclRoles;
 
-class UserResource extends Resource {
+class UserResource extends ApiResource {
 
     public function initialize()
     {
@@ -23,15 +23,15 @@ class UserResource extends Resource {
             ->collectionKey('users')
             ->deny(AclRoles::UNAUTHORIZED, AclRoles::USER)
 
-            ->endpoint(Endpoint::all()
+            ->endpoint(ApiEndpoint::all()
                 ->allow(AclRoles::USER)
                 ->description('Returns all registered users')
             )
-            ->endpoint(Endpoint::get('/me', 'me')
+            ->endpoint(ApiEndpoint::get('/me', 'me')
                 ->allow(AclRoles::USER)
                 ->description('Returns the currently logged in user')
             )
-            ->endpoint(Endpoint::post('/authenticate', 'authenticate')
+            ->endpoint(ApiEndpoint::post('/authenticate', 'authenticate')
                 ->allow(AclRoles::UNAUTHORIZED)
                 ->deny(AclRoles::AUTHORIZED)
                 ->description('Authenticates user credentials provided in the authorization header and returns an access token')

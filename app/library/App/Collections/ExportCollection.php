@@ -3,10 +3,10 @@
 namespace App\Collections;
 
 use App\Controllers\ExportController;
-use PhalconRest\Api\Collection;
-use PhalconRest\Api\Endpoint;
+use PhalconRest\Api\ApiCollection;
+use PhalconRest\Api\ApiEndpoint;
 
-class ExportCollection extends Collection
+class ExportCollection extends ApiCollection
 {
     protected function initialize()
     {
@@ -14,7 +14,7 @@ class ExportCollection extends Collection
             ->name('Export')
             ->handler(ExportController::class)
 
-            ->endpoint(Endpoint::get('/documentation.json', 'documentation'))
-            ->endpoint(Endpoint::get('/postman.json', 'postman'));
+            ->endpoint(ApiEndpoint::get('/documentation.json', 'documentation'))
+            ->endpoint(ApiEndpoint::get('/postman.json', 'postman'));
     }
 }

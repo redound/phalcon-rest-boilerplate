@@ -5,7 +5,7 @@ namespace App\Auth;
 use App\Constants\Services;
 use Phalcon\Di;
 
-class UsernameAccountType implements \PhalconRest\Auth\AccountType
+class UsernameAccountType implements \PhalconApi\Auth\AccountType
 {
     const NAME = "username";
 
